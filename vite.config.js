@@ -9,4 +9,13 @@ export default defineConfig({
     tailwindcss(),
 
   ],
+
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://backend:8080", // el nombre de servicio en Docker
+        changeOrigin: true,
+      },
+    },
+  },
 })
