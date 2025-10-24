@@ -1,0 +1,122 @@
+.about-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  background-color: rgb(249, 247, 255);
+  padding: 2rem 0;
+}
+
+.about-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+}
+
+.about-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-img {
+  width: 94%;
+  max-width: 520px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0px 8px 25px rgba(42, 68, 161, 0.2);
+}
+
+
+.about-description {
+  flex: 1;
+  background: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0px 10px 35px rgba(42, 68, 161, 0.15);
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-description::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: #2A44A1;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.about-heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #2A44A1;
+  margin-bottom: 1.2rem;
+  line-height: 2.2rem;
+
+}
+
+.about-text {
+  font-size: 1.1rem;
+  color: #444;
+  line-height: 1.7rem;
+  margin-bottom: 1rem;
+}
+
+.about-text strong {
+  color: #2A44A1;
+  font-weight: 600;
+}
+
+.about-footer {
+  font-size: 1.1rem;
+  color: #2A44A1;
+  font-weight: 600;
+  text-align: right;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.about-description:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 12px 45px rgba(42, 68, 161, 0.25);
+  transition: all 0.3s ease-in-out;
+}
+
+/*responsive */
+@media (max-width: 900px) {
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .about-img {
+    max-width: 400px;
+  }
+
+  .about-description {
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .about-footer {
+    text-align: center;
+  }
+
+  .about-description::before {
+    display: none;
+  }
+}
