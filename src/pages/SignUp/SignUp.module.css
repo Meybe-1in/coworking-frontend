@@ -1,0 +1,91 @@
+.signUpPage {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #eef2ff;
+  overflow: hidden;
+}
+
+.formPanel {
+  width: 894px;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: 0 0 62px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.title {
+  font-family: "Inter", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.footer {
+  font-family: "Inter", sans-serif;
+  font-size: 1.25rem;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.footer a {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.imagePanel {
+  width: 546px;
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*Responsive para pantallas pequeñas */
+@media (max-width: 1024px) {
+  .signUpPage {
+    flex-direction: column;
+  }
+
+  .formPanel {
+    width: 100%;
+    min-height: 100vh;
+    padding: 2rem 1.5rem;
+    box-shadow: none;
+  }
+
+    .imagePanel {
+    display: none;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .formPanel {
+    padding: 1.5rem 1rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+}
