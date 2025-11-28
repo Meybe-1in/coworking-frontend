@@ -1,0 +1,27 @@
+.dashboard-container {
+  background-color: #f1f5f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-content {
+  margin-top: 6rem; /* espacio para el navbar */
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.rooms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
