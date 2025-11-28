@@ -21,7 +21,7 @@ function LoginForm() {
       const res = await API.post("/auth/login", { email, password});
 
       localStorage.setItem("token", res.data.token);
-      navigate("/rooms");
+      navigate("/userdashboard");
     } catch (err) {
       const message =
         err.response?.data?.message ||
