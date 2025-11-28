@@ -4,6 +4,7 @@ import RoomsList from "./pages/RoomsList";
 import CreateReservation from "./pages/CreateReservation";
 import LoginPage from "./pages/Login/LoginPage";
 import Home from "./pages/HomePage/HomePage"
+import UserDashboard from "./pages/UserDashboard/UserDashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function LayoutWrapper() {
@@ -36,6 +37,14 @@ function LayoutWrapper() {
             }
           />
           <Route path="/Login" element={<LoginPage />} />
+          <Route
+            path="/userdashboard"
+            element={
+              
+                <UserDashboard />
+             
+            }
+          />
         </Routes>
       </div>
     </div>

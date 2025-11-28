@@ -22,7 +22,7 @@ function SignUpForm() {
       const res = await fetch("http://localhost:8080/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({username, email, password }),
       });
 
       if (!res.ok) throw new Error("Credenciales incorrectas");
