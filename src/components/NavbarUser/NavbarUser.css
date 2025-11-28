@@ -1,0 +1,88 @@
+.navbar-user {
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #1e40af;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    font-family: 'Inter', sans-serif;
+    position: fixed;
+    top: 0;
+    z-index: 50;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem; 
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.logo-bold {
+  color: #2A44A1;
+}
+
+.logo-light {
+  color: #000;
+  font-weight: 500;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 1.25rem; 
+}
+
+.navbar-link {
+    font-size: 1.25rem; 
+    font-weight: 500;
+}
+
+.link-calendar {
+    color: #a3a3a3; 
+}
+
+.link-reserve {
+    color: #1e40af; 
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.navbar-username {
+    color: black;
+    font-size: 1.25rem; 
+    font-weight: 500;
+}
+
+.navbar-logout-btn {
+    padding-left: 1.25rem; 
+    padding-right: 1.25rem; 
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem; 
+    background-color: white;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 2px solid #1e40af; 
+    color: #1e40af; 
+    font-size: 1.25rem; 
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.navbar-logout-btn:hover {
+    background-color: #f3f4f6;
+}
