@@ -1,29 +1,28 @@
 import React from 'react';
 import './NavbarUser.css'; // Importamos el archivo de estilos
-import { jwtDecode } from "jwt-decode";
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 
 export default function NavbarUser() {
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("Usuario");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const storedUsername = localStorage.getItem("username");
 
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setUsername(decoded.username);
-
-      } catch (error) {
-        console.error("Token invalido", error);
-      }
+    if (storedUsername) {
+     setUsername(storedUsername);
     }
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    
+    navigate("/login");
   };
 
   return (
@@ -34,7 +33,7 @@ export default function NavbarUser() {
                       <span className="logo-light">Working</span>
                 </div>
         <div className="navbar-links">
-          <span className="navbar-link link-calendar">Calendario</span>
+          <span onClick={() => navigate("/calendar")}>Calendario</span>
           <span className="navbar-link link-reserve">Reservar Sala</span>
         </div>
         <div className="navbar-actions">
