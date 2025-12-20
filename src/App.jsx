@@ -24,7 +24,7 @@ function LayoutWrapper() {
             path="/rooms"
             element={
               <ProtectedRoute>
-                <RoomsList />
+                <RoomList />
               </ProtectedRoute>
             }
           />
