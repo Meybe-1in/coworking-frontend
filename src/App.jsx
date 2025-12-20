@@ -30,11 +30,6 @@ function LayoutWrapper() {
           />
           <Route
             path="/reservations/new"
-            element={
-              <ProtectedRoute>
-                <CreateReservation />
-              </ProtectedRoute>
-            }
           />
           <Route path="/Login" element={<LoginPage />} />
           <Route
