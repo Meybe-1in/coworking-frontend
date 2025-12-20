@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./SearchBar.css";
 
-
 export default function SearchBar({ onSearch }) {
     const [filters, setFilters] = useState({
         date: new Date().toISOString().split("T")[0],
