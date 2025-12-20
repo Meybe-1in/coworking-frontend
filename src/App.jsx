@@ -35,9 +35,9 @@ function LayoutWrapper() {
           <Route
             path="/userdashboard"
             element={
-              
-                <UserDashboard />
-             
+              <ProtectedRoute>
+                <UserDashboard /> 
+              </ProtectedRoute>
             }
           />
         </Routes>
