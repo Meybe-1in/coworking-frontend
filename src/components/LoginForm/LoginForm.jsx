@@ -35,9 +35,9 @@ function LoginForm() {
 
       const message =
         err.response?.data?.message ||
-        err.response?.status === 403
-          ? "Acceso denegado (403)"
-          : "Credenciales incorrectas";
+        err.response?.status === 401
+          ? "Contraseña o correo incorrectos"
+          : "Error de conexion con el servidor";
       setError(message);
     }
   };
