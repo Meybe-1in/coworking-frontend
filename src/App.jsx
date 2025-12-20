@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import SignUp from "./pages/SignUp/SignUp";
-import RoomsList from "./pages/RoomsList";
-import CreateReservation from "./pages/CreateReservation";
 import LoginPage from "./pages/Login/LoginPage";
 import Home from "./pages/HomePage/HomePage";
 import RoomList from "./components/RoomCard/RoomList";
