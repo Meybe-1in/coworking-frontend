@@ -21,8 +21,18 @@ function LoginForm() {
       const res = await API.post("/auth/login", { email, password});
 
       localStorage.setItem("token", res.data.token);
+      if (res.data.username) {
+          localStorage.setItem("username", res.data.username);
+      }
+      
+      if (res.data.role) {
+          localStorage.setItem("role", res.data.role);
+      }
       navigate("/userdashboard");
+
     } catch (err) {
+      console.error("Error en login:", err);
+
       const message =
         err.response?.data?.message ||
         err.response?.status === 403
