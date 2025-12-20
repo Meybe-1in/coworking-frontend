@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RoomCard from "../components/RoomCard";
+import RoomCard from "./RoomCard";
 import { getRooms } from "../../api/axiosConfig";
 
 export default function RoomsList() {
