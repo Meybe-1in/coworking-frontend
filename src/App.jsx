@@ -3,7 +3,9 @@ import SignUp from "./pages/SignUp/SignUp";
 import RoomsList from "./pages/RoomsList";
 import CreateReservation from "./pages/CreateReservation";
 import LoginPage from "./pages/Login/LoginPage";
-import Home from "./pages/HomePage/HomePage"
+import Home from "./pages/HomePage/HomePage";
+import RoomList from "./components/RoomCard/RoomList";
+
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
