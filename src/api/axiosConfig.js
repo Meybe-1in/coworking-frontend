@@ -53,7 +53,7 @@ export const getAvailableRooms = async (filters) => {
   try {
     const { date, start, end, people } = filters;
     
-    const response = await API.get("api/rooms/available",{
+    const response = await API.get("/api/rooms/available",{
       params:{ date, start, end, people }
     });
     return response.data;

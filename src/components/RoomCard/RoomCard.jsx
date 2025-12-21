@@ -1,6 +1,7 @@
 import React from "react";
 import "./RoomCard.css";
-import Img from "../../assets/cub1.png"
+import Img from "../../assets/sala.png";
+
 const getStatusClass = (status) => {
   return status === "Disponible" ? "tag-available" : "tag-unavailable";
 };
