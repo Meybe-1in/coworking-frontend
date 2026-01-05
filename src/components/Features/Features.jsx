@@ -15,7 +15,7 @@ const Features = () => {
   return (
     <section className="features" id="features">
       <div className="features-container">
-        <h3 className="feature-title">Nuestras ventajas</h3>
+        <h3 className="feature-title">Servicios</h3>
         <div className="features-grid">
           {features.map((f, i) => (
             <div key={i} className="feature-card">
