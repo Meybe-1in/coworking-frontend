@@ -23,6 +23,16 @@ const Navbar = () => {
         <ul className="navbar-links">
           <li>
             <ScrollLink
+              to="hero-container" // debe coincidir con el id del div destino
+              smooth={true}
+              duration={600}
+              offset={-80} // ajusta según el alto del navbar
+            >
+              Home
+            </ScrollLink>
+          </li>
+          <li>
+            <ScrollLink
               to="about-container" // debe coincidir con el id del div destino
               smooth={true}
               duration={600}
