@@ -17,9 +17,7 @@ const HomePage = () => {
         <Features />
         <Contact />
       </div>
-      <Footer />
     </>
-
   );
 };
 
