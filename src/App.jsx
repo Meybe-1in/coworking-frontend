@@ -3,9 +3,11 @@ import SignUp from "./pages/SignUp/SignUp";
 import LoginPage from "./pages/Login/LoginPage";
 import Home from "./pages/HomePage/HomePage";
 import RoomList from "./components/RoomCard/RoomList";
-
+import Terms from "./pages/Terms/Terms";
+import Privacy from "./pages/Privacy/Privacy";
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicLayout from "./layouts/PublicLayout";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -18,8 +20,19 @@ function LayoutWrapper() {
     <div className="min-h-screen bg-gray-50">
       <div className="min-h-screen bg-gray-50">
         <Routes>
+
+          {/* publico con navbar + footer*/}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+          </Route>
+
+          {/* sin layout */}
           <Route path="/" element={<Home />} /> {/* Home maneja su propio Navbar y Footer */}
           <Route path="/register" element={<SignUp />} />
+          
+          {/* protegidas */}
           <Route
             path="/rooms"
             element={
@@ -31,7 +44,12 @@ function LayoutWrapper() {
           <Route
             path="/reservations/new"
           />
-          <Route path="/Login" element={<LoginPage />} />
+          <Route 
+            path="/Login" 
+            element={
+            <LoginPage />
+            }
+          />
           <Route
             path="/userdashboard"
             element={
@@ -40,7 +58,7 @@ function LayoutWrapper() {
               </ProtectedRoute>
             }
           />
-        </Routes>
+        </Routes> 
       </div>
     </div>
   );
