@@ -19,6 +19,12 @@ function SignUpForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!termsAccepted) {
+      setError("Debes aceptar los términos y condiciones para continuar.");
+      return;
+    }
+
     try {
       const res = await API.post("/auth/register", {
         username, email, password, termsAccepted
