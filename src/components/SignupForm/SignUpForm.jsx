@@ -103,8 +103,9 @@ function SignUpForm() {
         <label className={styles.checkbox}>
           <input
             type="checkbox"
-            checked={remember}
-            onChange={(e) => setRemember(e.target.checked)}
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.target.checked)}
+            className={!termsAccepted && error ? "error" : ""}
           />
           <span>
             I agree with{" "}
