@@ -34,7 +34,7 @@ function SignUpForm() {
     setError('');
     try {
       const res = await API.post("/auth/register", {
-        username, email, password,
+        username, email, password, termsAccepted
       });
 
       const data = res.data;
