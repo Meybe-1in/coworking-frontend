@@ -91,7 +91,11 @@ function SignUpForm() {
 
       </div>
 
-      <Button text="Sign up" type="submit" variant="primary" />
+      <Button
+        text="Sign up"
+        type="submit"
+        variant="primary"
+      />
     </form>
   );
 }
