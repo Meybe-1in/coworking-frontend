@@ -44,6 +44,12 @@ function SignUpForm() {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
+      {error && (
+        <div className={styles.alert}>
+          {error}
+        </div>
+      )}
+
       <Button
         text="Sign up with Google"
         variant="google"
