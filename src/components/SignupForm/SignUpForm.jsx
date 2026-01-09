@@ -75,6 +75,10 @@ function SignUpForm() {
         placeholder="example@mail.com"
       />
 
+      {emailError && (
+        <p className={styles.error}>{emailError}</p>
+      )}
+
       <InputField
         label="Password"
         type="password"
