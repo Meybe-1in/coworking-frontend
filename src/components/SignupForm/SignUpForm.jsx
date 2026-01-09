@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 function SignUpForm() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
