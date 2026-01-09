@@ -38,3 +38,9 @@
   font-weight: 600;
   text-decoration: none;
 }
+
+.error {
+  color: #b00020;
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
