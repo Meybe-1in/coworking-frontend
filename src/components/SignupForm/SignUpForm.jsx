@@ -13,7 +13,7 @@ function SignUpForm() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
-  const [remember, setRemember] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,9 +32,15 @@ function SignUpForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!termsAccepted) {
+      setError("Debes aceptar los términos y condiciones para continuar.");
+      return;
+    }
+
     try {
       const res = await API.post("/auth/register", {
-        username, email, password,
+        username, email, password, termsAccepted
       });
 
       const data = res.data;
@@ -51,6 +57,12 @@ function SignUpForm() {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
+      {error && (
+        <div className={styles.alert}>
+          {error}
+        </div>
+      )}
+
       <Button
         text="Sign up with Google"
         variant="google"
@@ -91,8 +103,9 @@ function SignUpForm() {
         <label className={styles.checkbox}>
           <input
             type="checkbox"
-            checked={remember}
-            onChange={(e) => setRemember(e.target.checked)}
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.target.checked)}
+            className={!termsAccepted && error ? "error" : ""}
           />
           <span>
             I agree with{" "}
@@ -108,7 +121,11 @@ function SignUpForm() {
 
       </div>
 
-      <Button text="Sign up" type="submit" variant="primary" />
+      <Button
+        text="Sign up"
+        type="submit"
+        variant="primary"
+      />
     </form>
   );
 }

@@ -44,3 +44,17 @@
   margin-top: 4px;
   font-size: 0.85rem;
 }
+.alert {
+  background: #fff5f5;
+  color: #b00020;
+  border: 1px solid #ffcccc;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.checkbox input:not(:checked).error {
+  outline: 2px solid #b00020;
+}
+
