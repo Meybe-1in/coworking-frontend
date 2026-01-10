@@ -11,10 +11,23 @@ import { Link } from 'react-router-dom';
 function SignUpForm() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    if (!emailRegex.test(value)) {
+      setEmailError("Ingresa un email válido");
+    } else {
+      setEmailError("");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,9 +83,13 @@ function SignUpForm() {
         label="Email"
         type="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleEmailChange}
         placeholder="example@mail.com"
       />
+
+      {emailError && (
+        <p className={styles.error}>{emailError}</p>
+      )}
 
       <InputField
         label="Password"
