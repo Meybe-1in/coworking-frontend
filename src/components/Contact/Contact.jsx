@@ -1,5 +1,6 @@
 import React from "react";
 import "./Contact.css";
+import API from "../../api/axiosConfig";
 
 const Contact = () => {
   return (
