@@ -13,10 +13,12 @@ function SignUpForm() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordValid, setPasswordValid] = useState(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
@@ -27,6 +29,11 @@ function SignUpForm() {
     } else {
       setEmailError("");
     }
+  };
+
+  const validatePassword = (value) => {
+    setPassword(value);
+    setPasswordValid(strongPasswordRegex.test(value));
   };
 
   const handleSubmit = async (e) => {
@@ -51,8 +58,18 @@ function SignUpForm() {
       navigate("/Login");
     } catch (err) {
       console.error(err);
-      setError(err.response?.data || "Error en el registro");
+
+      const backendError = err.response?.data;
+
+      if (backendError?.message) {
+        setError(backendError.message);          // Mensaje del backend
+      } else if (typeof backendError === "string") {
+        setError(backendError);                  // Si backend envía string
+      } else {
+        setError("Error en el registro");        // Default
+      }
     }
+
   };
 
   return (
@@ -95,9 +112,15 @@ function SignUpForm() {
         label="Password"
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => validatePassword(e.target.value)}
         placeholder="at least 8 characteres"
       />
+
+      {!passwordValid && (
+        <p className={styles.error}>
+          La contraseña debe contener mayúscula, minúscula, número y símbolo.
+        </p>
+      )}
 
       <div className={styles.options}>
         <label className={styles.checkbox}>
