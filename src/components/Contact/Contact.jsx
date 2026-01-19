@@ -36,7 +36,7 @@ const Contact = () => {
     return null;
   };
 
-  const handlesubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -63,7 +63,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact-container" id="contact">
+    <section className="contact" id="contact">
       <div className="contact-container">
         <h2 className="contact-title">Contáctanos</h2>
 
@@ -89,7 +89,7 @@ const Contact = () => {
             <h3 className="contact-heading">Escríbenos</h3>
             {error && <div className="alert-error">{error}</div>}
             {success && <div className="alert-success">{success}</div>}
-            <form onSubmit={handlesubmit}>
+            <form onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="name"
@@ -115,7 +115,7 @@ const Contact = () => {
                 required
               />
 
-              <button type="submit" disabled={loading}>
+              <button className="contact-button" type="submit" disabled={loading}>
                 {loading ? "Enviando..." : "Enviar mensaje"}
               </button>
             </form>
