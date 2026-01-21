@@ -1,6 +1,6 @@
 .features {
   text-align: center;
-  padding: 2rem 2rem;
+  padding: 1rem 2rem;
   background-color: rgb(249, 247, 255);
 
 }
@@ -9,12 +9,15 @@
   max-width: 1200px; 
   margin: 0 auto;
   text-align: center;
+  font-family: 'Inter', sans-serif;
 }
 
-.features h3 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #2a44a1;
+.feature-title {
+  text-align: center;
+  color: #2A44A1;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 3rem;
 }
 
 .features-grid {

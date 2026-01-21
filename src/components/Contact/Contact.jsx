@@ -1,9 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Contact.css";
+import API from "../../api/axiosConfig";
 
 const Contact = () => {
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const validateForm = () => {
+    if (!form.name || !form.email || !form.message) {
+      return "Todos los campos son obligatorios.";
+    }
+    if (!emailRegex.test(form.email)) {
+      return "Ingresa un correo electrónico válido.";
+    }
+    if (form.message.length < 10) {
+      return "El mensaje debe tener al menos 10 caracteres.";
+    }
+    return null;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await API.post("/contact", form);
+
+      setSuccess("Mensaje enviado correctamente. Nos pondremos en contacto contigo.");
+      setForm({ name: "", email: "", message: "" });
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Ocurrió un error al enviar el mensaje."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <section className="contact-container" id="contact">
+    <section className="contact" id="contact">
       <div className="contact-container">
         <h2 className="contact-title">Contáctanos</h2>
 
@@ -27,11 +87,37 @@ const Contact = () => {
           {/* Columna Derecha: Formulario */}
           <div className="contact-form">
             <h3 className="contact-heading">Escríbenos</h3>
-            <form>
-              <input type="text" placeholder="Nombre" required />
-              <input type="email" placeholder="Correo electrónico" required />
-              <textarea placeholder="Mensaje" rows="5" required></textarea>
-              <button type="submit" className="contact-button">Enviar mensaje</button>
+            {error && <div className="alert-error">{error}</div>}
+            {success && <div className="alert-success">{success}</div>}
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Nombre"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Correo electrónico"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
+              <textarea
+                name="message"
+                placeholder="Mensaje"
+                rows="5"
+                value={form.message}
+                onChange={handleChange}
+                required
+              />
+
+              <button className="contact-button" type="submit" disabled={loading}>
+                {loading ? "Enviando..." : "Enviar mensaje"}
+              </button>
             </form>
           </div>
         </div>
