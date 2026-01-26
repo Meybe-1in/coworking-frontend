@@ -1,0 +1,30 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #f5f7ff;
+  font-family: Inter, sans-serif;
+}
+
+h1 {
+  color: #2A44A1;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+button {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  border: none;
+  background: #2A44A1;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}

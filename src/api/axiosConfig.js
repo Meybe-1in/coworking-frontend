@@ -7,27 +7,62 @@ const API = axios.create({
   },
 });
 
-//agregar el token JWT si existe
+//interceptor request
 API.interceptors.request.use((config) => {
-  if (!config.url.includes("/contact")) {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  }
-  return config;
-});
 
+  const token = localStorage.getItem("token");
+  //endpoint
+  const publicEndpoints = [
+    "/auth/login",
+    "/auth/register",
+    "/auth/resend-verification",
+    "/contact",
+  ];
+
+  const isPublic = publicEndpoints.some((url) =>
+    config.url?.includes(url)
+  );
+
+  if (token && !isPublic) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+},
+  (error) => Promise.reject(error)
+
+  );
+
+  // interceptor response
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    const isContact = error.config?.url?.includes("/contact");
-    if ( !isContact && (error.response?.status === 401 || error.response?.status === 403)) {
+    const status = error.response?.status;
+    const url = error.config?.url;
+
+    const publicEndpoints = [
+      "/auth/login",
+      "/auth/register",
+      "/auth/resend-verification",
+      "/contact",
+    ];
+
+    const isPublic = publicEndpoints.some((u) =>
+      url?.includes(u)
+    );
+
+    //redirigir si hay token o el endpoint publico o error 401/403
+    if (
+      localStorage.getItem("token") &&
+      !isPublic &&
+      (status === 401 || status === 403)
+    ) {
       localStorage.removeItem("token");
       window.location.href = "/login";
     }
+
     return Promise.reject(error);
-  }
+  } 
 );
 
 
@@ -51,13 +86,13 @@ export const getRooms = async () => {
   }
 };
 
-  //obtener salas disponibles
+//obtener salas disponibles
 export const getAvailableRooms = async (filters) => {
   try {
     const { date, start, end, people } = filters;
-    
-    const response = await API.get("/api/rooms/available",{
-      params:{ date, start, end, people }
+
+    const response = await API.get("/api/rooms/available", {
+      params: { date, start, end, people }
     });
     return response.data;
   } catch (error) {
