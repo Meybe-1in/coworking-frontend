@@ -6,6 +6,7 @@ import googleLogo from "../../assets/google.svg";
 import API from '../../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 
 function SignUpForm() {
@@ -16,6 +17,7 @@ function SignUpForm() {
   const [passwordValid, setPasswordValid] = useState(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
+
   const navigate = useNavigate();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
@@ -46,110 +48,115 @@ function SignUpForm() {
     }
 
     try {
-      const res = await API.post("/auth/register", {
-        username, email, password, termsAccepted
+      await API.post("/auth/register", {
+        username,
+        email,
+        password
+      });
+      //modal
+      Swal.fire({
+        icon: "success",
+        title: "Registro exitoso",
+        html: `
+        <p>Hemos enviado un correo de verificación.</p>
+        <p><b>Revisa tu bandeja de entrada</b>.</p>
+      `,
+        confirmButtonText: "Ir al login"
+      }).then(() => {
+        navigate("/login");
       });
 
-      const data = res.data;
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("role", data.role);
-      alert("Registro exitoso.");
-      navigate("/Login");
+      
     } catch (err) {
-      console.error(err);
-
-      const backendError = err.response?.data;
-
-      if (backendError?.message) {
-        setError(backendError.message);          // Mensaje del backend
-      } else if (typeof backendError === "string") {
-        setError(backendError);                  // Si backend envía string
-      } else {
-        setError("Error en el registro");        // Default
-      }
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.message || "Error al registrarse",
+      });
     }
 
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      {error && (
-        <div className={styles.alert}>
-          {error}
+    <>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        {error && (
+          <div className={styles.alert}>
+            {error}
+          </div>
+        )}
+
+        <Button
+          text="Sign up with Google"
+          variant="google"
+          icon={<img src={googleLogo} alt="Google" />}
+        />
+
+        <div className={styles.divider}></div>
+
+        <InputField
+          label="Usename"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Leslie"
+        />
+
+        <InputField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={handleEmailChange}
+          placeholder="example@mail.com"
+        />
+
+        {emailError && (
+          <p className={styles.error}>{emailError}</p>
+        )}
+
+        <InputField
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => validatePassword(e.target.value)}
+          placeholder="at least 8 characteres"
+        />
+
+        {!passwordValid && (
+          <p className={styles.error}>
+            La contraseña debe contener mayúscula, minúscula, número y símbolo.
+          </p>
+        )}
+
+        <div className={styles.options}>
+          <label className={styles.checkbox}>
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              className={!termsAccepted && error ? "error" : ""}
+            />
+            <span>
+              I agree with{" "}
+              <Link to="/terms" className="text-blue-600 hover:underline">
+                Terms
+              </Link>{" "}
+              and{" "}
+              <Link to="/privacy" className="text-blue-600 hover:underline">
+                Privacy Policy
+              </Link>
+            </span>
+          </label>
+
         </div>
-      )}
 
-      <Button
-        text="Sign up with Google"
-        variant="google"
-        icon={<img src={googleLogo} alt="Google" />}
-      />
-
-      <div className={styles.divider}></div>
-
-      <InputField
-        label="Usename"
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Leslie"
-      />
-
-      <InputField
-        label="Email"
-        type="email"
-        value={email}
-        onChange={handleEmailChange}
-        placeholder="example@mail.com"
-      />
-
-      {emailError && (
-        <p className={styles.error}>{emailError}</p>
-      )}
-
-      <InputField
-        label="Password"
-        type="password"
-        value={password}
-        onChange={(e) => validatePassword(e.target.value)}
-        placeholder="at least 8 characteres"
-      />
-
-      {!passwordValid && (
-        <p className={styles.error}>
-          La contraseña debe contener mayúscula, minúscula, número y símbolo.
-        </p>
-      )}
-
-      <div className={styles.options}>
-        <label className={styles.checkbox}>
-          <input
-            type="checkbox"
-            checked={termsAccepted}
-            onChange={(e) => setTermsAccepted(e.target.checked)}
-            className={!termsAccepted && error ? "error" : ""}
-          />
-          <span>
-            I agree with{" "}
-            <Link to="/terms" className="text-blue-600 hover:underline">
-              Terms
-            </Link>{" "}
-            and{" "}
-            <Link to="/privacy" className="text-blue-600 hover:underline">
-              Privacy Policy
-            </Link>
-          </span>
-        </label>
-
-      </div>
-
-      <Button
-        text="Sign up"
-        type="submit"
-        variant="primary"
-      />
-    </form>
+        <Button
+          text="Sign up"
+          type="submit"
+          variant="primary"
+        />
+      </form>
+    </>
   );
 }
 
