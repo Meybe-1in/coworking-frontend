@@ -8,6 +8,8 @@ import Privacy from "./pages/Privacy/Privacy";
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
+import VerifyError from "./components/ui/VerifyError";
+import VerifySuccess from "./components/ui/VerifySuccess";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -31,6 +33,8 @@ function LayoutWrapper() {
           {/* sin layout */}
           <Route path="/" element={<Home />} /> {/* Home maneja su propio Navbar y Footer */}
           <Route path="/register" element={<SignUp />} />
+          <Route path="/verify-success" element={<VerifySuccess />} />
+          <Route path="/verify-error" element={<VerifyError />} />  
           
           {/* protegidas */}
           <Route
