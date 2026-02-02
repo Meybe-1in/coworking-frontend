@@ -1,0 +1,29 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  padding: 1rem;
+}
+
+.auth-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem;
+  border-radius: 14px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.auth-card h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.auth-card p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 1.8rem;
+}
