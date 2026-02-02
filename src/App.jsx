@@ -10,6 +10,8 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 import VerifyError from "./components/ui/VerifyError";
 import VerifySuccess from "./components/ui/VerifySuccess";
+import ForgotPassword from "./pages/Password/ForgotPassword";
+import ResetPassword from "./pages/Password/ResetPassword";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -35,7 +37,9 @@ function LayoutWrapper() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/verify-success" element={<VerifySuccess />} />
           <Route path="/verify-error" element={<VerifyError />} />  
-          
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
           {/* protegidas */}
           <Route
             path="/rooms"
