@@ -7,6 +7,7 @@ import API from '../../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Swal from "sweetalert2";
+import GoogleLoginButton from '../Button/GoogleButton';
 
 
 function SignUpForm() {
@@ -66,7 +67,7 @@ function SignUpForm() {
         navigate("/login");
       });
 
-      
+
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -85,13 +86,11 @@ function SignUpForm() {
             {error}
           </div>
         )}
-
-        <Button
+        <GoogleLoginButton
+          redirectTo="/userdashboard"
           text="Sign up with Google"
-          variant="google"
-          icon={<img src={googleLogo} alt="Google" />}
         />
-
+        
         <div className={styles.divider}></div>
 
         <InputField
