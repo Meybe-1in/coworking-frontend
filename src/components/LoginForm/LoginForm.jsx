@@ -15,116 +15,126 @@ function LoginForm() {
   const [remember, setRemember] = useState(false);
   const navigate = useNavigate();
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-          const res = await API.post("/auth/login", { email, password });
+    try {
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+        rememberMe: remember
+      });
 
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem("username", res.data.username);
-          localStorage.setItem("role", res.data.role);
+      const storage = remember ? localStorage : sessionStorage;
 
-          navigate("/userdashboard");
-        } catch (err) {
-          const status = err.response?.status;
-          const data = err.response?.data;
+      storage.setItem("token", res.data.token);
+      storage.setItem("username", res.data.username);
+      storage.setItem("role", res.data.role);
 
-          //EMAIL NO VERIFICADO
-          if (status === 403 && data?.code === "EMAIL_NOT_VERIFIED") {
-            Swal.fire({
-              icon: "warning",
-              title: "Cuenta no verificada",
-              html: `
+      navigate("/userdashboard");
+    } catch (err) {
+      const status = err.response?.status;
+      const data = err.response?.data;
+
+      //EMAIL NO VERIFICADO
+      if (status === 403 && data?.code === "EMAIL_NOT_VERIFIED") {
+        Swal.fire({
+          icon: "warning",
+          title: "Cuenta no verificada",
+          html: `
             <p>Tu cuenta aún no ha sido activada.</p>
             <p>¿Deseas que reenviemos el correo de verificación?</p>
           `,
-              showCancelButton: true,
-              confirmButtonText: "Reenviar correo",
-              cancelButtonText: "Cancelar",
-            }).then(async (result) => {
-              if (result.isConfirmed) {
-                try {
-                  await API.post("/auth/resend-verification", {
-                    email: data.email,
-                  });
+          showCancelButton: true,
+          confirmButtonText: "Reenviar correo",
+          cancelButtonText: "Cancelar",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              await API.post("/auth/resend-verification", {
+                email: data.email,
+              });
 
-                  Swal.fire({
-                    icon: "success",
-                    title: "Correo enviado",
-                    text: "Revisa tu bandeja de entrada.",
-                  });
-                } catch {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "No se pudo reenviar el correo.",
-                  });
-                }
-              }
-            });
-            return;
+              Swal.fire({
+                icon: "success",
+                title: "Correo enviado",
+                text: "Revisa tu bandeja de entrada.",
+              });
+            } catch {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se pudo reenviar el correo.",
+              });
+            }
           }
+        });
+        return;
+      }
 
-          //CREDENCIALES INCORRECTAS
-          if (status === 401) {
-            Swal.fire({
-              icon: "error",
-              title: "Error de autenticación",
-              text: "Correo o contraseña incorrectos",
-            });
-            return;
-          }
+      //CREDENCIALES INCORRECTAS
+      if (status === 401) {
+        Swal.fire({
+          icon: "error",
+          title: "Error de autenticación",
+          text: "Correo o contraseña incorrectos",
+        });
+        return;
+      }
 
-          //ERROR GENERAL
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No se pudo iniciar sesión. Intenta más tarde.",
-          });
-        }
-      };
-
-
-      return (
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <GoogleLoginButton redirectTo="/userdashboard" text="Log in with Google" />
-
-          <div className={styles.divider}></div>
-
-          <InputField
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="leslie@pixsellz.io"
-          />
-
-          <InputField
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••••••"
-          />
-
-          <div className={styles.options}>
-            <label className={styles.checkbox}>
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-              />
-              <span>Remember me</span>
-            </label>
-            <a href="/forgot-password" className={styles.forgot}>
-              Forgot Password?
-            </a>
-          </div>
-
-          <Button text="Log in" type="submit" variant="primary" />
-        </form>
-      );
+      //ERROR GENERAL
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo iniciar sesión. Intenta más tarde.",
+      });
     }
+  };
+
+
+  return (
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <GoogleLoginButton
+        redirectTo="/userdashboard"
+        rememberMe={remember}
+        text="Log in with Google"
+      />
+
+      <div className={styles.divider}></div>
+
+      <InputField
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="leslie@pixsellz.io"
+      />
+
+      <InputField
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="••••••••••••"
+      />
+
+      <div className={styles.options}>
+        <label className={styles.checkbox}>
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(e) => setRemember(e.target.checked)}
+          />
+          <span>Remember me</span>
+        </label>
+        <a href="/forgot-password" className={styles.forgot}>
+          Forgot Password?
+        </a>
+      </div>
+
+      <Button text="Log in" type="submit" variant="primary" />
+    </form>
+  );
+}
 
 export default LoginForm;
