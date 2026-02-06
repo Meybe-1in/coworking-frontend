@@ -10,7 +10,8 @@ const API = axios.create({
 //interceptor request
 API.interceptors.request.use((config) => {
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token") || 
+  sessionStorage.getItem("token");
   //endpoint
   const publicEndpoints = [
     "/auth/login",
