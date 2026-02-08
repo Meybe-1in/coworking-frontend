@@ -7,6 +7,7 @@ import googleLogo from "../../assets/google.svg";
 
 export default function GoogleLoginButton({ 
   redirectTo = "/dashboard",
+  rememberMe ,
   text = "Continue with Google"
 }) {
   const navigate = useNavigate();
@@ -17,12 +18,14 @@ export default function GoogleLoginButton({
       try {
         const res = await API.post("/auth/google", {
           accessToken: tokenResponse.access_token,
+          rememberMe
         });
 
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("username", res.data.username);
-        localStorage.setItem("role", res.data.role);
+        const storage = rememberMe ? localStorage : sessionStorage;
 
+        storage.setItem("token", res.data.token);
+        storage.setItem("username", res.data.username);
+        storage.setItem("role", res.data.role);
         navigate(redirectTo);
       } catch {
         Swal.fire({

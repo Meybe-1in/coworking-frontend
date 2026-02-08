@@ -2,6 +2,7 @@ import React from 'react';
 import './NavbarUser.css'; // Importamos el archivo de estilos
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
+import { getAuthItem, clearAuth } from '../../utils/authStorage';
 
 export default function NavbarUser() {
 
@@ -9,7 +10,7 @@ export default function NavbarUser() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
+    const storedUsername = getAuthItem("username");
 
     if (storedUsername) {
      setUsername(storedUsername);
@@ -17,10 +18,7 @@ export default function NavbarUser() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
-    localStorage.removeItem("token");
+    clearAuth();
     
     navigate("/login");
   };
