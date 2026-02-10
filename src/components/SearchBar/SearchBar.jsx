@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import "./SearchBar.css";
+import { useState } from "react";
 
 export default function SearchBar({ onSearch }) {
   const [filters, setFilters] = useState({
