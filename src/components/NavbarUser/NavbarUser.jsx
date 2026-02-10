@@ -1,35 +1,60 @@
 import { useEffect, useState } from "react";
-import { getAuthItem, clearAuth } from '../../utils/authStorage';
+import { useNavigate, useLocation } from "react-router-dom";
+import { getAuthItem, clearAuth } from "../../utils/authStorage";
 
 export default function NavbarUser() {
-
   const [username, setUsername] = useState("Usuario");
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const storedUsername = getAuthItem("username");
-
-    if (storedUsername) {
-     setUsername(storedUsername);
-    }
+    if (storedUsername) setUsername(storedUsername);
   }, []);
 
   const handleLogout = () => {
     clearAuth();
-    
     navigate("/login");
   };
 
+  // botton sin estilo
+  const isActive = (path) =>
+    location.pathname === path
+      ? "text-blue-800 font-semibold"
+      : "text-gray-400 hover:text-blue-800";
+
   return (
-    <nav className="navbar-user">
-      <div className="navbar-container">
-         <div className="navbar-logo">
-                  <span className="logo-bold">Co</span>
-                      <span className="logo-light">Working</span>
-                </div>
-        <div className="navbar-links">
-          <span onClick={() => navigate("/calendar")}>Calendario</span>
-          <span className="navbar-link link-reserve">Reservar Sala</span>
+    <nav className="fixed top-0 z-50 w-full bg-white border-b border-blue-800/20">
+      <div className="mx-auto max-w-7xl px-4 h-20 flex items-center">
+
+        {/* LOGO */}
+        <div
+          className="text-2xl font-bold cursor-pointer w-1/4"
+          onClick={() => navigate("/userdashboard")}
+        >
+          <span className="text-blue-800">Co</span>
+          <span className="text-black">Working</span>
+        </div>
+
+        {/* MENÚ CENTRADO */}
+        <div className="hidden md:flex w-2/4 justify-center gap-12 text-lg">
+
+          <span
+            onClick={() => navigate("/calendar")}
+            className={`cursor-pointer ${isActive("/calendar")}`}
+          >
+            Calendario
+          </span>
+
+          <span
+            onClick={() => navigate("/")}
+            className={`cursor-pointer ${isActive("/userdashboard")}`}
+          >
+            Reservar Sala
+          </span>
+
         </div>
 
         {/* DERECHA - USUARIO + LOGOUT */}
