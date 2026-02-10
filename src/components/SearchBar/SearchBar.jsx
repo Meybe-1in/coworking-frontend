@@ -47,11 +47,11 @@ export default function SearchBar({ onSearch }) {
 
 
 
-    return (
-        <div className="searchbar-wrapper">
-            <div className="searchbar-header">
-                <span>Iniciar Reserva</span>
-            </div>
+  return (
+    <section className="bg-white shadow-lg rounded-lg p-4 sm:p-6">
+      <div className="bg-sky-500 text-white px-6 py-2 rounded-t-md w-fit text-xl font-medium">
+        Iniciar Reserva
+      </div>
 
             <div className="searchbar-filters">
                 <div className="filter-group">
@@ -114,11 +114,16 @@ export default function SearchBar({ onSearch }) {
                     />
                 </div>
 
-                <div className="filter-group">
-                    <label className="invisible-label">buscar</label>
-                    <button onClick={handleSearch}>Buscar Sala</button>
-                </div>
-            </div>
-        </div>
-    );
+        <button
+          onClick={handleSearch}
+          className="h-10 flex items-center justify-center
+             border-2 border-sky-500 text-sky-500
+             font-bold rounded
+             hover:bg-sky-500 hover:text-white transition"
+>
+          Buscar Sala
+        </button>
+      </div>
+    </section>
+  );
 }
