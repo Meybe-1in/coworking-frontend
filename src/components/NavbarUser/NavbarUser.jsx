@@ -46,6 +46,43 @@ export default function NavbarUser() {
           ☰
         </button>
       </div>
+
+      {/* MOBILE MENU */}
+      {open && (
+        <div className="md:hidden bg-white border-t border-blue-800/20 px-6 py-4 flex flex-col gap-4">
+
+          <div className="flex items-center gap-2">
+            {username}
+          </div>
+
+          <span
+            onClick={() => {
+              navigate("/calendar");
+              setOpen(false);
+            }}
+            className={isActive("/calendar")}
+          >
+            Calendario
+          </span>
+
+          <span
+            onClick={() => {
+              navigate("/");
+              setOpen(false);
+            }}
+            className={isActive("/")}
+          >
+            Reservar Sala
+          </span>
+
+          <span
+            onClick={handleLogout}
+            className="text-blue-800 hover:text-blue-700"
+          >
+            Logout
+          </span>
+        </div>
+      )}
     </nav>
   );
 }
