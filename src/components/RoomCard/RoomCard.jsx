@@ -1,66 +1,55 @@
-import React from "react";
-import "./RoomCard.css";
-import Img from "../../assets/sala.png";
-
-const getStatusClass = (status) => {
-  return status === "Disponible" ? "tag-available" : "tag-unavailable";
-};
-
 export default function RoomCard({ room }) {
-  const features = room.features || [];
   const isAvailable = room.available;
-  const status = isAvailable ? "Disponible" : "No disponible";
-  const statusClass = isAvailable ? "tag-available" : "tag-unavailable";
 
   return (
-    <div className="room-card">
-      {/* HEADER */}
-      <div className="room-card-header">
-        <span className={`room-status ${statusClass}`}>{status}</span>
-        <div className="room-price">
-          <span className="price-value">${room.price}</span>
-          <span className="price-unit">/h</span>
-        </div>
+    <article className="bg-white rounded-2xl shadow-xl p-6">
+      {/* Header */}
+      <div className="flex justify-between">
+        <span className={`px-6 py-2 rounded-br-xl text-white font-semibold ${
+          isAvailable ? "bg-sky-500" : "bg-red-500"
+        }`}>
+          {isAvailable ? "Disponible" : "No disponible"}
+        </span>
+
+        <span className="text-3xl font-bold text-blue-800">
+          ${room.price}<span className="text-xl">/h</span>
+        </span>
       </div>
 
-      {/* CONTENT */}
-      <div className="room-card-content">
-        {/* LEFT SIDE - INFO */}
-        <div className="room-info">
-          <div className="room-title">
-            <h3>{room.name}</h3>
-            <p className="room-meta">
-              {room.capacity} {room.capacity === 1 ? "Persona " : "Personas "} | {room.location}
-            </p>
-          </div>
+      {/* Content */}
+      <div className="mt-6 grid gap-6 md:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xl font-semibold">{room.name}</h3>
+          <p className="font-medium">
+            {room.capacity} personas | {room.location}
+          </p>
+          <p className="text-gray-600">{room.description}</p>
 
-          <p className="room-description">{room.description}</p>
-
-          <div className="room-features">
-            {features.map((f, i) => (
-              <span key={i} className="room-feature-item">
+          <div className="flex flex-wrap gap-2">
+            {room.features?.map((f, i) => (
+              <span key={i} className="px-3 py-1 rounded-full bg-gray-100 text-blue-800">
                 {f}
               </span>
             ))}
           </div>
 
-          <button className="reserve-button" disabled={!isAvailable}>
-            Solicita una reserva
+          <button
+            disabled={!isAvailable}
+            className="mt-4 px-6 py-3 rounded-full bg-sky-500 text-white font-medium hover:bg-blue-800 transition disabled:bg-gray-400"
+          >
+            Solicitar reserva
           </button>
         </div>
 
-        {/* RIGHT SIDE - IMAGE */}
-        <div className="room-image-container">
-          <img
-            src={
-              room.imageUrl
-                ? `${import.meta.env.VITE_API_URL}${room.imageUrl}` // muestra la imagen del backend
-                : Img // imagen por defecto si no tiene
-                }
-            alt={room.name}
-          />
-        </div>
+        <img
+          src={room.imageUrl
+            ? `${import.meta.env.VITE_API_URL}${room.imageUrl}`
+            : "https://via.placeholder.com/400x300?text=No+Image"
+          }
+          alt={room.name}
+          className="rounded-xl object-cover w-full h-full max-h-72"
+        />
       </div>
-    </div>
+    </article>
   );
 }

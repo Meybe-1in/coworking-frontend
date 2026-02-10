@@ -1,49 +1,51 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import RoomCard from "../../components/RoomCard/RoomCard";
-import "./UserDashboard.css";
-import { getRooms, getReservations, getAvailableRooms } from "../../api/axiosConfig";
+import { getRooms, getAvailableRooms } from "../../api/axiosConfig";
 
 export default function UserDashboard() {
-    const [rooms, setRooms] = useState([]);
     const [filtered, setFiltered] = useState([]);
 
-
-    // Cargar salas iniciales
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const roomsData = await getRooms();
-                setRooms(roomsData);
-                setFiltered(roomsData);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchData();
+        getRooms()
+            .then(data => setFiltered(Array.isArray(data) ? data : []))
+            .catch(console.error);
     }, []);
 
-    // Manejar búsqueda desde SearchBar
     const handleSearch = async (filters) => {
         try {
             const available = await getAvailableRooms(filters);
-            setFiltered(available);
+            setFiltered(Array.isArray(available) ? available : []);
         } catch (err) {
-            console.error("Error en búsqueda de salas disponibles", err);
+            console.error(err);
+            setFiltered([]);
         }
     };
 
     return (
-        <div className="dashboard-container">
+        <div className="bg-slate-100 min-h-screen">
             <NavbarUser />
-            <main className="dashboard-content">
-                <h1 className="title">Salas de reuniones y Coworking</h1>
-                <SearchBar onSearch={handleSearch} />
-                <div className="rooms-list">
-                    {filtered.map((room) => (
-                        <RoomCard key={room.id} room={room} status="Disponible" />
-                    ))}
+
+            <main className="pt-28 px-4 pb-16">
+                <div className="max-w-7xl mx-auto flex flex-col gap-6">
+                    <h1 className="text-3xl font-semibold">
+                        Salas de reuniones y Coworking
+                    </h1>
+
+                    <SearchBar onSearch={handleSearch} />
+
+                     <section className="flex flex-col gap-8">
+                        {filtered.length > 0 ? (
+                            filtered.map(room => (
+                                <RoomCard key={room.id} room={room} />
+                            ))
+                        ) : (
+                            <p className="text-center text-gray-500">
+                                No hay salas disponibles
+                            </p>
+                        )}
+                    </section>
                 </div>
             </main>
         </div>
