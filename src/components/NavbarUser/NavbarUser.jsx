@@ -37,6 +37,14 @@ export default function NavbarUser() {
             Log Out
           </button>
         </div>
+
+        {/* MOBILE ICON MENU */}
+        <button
+          className="md:hidden ml-auto text-2xl leading-none"
+          onClick={() => setOpen(!open)}
+        >
+          ☰
+        </button>
       </div>
     </nav>
   );
