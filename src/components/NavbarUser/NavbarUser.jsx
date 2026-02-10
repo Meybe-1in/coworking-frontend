@@ -31,11 +31,22 @@ export default function NavbarUser() {
           <span onClick={() => navigate("/calendar")}>Calendario</span>
           <span className="navbar-link link-reserve">Reservar Sala</span>
         </div>
-        <div className="navbar-actions">
-          <span className="navbar-username">{username}</span>
-          <button className="navbar-logout-btn" onClick={handleLogout}>
-            Log Out
-          </button>
+
+        {/* DERECHA - USUARIO + LOGOUT */}
+        <div className="hidden md:flex w-1/4 justify-end items-center gap-5">
+
+          {/* usuario alineado */}
+          <div className="flex items-center gap-2 text-gray-700">
+            <span className="leading-none">{username}</span>
+          </div>
+
+          <span
+            onClick={handleLogout}
+            className="cursor-pointer text-blue-800 hover:text-blue-700"
+          >
+            Logout
+          </span>
+
         </div>
 
         {/* MOBILE ICON MENU */}
