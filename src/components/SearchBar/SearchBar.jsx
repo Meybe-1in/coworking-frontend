@@ -53,66 +53,62 @@ export default function SearchBar({ onSearch }) {
         Iniciar Reserva
       </div>
 
-            <div className="searchbar-filters">
-                <div className="filter-group">
-                    <label htmlFor="date-input">Fecha</label>
-                    <input
-                        id="date-input"
-                        type="date"
-                        name="date"
-                        value={filters.date}
-                        onChange={handleChange}
-                        min={new Date().toISOString().split("T")[0]}   //evita fechas pasadas
-                    />
-                </div>
+      <div
+        className="
+          mt-4 grid gap-4
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-5
+          items-end
+        "
+      >
+        <div className="flex flex-col gap-1">
+          <label className="font-medium">Fecha</label>
+          <input
+            type="date"
+            name="date"
+            value={filters.date}
+            min={filters.date}
+            onChange={handleChange}
+            className={inputClass}
+          />
+        </div>
 
-                <div className="filter-group">
-                    <label htmlFor="start-input">Hora de Inicio</label>
-                    <select
-                        id="start-input"
-                        type="time"
-                        name="start"
-                        value={filters.start}
-                        onChange={handleChange}
+        <div className="flex flex-col gap-1">
+          <label className="font-medium">Hora Inicio</label>
+          <select
+            name="start"
+            value={filters.start}
+            onChange={handleChange}
+            className={inputClass}
+          >
+            {hours(7, 19).map(h => <option key={h}>{h}</option>)}
+          </select>
+        </div>
 
-                    >
-                        {startOptions.map((time) => (
-                            <option key={time} value={time}>
-                                {time}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+        <div className="flex flex-col gap-1">
+          <label className="font-medium">Hora Fin</label>
+          <select
+            name="end"
+            value={filters.end}
+            onChange={handleChange}
+            className={inputClass}
+          >
+            {hours(8, 20).map(h => <option key={h}>{h}</option>)}
+          </select>
+        </div>
 
-                <div className="filter-group">
-                    <label htmlFor="end-input">Hora de Finalización</label>
-                    <select
-                        id="end-input"
-                        type="time"
-                        name="end"
-                        value={filters.end}
-                        onChange={handleChange}
-                    >
-                        {endOptions.map((time) => (
-                            <option key={time} value={time}>
-                                {time}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="filter-group">
-                    <label htmlFor="people-input">N° Personas</label>
-                    <input
-                        id="people-input"
-                        type="number"
-                        name="people"
-                        value={filters.people}
-                        onChange={handleChange}
-                        placeholder="1"
-                        min="1"
-                    />
-                </div>
+        <div className="flex flex-col gap-1">
+          <label className="font-medium">Personas</label>
+          <input
+            type="number"
+            name="people"
+            min="1"
+            value={filters.people}
+            onChange={handleChange}
+            className={inputClass}
+          />
+        </div>
 
         <button
           onClick={handleSearch}
