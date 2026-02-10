@@ -2,50 +2,31 @@ import React, { useState } from "react";
 import "./SearchBar.css";
 
 export default function SearchBar({ onSearch }) {
-    const [filters, setFilters] = useState({
-        date: new Date().toISOString().split("T")[0],
-        start: "07:00",
-        end: "08:00",
-        people: "1"
-    });
+  const [filters, setFilters] = useState({
+    date: new Date().toISOString().split("T")[0],
+    start: "07:00",
+    end: "08:00",
+    people: "1",
+  });
 
-    const handleChange = (e) => {
-        setFilters({ ...filters, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e) =>
+    setFilters({ ...filters, [e.target.name]: e.target.value });
 
-    const handleSearch = () => {
-        if (!filters.date || !filters.start || !filters.end) {
-            alert("Por favor selecciona una fecha y horario");
-            return;
-        }
+  const handleSearch = () => {
+    if (!filters.date || filters.start >= filters.end) {
+      alert("Horario inválido");
+      return;
+    }
+    onSearch(filters);
+  };
 
-        if (filters.start >= filters.end) {
-            alert("La hora de inicio debe ser menor que la de fin");
-            return;
-        }
-        // Llamar a la función de búsqueda con los filtros
-        onSearch(filters);
-    };
-    const generateStartTimes = () => {
-        const times = [];
-        for (let h = 7; h <= 19; h++) {
-            times.push(`${h.toString().padStart(2, "0")}:00`);
-        }
-        return times;
-    };
+  const hours = (start, end) =>
+    Array.from({ length: end - start + 1 }, (_, i) =>
+      `${String(start + i).padStart(2, "0")}:00`
+    );
 
-    const generateEndTimes = () => {
-        const times = [];
-        for (let h = 8; h <= 20; h++) {
-            times.push(`${h.toString().padStart(2, "0")}:00`);
-        }
-        return times;
-    };
-
-    const startOptions = generateStartTimes();
-    const endOptions = generateEndTimes();
-
-
+  const inputClass =
+    "h-10 rounded bg-gray-200 text-center text-lg font-medium focus:outline focus:outline-sky-500";
 
   return (
     <section className="bg-white shadow-lg rounded-lg p-4 sm:p-6">
