@@ -1,6 +1,3 @@
-import React from 'react';
-import './NavbarUser.css'; // Importamos el archivo de estilos
-import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { getAuthItem, clearAuth } from '../../utils/authStorage';
 
