@@ -49,7 +49,7 @@ export default function NavbarUser() {
           </span>
 
           <span
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/userdashboard")}
             className={`cursor-pointer ${isActive("/userdashboard")}`}
           >
             Reservar Sala
