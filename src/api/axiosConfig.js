@@ -102,6 +102,15 @@ export const getAvailableRooms = async (filters) => {
   }
 }
 
+//crear calendario
+export const getCalendar = async (from, to) => {
+  
+    const res = await API.get(
+     "/api/reservations/calendar", 
+      { params: { from, to } }
+    );
+    return res.data;
+}
 
 export default API;
 
