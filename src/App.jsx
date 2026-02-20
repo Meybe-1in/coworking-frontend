@@ -12,6 +12,7 @@ import VerifyError from "./components/ui/VerifyError";
 import VerifySuccess from "./components/ui/VerifySuccess";
 import ForgotPassword from "./pages/Password/ForgotPassword";
 import ResetPassword from "./pages/Password/ResetPassword";
+import UserCalendar from "./pages/UserCalendar/UserCalendar";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -65,6 +66,10 @@ function LayoutWrapper() {
                 <UserDashboard /> 
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/calendar"
+            element={<UserCalendar />}
           />
         </Routes> 
       </div>
