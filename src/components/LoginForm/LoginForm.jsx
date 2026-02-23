@@ -25,6 +25,18 @@ function LoginForm() {
         rememberMe: remember
       });
 
+      // Limpiar tokens anteriores
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("role");
+
+      // Guardar nuevo token
+
       const storage = remember ? localStorage : sessionStorage;
 
       storage.setItem("token", res.data.token);
