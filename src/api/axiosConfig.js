@@ -52,14 +52,25 @@ API.interceptors.response.use(
       url?.includes(u)
     );
 
+    const token = 
+    localStorage.getItem("token") || 
+    sessionStorage.getItem("token");
+
     //redirigir si hay token o el endpoint publico o error 401/403
     if (
-      localStorage.getItem("token") &&
+      token &&
       !isPublic &&
       (status === 401 || status === 403)
     ) {
       localStorage.removeItem("token");
-      window.location.href = "/login";
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("role");
+      
+      window.location.replace("/login");
     }
 
     return Promise.reject(error);
