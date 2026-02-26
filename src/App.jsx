@@ -37,7 +37,7 @@ function LayoutWrapper() {
           <Route path="/" element={<Home />} /> {/* Home maneja su propio Navbar y Footer */}
           <Route path="/register" element={<SignUp />} />
           <Route path="/verify-success" element={<VerifySuccess />} />
-          <Route path="/verify-error" element={<VerifyError />} />  
+          <Route path="/verify-error" element={<VerifyError />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
@@ -53,25 +53,29 @@ function LayoutWrapper() {
           <Route
             path="/reservations/new"
           />
-          <Route 
-            path="/Login" 
+          <Route
+            path="/Login"
             element={
-            <LoginPage />
+              <LoginPage />
             }
           />
           <Route
             path="/userdashboard"
             element={
               <ProtectedRoute>
-                <UserDashboard /> 
+                <UserDashboard />
               </ProtectedRoute>
             }
           />
           <Route
             path="/calendar"
-            element={<UserCalendar />}
+            element={
+              <ProtectedRoute>
+                <UserCalendar />
+              </ProtectedRoute>
+            }
           />
-        </Routes> 
+        </Routes>
       </div>
     </div>
   );
