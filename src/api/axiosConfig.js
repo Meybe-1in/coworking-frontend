@@ -69,8 +69,8 @@ API.interceptors.response.use(
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("username");
       sessionStorage.removeItem("role");
-      
-      window.location.replace("/login");
+
+      window.location.replace("/Login");
     }
 
     return Promise.reject(error);
@@ -115,13 +115,13 @@ export const getAvailableRooms = async (filters) => {
 
 //crear calendario
 export const getCalendar = async (from, to) => {
-  
-    const res = await API.get(
-     "/api/reservations/calendar", 
-      { params: { from, to } }
-    );
-    return res.data;
-}
+
+  const res = await API.get("/api/reservations/calendar", {
+    params: { from, to }
+  });
+
+  return res.data;
+};
 
 export default API;
 
