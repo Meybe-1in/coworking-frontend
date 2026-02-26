@@ -3,7 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getAuthItem, clearAuth } from "../../utils/authStorage";
 
 export default function NavbarUser() {
-  const [username, setUsername] = useState("Usuario");
+  //const [username, setUsername] = useState(null);
+  const [username] = useState(() => getAuthItem("username"));
+  
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ export default function NavbarUser() {
 
   const handleLogout = () => {
     clearAuth();
-    navigate("/login");
+    navigate("/Login");
   };
 
   // botton sin estilo
@@ -61,9 +63,11 @@ export default function NavbarUser() {
         <div className="hidden md:flex w-1/4 justify-end items-center gap-5">
 
           {/* usuario alineado */}
-          <div className="flex items-center gap-2 text-gray-700">
-            <span className="leading-none">{username}</span>
-          </div>
+          {username && (
+            <div className="flex items-center gap-2 text-gray-700">
+              <span className="leading-none">{username}</span>
+            </div>
+          )}
 
           <span
             onClick={handleLogout}
@@ -103,10 +107,10 @@ export default function NavbarUser() {
 
           <span
             onClick={() => {
-              navigate("/");
+              navigate("/userdashboard");
               setOpen(false);
             }}
-            className={isActive("/")}
+            className={isActive("/userdashboard")}
           >
             Reservar Sala
           </span>
