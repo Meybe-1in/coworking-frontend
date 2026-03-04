@@ -4,17 +4,12 @@ import { getAuthItem, clearAuth } from "../../utils/authStorage";
 
 export default function NavbarUser() {
   //const [username, setUsername] = useState(null);
-  const [username] = useState(() => getAuthItem("username"));
+  const [username, setUsername] = useState(() => getAuthItem("username"));
   
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    const storedUsername = getAuthItem("username");
-    if (storedUsername) setUsername(storedUsername);
-  }, []);
 
   const handleLogout = () => {
     clearAuth();
