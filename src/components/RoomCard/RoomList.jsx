@@ -10,7 +10,8 @@ export default function RoomList() {
     const loadRooms = async () => {
       try {
         const data = await getRooms();
-        setRooms(data);
+        const sorted = [...data].sort((a, b) => a.capacity - b.capacity);
+        setRooms(sorted);
       } catch (err) {
         console.error(err);
       } finally {
