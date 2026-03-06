@@ -70,9 +70,33 @@ export default function UserDashboard() {
                                 <RoomCard key={room.id} room={room} />
                             ))
                         ) : (
-                            <p className="text-center text-gray-500">
-                                No hay salas disponibles
-                            </p>
+                            <div className="text-center py-12">
+                                <p className="text-xl font-semibold text-gray-600">
+                                    No hay salas disponibles para esa capacidad
+                                </p>
+                                {suggestedRooms.length > 0 && (
+                                    <div className="mt-6">
+                                        <p className="text-lg font-medium text-gray-700 mb-4">  
+                                            Salas sugeridas:
+                                        </p>
+                                        <div className="flex flex-col gap-4">
+                                            {suggestedRooms.map(room => (
+                                                <RoomCard key={room.id} room={room} />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <button
+                                    onClick={() => {
+                                        setFiltered(null);
+                                        setSuggestedRooms([]);
+                                    }}
+                                    className="mt-4 px-6 py-2 bg-sky-500 text-white rounded-lg"
+                                >
+                                    Ver todas las salas
+                                </button>
+                            </div>
                         )}
                     </section>
                 </div>
