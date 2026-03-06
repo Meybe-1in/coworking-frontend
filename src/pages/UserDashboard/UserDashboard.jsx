@@ -14,6 +14,18 @@ export default function UserDashboard() {
         loadRooms();
     }, []);
 
+    const loadRooms = async () => {
+        try {
+            const data = await getRooms();
+            setRooms(data);
+            setFiltered(data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleSearch = async (filters) => {
         try {
             const available = await getAvailableRooms(filters);
