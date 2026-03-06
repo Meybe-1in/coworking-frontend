@@ -5,7 +5,10 @@ import RoomCard from "../../components/RoomCard/RoomCard";
 import { getRooms, getAvailableRooms } from "../../api/axiosConfig";
 
 export default function UserDashboard() {
-    const [filtered, setFiltered] = useState([]);
+    const [rooms, setRooms] = useState([]);
+    const [filtered, setFiltered] = useState([null]);
+    const [loading, setLoading] = useState(true);
+    const [suggestedRooms, setSuggestedRooms] = useState([]);
 
     useEffect(() => {
         getRooms()
