@@ -11,9 +11,7 @@ export default function UserDashboard() {
     const [suggestedRooms, setSuggestedRooms] = useState([]);
 
     useEffect(() => {
-        getRooms()
-            .then(data => setFiltered(Array.isArray(data) ? data : []))
-            .catch(console.error);
+        loadRooms();
     }, []);
 
     const handleSearch = async (filters) => {
