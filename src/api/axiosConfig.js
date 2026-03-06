@@ -98,20 +98,29 @@ export const getRooms = async () => {
   }
 };
 
-//obtener salas disponibles
-export const getAvailableRooms = async (filters) => {
+//Obtener salas disponibles y no disponibles para un rango de fecha y hora
+export const getRoomsAvailability = async (filters) => {
   try {
     const { date, start, end, people } = filters;
 
-    const response = await API.get("/api/rooms/available", {
-      params: { date, start, end, people }
+    const startDateTime = `${date}T${start}`;
+    const endDateTime = `${date}T${end}`;
+
+    const response = await API.get("/api/rooms/availability", {
+      params: {
+        start: startDateTime,
+        end: endDateTime,
+        people
+      }
     });
+
     return response.data;
+
   } catch (error) {
-    console.error("Error obteniendo salas disponibles", error);
+    console.error("Error obteniendo disponibilidad", error);
     throw error;
   }
-}
+};
 
 //crear calendario
 export const getCalendar = async (from, to) => {
