@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import RoomCard from "../../components/RoomCard/RoomCard";
-import { getRooms, getAvailableRooms } from "../../api/axiosConfig";
+import { getRooms, getRoomsAvailability } from "../../api/axiosConfig";
 
 export default function UserDashboard() {
     const [rooms, setRooms] = useState([]);
@@ -52,6 +52,8 @@ export default function UserDashboard() {
         }
     };
 
+    const roomsToShow = filtered !== null ? filtered : rooms;
+
     return (
         <div className="bg-slate-100 min-h-screen">
             <NavbarUser />
@@ -64,9 +66,12 @@ export default function UserDashboard() {
 
                     <SearchBar onSearch={handleSearch} />
 
-                     <section className="flex flex-col gap-8">
-                        {filtered.length > 0 ? (
-                            filtered.map(room => (
+                    <section className="flex flex-col gap-8">
+                        {loading ? (
+                            <p className="text-center text-lg text-gray-600">
+                            </p>
+                        ) : roomsToShow.length > 0 ? (
+                            roomsToShow.map(room => (
                                 <RoomCard key={room.id} room={room} />
                             ))
                         ) : (
