@@ -28,8 +28,24 @@ export default function UserDashboard() {
 
     const handleSearch = async (filters) => {
         try {
-            const available = await getAvailableRooms(filters);
-            setFiltered(Array.isArray(available) ? available : []);
+            const data = await getRoomsAvailability(filters);
+
+            if (data.length === 0) {
+
+                const suggestions = rooms
+                    .sort((a, b) =>
+                        Math.abs(a.capacity - filters.people) -
+                        Math.abs(b.capacity - filters.people)
+                    )
+                    .slice(0, 2);
+
+                setSuggestedRooms(suggestions);
+            } else {
+                setSuggestedRooms([]);
+            }
+
+            setFiltered(data);
+
         } catch (err) {
             console.error(err);
             setFiltered([]);
