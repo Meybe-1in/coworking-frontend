@@ -81,7 +81,11 @@ export default function UserDashboard() {
 
             {filtered && filtered.length > 0 && (
               filtered.map(room => (
-                <RoomCard key={room.id} room={room} />
+                <RoomCard 
+                key={room.id} 
+                room={room} 
+                filters={filters}
+                />
               ))
             )}
 
