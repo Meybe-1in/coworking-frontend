@@ -132,5 +132,16 @@ export const getCalendar = async (from, to) => {
   return res.data;
 };
 
+//API para crear reserva 
+export const createReservation = async (reservationData) => {
+  try {
+    const res = await API.post("/api/reservations", reservationData);
+    return res.data;
+  } catch (error) {
+    console.error("Error creando reserva:", error);
+    throw new Error("Error al crear la reserva");
+  }
+};
+
 export default API;
 
