@@ -13,6 +13,7 @@ import VerifySuccess from "./components/ui/VerifySuccess";
 import ForgotPassword from "./pages/Password/ForgotPassword";
 import ResetPassword from "./pages/Password/ResetPassword";
 import UserCalendar from "./pages/UserCalendar/UserCalendar";
+import CheckoutPage from "./pages/Checkout/CheckoutPage";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -72,6 +73,14 @@ function LayoutWrapper() {
             element={
               <ProtectedRoute>
                 <UserCalendar />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
               </ProtectedRoute>
             }
           />
