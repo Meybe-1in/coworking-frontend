@@ -1,3 +1,3 @@
 export function formatDateTime(date, time) {
-  return `${date} ${time}:00.000`;
+    return `${date}T${time}:00`;
 }
