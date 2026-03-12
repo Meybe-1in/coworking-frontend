@@ -1,47 +1,60 @@
 import { useState } from "react";
 
 export default function SearchBar({ onSearch }) {
-  const today = new Date().toISOString().split("T")[0];
 
-  const getInitialHours = () => {
-    const currentHour = new Date().getHours() + 1;
-    const startHour = Math.max(7, currentHour);
-    return {
-      start: `${String(startHour).padStart(2, "0")}:00`,
-      end: `${String(startHour + 1).padStart(2, "0")}:00`,
-    };
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
-  const initialHours = getInitialHours();
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  const todayR = formatDate(now);
+
+  // Si ya es tarde, iniciar mañana
+  const isNextDay = currentHour >= 19;
+
+  const defaultDate = new Date(now);
+
+  if (isNextDay) {
+    defaultDate.setDate(defaultDate.getDate() + 1);
+  }
+
+  const today = formatDate(defaultDate);
+
+  const initialStartHour = isNextDay
+    ? 7
+    : Math.max(7, currentHour + 1);
+
+  const formatHour = (hour) =>
+    `${String(hour).padStart(2, "0")}:00`;
 
   const [filters, setFilters] = useState({
     date: today,
-    start: initialHours.start,
-    end: initialHours.end,
+    start: formatHour(initialStartHour),
+    end: formatHour(initialStartHour + 1),
     people: "1",
   });
 
-  // Genera horas entre un rango
-  const generateHours = (start, end) => {
-    const hours = [];
+  // Generar lista de horas
+  const generateHours = (start, end) =>
+    Array.from(
+      { length: end - start + 1 },
+      (_, i) => formatHour(start + i)
+    );
 
-    for (let i = start; i <= end; i++) {
-      hours.push(`${String(i).padStart(2, "0")}:00`);
-    }
-
-    return hours;
-  };
-
-  // Hora actual redondeada a la siguiente
-  const getCurrentHour = () => {
-    return new Date().getHours() + 1;
-  };
+  // Hora actual redondeada
+  const getCurrentHour = () =>
+    new Date().getHours() + 1;
 
   // Horas disponibles para inicio
   const getStartHours = () => {
     let startHour = 7;
 
-    if (filters.date === today) {
+    if (filters.date === todayR) {
       startHour = Math.max(7, getCurrentHour());
     }
 
@@ -50,7 +63,9 @@ export default function SearchBar({ onSearch }) {
 
   // Horas disponibles para fin
   const getEndHours = () => {
-    const startHour = parseInt(filters.start.split(":")[0]) + 1;
+    const startHour =
+      parseInt(filters.start.split(":")[0]) + 1;
+
     return generateHours(startHour, 20);
   };
 
@@ -60,19 +75,19 @@ export default function SearchBar({ onSearch }) {
     let updated = { ...filters, [name]: value };
 
     if (name === "start") {
-      const startHour = parseInt(value.split(":")[0]);
-      updated.end = `${String(startHour + 1).padStart(2, "0")}:00`;
+      const startHour = parseInt(value);
+      updated.end = formatHour(startHour + 1);
     }
 
     if (name === "date") {
       let startHour = 7;
 
-      if (value === today) {
-        startHour = Math.max(7, new Date().getHours() + 1);
+      if (value === todayR) {
+        startHour = Math.max(7, getCurrentHour());
       }
 
-      updated.start = `${String(startHour).padStart(2, "0")}:00`;
-      updated.end = `${String(startHour + 1).padStart(2, "0")}:00`;
+      updated.start = formatHour(startHour);
+      updated.end = formatHour(startHour + 1);
     }
 
     setFilters(updated);
@@ -92,6 +107,7 @@ export default function SearchBar({ onSearch }) {
 
   return (
     <section className="bg-white shadow-lg rounded-lg p-4 sm:p-6">
+
       <div className="bg-sky-500 text-white px-6 py-2 rounded-t-md w-fit text-xl font-medium">
         Iniciar Reserva
       </div>
@@ -105,18 +121,21 @@ export default function SearchBar({ onSearch }) {
         items-end
       "
       >
+
+        {/* Fecha */}
         <div className="flex flex-col gap-1">
           <label className="font-medium">Fecha</label>
           <input
             type="date"
             name="date"
             value={filters.date}
-            min={today}
+            min={isNextDay ? today : todayR}
             onChange={handleChange}
             className={inputClass}
           />
         </div>
 
+        {/* Hora inicio */}
         <div className="flex flex-col gap-1">
           <label className="font-medium">Hora Inicio</label>
           <select
@@ -131,6 +150,7 @@ export default function SearchBar({ onSearch }) {
           </select>
         </div>
 
+        {/* Hora fin */}
         <div className="flex flex-col gap-1">
           <label className="font-medium">Hora Fin</label>
           <select
@@ -145,6 +165,7 @@ export default function SearchBar({ onSearch }) {
           </select>
         </div>
 
+        {/* Personas */}
         <div className="flex flex-col gap-1">
           <label className="font-medium">Personas</label>
           <input
@@ -157,15 +178,19 @@ export default function SearchBar({ onSearch }) {
           />
         </div>
 
+        {/* Botón */}
         <button
           onClick={handleSearch}
-          className="h-10 flex items-center justify-center
+          className="
+          h-10 flex items-center justify-center
           border-2 border-sky-500 text-sky-500
           font-bold rounded
-          hover:bg-sky-500 hover:text-white transition"
+          hover:bg-sky-500 hover:text-white transition
+        "
         >
           Buscar Sala
         </button>
+
       </div>
     </section>
   );
