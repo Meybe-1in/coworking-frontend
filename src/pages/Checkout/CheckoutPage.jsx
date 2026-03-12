@@ -34,7 +34,7 @@ export default function CheckoutPage() {
         roomId: room.id,
         startAt,
         endAt,
-        people: filters.people,
+       // people: filters.people,
         note: note || "Reserva Coworking"
       };
 
