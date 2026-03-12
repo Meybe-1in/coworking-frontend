@@ -70,7 +70,7 @@ API.interceptors.response.use(
       sessionStorage.removeItem("username");
       sessionStorage.removeItem("role");
 
-      window.location.replace("/Login");
+      //window.location.replace("/Login");
     }
 
     return Promise.reject(error);
