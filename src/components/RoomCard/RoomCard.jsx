@@ -1,5 +1,12 @@
-export default function RoomCard({ room }) {
+import { useNavigate } from "react-router-dom";
+export default function RoomCard({ room, filters }) {
   const isAvailable = room.available;
+  const navigate = useNavigate();
+
+  const handleReserve = () => {
+    if (!filters) return;
+      navigate("/checkout", { state: { room, filters } });
+  };
 
   return (
     <article className="bg-white rounded-2xl shadow-xl p-6">
@@ -44,7 +51,7 @@ export default function RoomCard({ room }) {
           {/* Botón reserva */}
           <button
             disabled={!isAvailable}
-            aria-disabled={!isAvailable}
+            onClick={handleReserve}
             className={`
               mt-4 px-6 py-3 rounded-full font-medium transition
               ${
