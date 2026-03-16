@@ -143,5 +143,16 @@ export const createReservation = async (reservationData) => {
   }
 };
 
+//API para obtener sala por ID
+export const getRoomById = async (id) => {
+  try {
+    const res = await API.get(`/api/rooms/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error obteniendo sala por ID:", error);
+    throw new Error("Error al obtener la sala");
+  }
+};
+
 export default API;
 
