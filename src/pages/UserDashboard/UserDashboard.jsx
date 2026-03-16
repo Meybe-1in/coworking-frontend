@@ -3,6 +3,7 @@ import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import EmptyRoomsState from "../../components/ui/EmptyRoomsState";
+import RoomCarousel from "../../components/RoomCard/RoomCarousel";
 
 import { getRooms, getRoomsAvailability } from "../../api/axiosConfig";
 
@@ -24,6 +25,11 @@ export default function UserDashboard() {
       console.error(err);
       setFiltered([]);
     }
+  };
+
+  const handleShowAll = () => {
+    setFilters(null);
+    loadAllRooms();
   };
 
   const handleSearch = async (filters) => {
@@ -73,27 +79,33 @@ export default function UserDashboard() {
             Salas de reuniones y Coworking
           </h1>
 
+
           <SearchBar onSearch={handleSearch} />
+          {/* Carrusel de sugerencias */}
+          
+          {filtered && !filters && (
+            <RoomCarousel rooms={filtered} />
+          )}
 
           {/* RESULTADOS */}
 
           <section className="flex flex-col gap-8">
 
-            {filtered && filtered.length > 0 && (
+            {filters && filtered && filtered.length > 0 && (
               filtered.map(room => (
-                <RoomCard 
-                key={room.id} 
-                room={room} 
-                filters={filters}
+                <RoomCard
+                  key={room.id}
+                  room={room}
+                  filters={filters}
                 />
               ))
             )}
 
-            {filtered && filtered.length === 0 && (
+            {filters && filtered && filtered.length === 0 && (
               <EmptyRoomsState
                 people={filters?.people}
                 suggestedRooms={suggestedRooms}
-                onShowAll={loadAllRooms}
+                onShowAll={handleShowAll}
               />
             )}
 
