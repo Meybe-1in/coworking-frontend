@@ -35,7 +35,9 @@ export default function RoomCard({ room, filters }) {
             {room.capacity} personas | {room.location}
           </p>
 
-          <p className="text-gray-600">{room.description}</p>
+          <p className="text-gray-600 line-clamp-2">
+            {room.description}
+          </p>
 
           <div className="flex flex-wrap gap-2">
             {room.features?.map((f, i) => (
