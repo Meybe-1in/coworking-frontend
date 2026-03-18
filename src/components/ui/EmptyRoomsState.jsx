@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import RoomCard from "../RoomCard/RoomCard";
 
-export default function EmptyRoomsState({ people, suggestedRooms, onShowAll }) {
+export default function EmptyRoomsState({ people, suggestedRooms, onShowAll, filters }) {
 
     const [visible, setVisible] = useState(false);
 
@@ -51,7 +51,11 @@ export default function EmptyRoomsState({ people, suggestedRooms, onShowAll }) {
                                 animationDelay: `${index * 0.1}s`
                             }}
                         >
-                            <RoomCard room={room} />
+                            <RoomCard 
+                            key={room.id} 
+                            room={room} 
+                            filters={filters}
+                            />
                         </div>
                     ))}
                 </div>
