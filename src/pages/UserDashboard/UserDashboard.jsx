@@ -51,31 +51,14 @@ export default function UserDashboard() {
         getRooms()
       ]);
 
-      {/*if (!availabilityRooms || availabilityRooms.length === 0) {
-
-        const suggestions = allRooms
-          .sort(
-            (a, b) =>
-              Math.abs(a.capacity - filters.people) -
-              Math.abs(b.capacity - filters.people)
-          )
-          .slice(0, 3)
-          .map(room => ({
-            ...room,
-            available: true
-          }));
-
-        setFiltered([]);
-        setSuggestedRooms(suggestions);
-
-}*/} 
+      {
 
 if (!availabilityRooms || availabilityRooms.length === 0) {
 
   let suggestions = [];
 
   try {
-    // 🔥 Intento 1: sin filtro de capacidad (solo fecha/hora)
+
     const { people, ...rest } = filters;
 
     const relaxedAvailability = await getRoomsAvailability(rest);
@@ -92,16 +75,14 @@ if (!availabilityRooms || availabilityRooms.length === 0) {
   } catch (error) {
     console.error("Error en sugerencias:", error);
   }
-
-  // 🔥 fallback si backend no devuelve nada
   if (suggestions.length === 0) {
     suggestions = allRooms.map(room => ({
       ...room,
-      available: false // 🔥 importante: no mentimos
+      available: false 
     }));
   }
 
-  // 🔥 ordenamos por cercanía de capacidad
+
   suggestions = suggestions
     .sort(
       (a, b) =>
