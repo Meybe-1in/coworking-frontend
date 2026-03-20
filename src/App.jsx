@@ -14,6 +14,7 @@ import ForgotPassword from "./pages/Password/ForgotPassword";
 import ResetPassword from "./pages/Password/ResetPassword";
 import UserCalendar from "./pages/UserCalendar/UserCalendar";
 import CheckoutPage from "./pages/Checkout/CheckoutPage";
+import RoomDetailsPage from "./pages/Checkout/RoomDetailsPage";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function LayoutWrapper() {
           <Route path="/verify-error" element={<VerifyError />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/rooms/:id" element={<RoomDetailsPage />} />
 
           {/* protegidas */}
           <Route

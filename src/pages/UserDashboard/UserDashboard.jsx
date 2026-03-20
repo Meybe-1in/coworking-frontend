@@ -4,7 +4,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import EmptyRoomsState from "../../components/ui/EmptyRoomsState";
 import RoomCarousel from "../../components/RoomCard/RoomCarousel";
-
+import { useLocation } from "react-router-dom";
 import { getRooms, getRoomsAvailability } from "../../api/axiosConfig";
 
 export default function UserDashboard() {
@@ -12,10 +12,19 @@ export default function UserDashboard() {
   const [filtered, setFiltered] = useState(null);
   const [suggestedRooms, setSuggestedRooms] = useState([]);
   const [filters, setFilters] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     loadAllRooms();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.reset) {
+      handleShowAll();
+
+      window.history.replaceState({}, document.title); // Limpia el state para evitar re-ejecutar al volver a la página 
+    }
+  }, [location.state]);
 
   const loadAllRooms = async () => {
     try {
@@ -37,11 +46,12 @@ export default function UserDashboard() {
 
       setFilters(filters);
 
-      const rooms = await getRoomsAvailability(filters);
+      const [availabilityRooms, allRooms] = await Promise.all([
+        getRoomsAvailability(filters),
+        getRooms()
+      ]);
 
-      if (!rooms || rooms.length === 0) {
-
-        const allRooms = await getRooms();
+      if (!availabilityRooms || availabilityRooms.length === 0) {
 
         const suggestions = allRooms
           .sort(
@@ -49,14 +59,26 @@ export default function UserDashboard() {
               Math.abs(a.capacity - filters.people) -
               Math.abs(b.capacity - filters.people)
           )
-          .slice(0, 3);
+          .slice(0, 3)
+          .map(room => ({
+            ...room,
+            available: true
+          }));
 
         setFiltered([]);
         setSuggestedRooms(suggestions);
 
       } else {
+        const fullRooms = availabilityRooms.map(avRoom => {
+          const fullData = allRooms.find(r => r.id === avRoom.id);
 
-        setFiltered(rooms);
+          return {
+            ...fullData,   // description, features, etc
+            ...avRoom      // available, etc
+          };
+        });
+
+        setFiltered(fullRooms);
         setSuggestedRooms([]);
 
       }
@@ -82,7 +104,7 @@ export default function UserDashboard() {
 
           <SearchBar onSearch={handleSearch} />
           {/* Carrusel de sugerencias */}
-          
+
           {filtered && !filters && (
             <RoomCarousel rooms={filtered} />
           )}
@@ -97,6 +119,7 @@ export default function UserDashboard() {
                   key={room.id}
                   room={room}
                   filters={filters}
+                  preview={false}
                 />
               ))
             )}
@@ -106,6 +129,7 @@ export default function UserDashboard() {
                 people={filters?.people}
                 suggestedRooms={suggestedRooms}
                 onShowAll={handleShowAll}
+                filters={filters}
               />
             )}
 
