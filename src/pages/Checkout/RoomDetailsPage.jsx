@@ -32,14 +32,24 @@ export default function RoomDetailsPage() {
     // STATE
     const [room, setRoom] = useState(null);
 
-    const [filters, setFilters] = useState(
-        incomingFilters || {
-            date: today,
-            start: formatHour(initialStartHour),
-            end: formatHour(initialStartHour + 1),
-            people: 1
-        }
-    );
+    const defaultFilters = {
+    date: today,
+    start: formatHour(initialStartHour),
+    end: formatHour(initialStartHour + 1),
+    people: 1
+};
+
+const [filters, setFilters] = useState({
+    ...defaultFilters,
+    ...incomingFilters
+});
+
+const safeFilters = {
+    date: filters?.date || defaultFilters.date,
+    start: filters?.start || defaultFilters.start,
+    end: filters?.end || defaultFilters.end,
+    people: filters?.people || defaultFilters.people
+};
 
     // -----------------------------
     // EFFECTS
@@ -59,13 +69,16 @@ export default function RoomDetailsPage() {
         if (!room) return;
 
         const validHours = getStartHours();
+        if (!validHours.length) return;
+
+        const hour = parseInt(validHours[0].split(":")[0]);
 
         setFilters(prev => {
             if (!validHours.includes(prev.start)) {
                 return {
                     ...prev,
                     start: validHours[0],
-                    end: formatHour(parseInt(validHours[0]) + 1)
+                    end: formatHour(hour + 1)
                 };
             }
             return prev;
@@ -85,7 +98,7 @@ export default function RoomDetailsPage() {
 
     const getStartHours = () => {
         const now = new Date();
-        const selectedDate = new Date(filters.date);
+        const selectedDate = new Date(safeFilters.date);
 
         let startHour = 7;
 
@@ -102,6 +115,7 @@ export default function RoomDetailsPage() {
     };
 
     const getEndHours = () => {
+        if (!filters.start) return [];
         const startHour =
             parseInt(filters.start.split(":")[0]) + 1;
 
@@ -109,8 +123,8 @@ export default function RoomDetailsPage() {
     };
 
     const getHours = () => {
-        const start = parseInt(filters.start);
-        const end = parseInt(filters.end);
+        const start = parseInt(safeFilters.start);
+        const end = parseInt(safeFilters.end);
 
         return Math.max(0, end - start);
     };
@@ -152,7 +166,7 @@ export default function RoomDetailsPage() {
     const startHours = getStartHours();
     const endHours = getEndHours();
     const hours =
-        parseInt(filters.end) - parseInt(filters.start);
+        parseInt(safeFilters.end) - parseInt(safeFilters.start);
 
     return (
         <div className="bg-slate-100 min-h-screen">
@@ -170,7 +184,7 @@ export default function RoomDetailsPage() {
                                     ? `${import.meta.env.VITE_API_URL}${room.imageUrl}`
                                     : Img
                             }
-                            className="w-full h-[380px] object-cover rounded-2xl"
+                            className="w-full h-96 object-cover rounded-2xl"
                         />
 
 
@@ -247,7 +261,7 @@ export default function RoomDetailsPage() {
                                 <input
                                     type="date"
                                     name="date"
-                                    value={filters.date}
+                                    value={safeFilters.date}
                                     min={today}
                                     onChange={handleChange}
                                     className="outline-none text-lg font-medium"
@@ -265,7 +279,7 @@ export default function RoomDetailsPage() {
 
                                     <select
                                         name="start"
-                                        value={filters.start}
+                                        value={safeFilters.start}
                                         onChange={handleChange}
                                         className="outline-none text-lg font-medium bg-transparent"
                                     >
@@ -283,7 +297,7 @@ export default function RoomDetailsPage() {
 
                                     <select
                                         name="end"
-                                        value={filters.end}
+                                        value={safeFilters.end}
                                         onChange={handleChange}
                                         className="outline-none text-lg font-medium bg-transparent"
                                     >
