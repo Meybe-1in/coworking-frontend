@@ -1,22 +1,23 @@
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getRoomById } from "../../api/axiosConfig";
+import { getRoomById, getCalendar } from "../../api/axiosConfig";
 import Img from "../../assets/sala.png";
+import { getBlockedHours, formatHour, generateHours } from "../../utils/timeSlots";
+import { toUTC } from "../../utils/dateUtils";
 
 export default function RoomDetailsPage() {
 
+    //STATES
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+    const [blockedHours, setBlockedHours] = useState(new Set());
 
     const incomingFilters = location.state?.filters;
 
     const now = new Date();
     const today = now.toISOString().split("T")[0];
-
-    const formatHour = (hour) =>
-        `${String(hour).padStart(2, "0")}:00`;
 
     const getInitialStartHour = () => {
         const currentHour = now.getHours();
@@ -33,23 +34,23 @@ export default function RoomDetailsPage() {
     const [room, setRoom] = useState(null);
 
     const defaultFilters = {
-    date: today,
-    start: formatHour(initialStartHour),
-    end: formatHour(initialStartHour + 1),
-    people: 1
-};
+        date: today,
+        start: formatHour(initialStartHour),
+        end: formatHour(initialStartHour + 1),
+        people: 1
+    };
 
-const [filters, setFilters] = useState({
-    ...defaultFilters,
-    ...incomingFilters
-});
+    const [filters, setFilters] = useState({
+        ...defaultFilters,
+        ...incomingFilters
+    });
 
-const safeFilters = {
-    date: filters?.date || defaultFilters.date,
-    start: filters?.start || defaultFilters.start,
-    end: filters?.end || defaultFilters.end,
-    people: filters?.people || defaultFilters.people
-};
+    const safeFilters = {
+        date: filters?.date || defaultFilters.date,
+        start: filters?.start || defaultFilters.start,
+        end: filters?.end || defaultFilters.end,
+        people: filters?.people || defaultFilters.people
+    };
 
     // -----------------------------
     // EFFECTS
@@ -71,55 +72,120 @@ const safeFilters = {
         const validHours = getStartHours();
         if (!validHours.length) return;
 
-        const hour = parseInt(validHours[0].split(":")[0]);
+        const firstAvailable = validHours.find(h => !h.disabled);
+        if (!firstAvailable) return;
+
+        const hour = parseInt(firstAvailable.value);
 
         setFilters(prev => {
-            if (!validHours.includes(prev.start)) {
+            if (!validHours.some(h => h.value === prev.start && !h.disabled)) {
                 return {
                     ...prev,
-                    start: validHours[0],
+                    start: firstAvailable.value,
                     end: formatHour(hour + 1)
                 };
             }
             return prev;
         });
 
-    }, [filters.date, room]);
+    }, [filters.date, room, blockedHours]);
 
+    // Cargar horas bloqueadas
+
+    useEffect(() => {
+        const loadReservations = async () => {
+            try {
+                const start = toUTC(safeFilters.date, "00:00");
+                const end = toUTC(safeFilters.date, "23:59");
+
+                const data = await getCalendar(start, end);
+                console.log("CALENDAR DATA:", data);
+
+                //filtrar por sala
+                const roomReservations = data.filter(r => r.roomId === parseInt(id));
+
+                const blocked = getBlockedHours(roomReservations, safeFilters.date);
+
+                setBlockedHours(blocked);
+
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        loadReservations();
+    }, [safeFilters.date, id]);
+
+    // Ajustar horas si las bloqueadas afectan la selección actual
+    useEffect(() => {
+        if (!blockedHours.size) return;
+
+        const availableStart = getStartHours().find(h => !h.disabled);
+
+        if (!availableStart) return;
+
+        setFilters(prev => {
+            if (blockedHours.has(prev.start)) {
+                const startHour = parseInt(availableStart.value);
+
+                return {
+                    ...prev,
+                    start: availableStart.value,
+                    end: formatHour(startHour + 1)
+                };
+            }
+            return prev;
+        });
+
+    }, [blockedHours]);
     // -----------------------------
     // HELPERS
     // -----------------------------
 
-    const generateHours = (start, end) =>
-        Array.from(
-            { length: end - start + 1 },
-            (_, i) => formatHour(start + i)
-        );
-
     const getStartHours = () => {
         const now = new Date();
-        const selectedDate = new Date(safeFilters.date);
+
+        const todayStr = now.toISOString().split("T")[0];
 
         let startHour = 7;
 
-        if (selectedDate.toDateString() === now.toDateString()) {
-            const nextHour =
-                now.getMinutes() > 0
-                    ? now.getHours() + 1
-                    : now.getHours();
-
-            startHour = Math.max(7, nextHour);
+        if (safeFilters.date === todayStr) {
+            startHour = Math.max(7, now.getHours() + 1);
         }
 
-        return generateHours(startHour, 19);
+        const hours = generateHours(startHour, 19);
+
+        return hours.map(h => ({
+            value: h,
+            disabled: blockedHours.has(h)
+        }));
     };
 
     const getEndHours = () => {
         if (!filters.start) return [];
-        const startHour =
-            parseInt(filters.start.split(":")[0]) + 1;
 
-        return generateHours(startHour, 20);
+        const startHour = parseInt(filters.start.split(":")[0]);
+        const hours = [];
+
+        for (let h = startHour + 1; h <= 20; h++) {
+            const hourStr = formatHour(h);
+
+            // SI está bloqueada → se puede usar como FIN, pero no seguir
+            if (blockedHours.has(hourStr)) {
+                hours.push({
+                    value: hourStr,
+                    disabled: false
+                });
+                break;
+            }
+
+            hours.push({
+                value: hourStr,
+                disabled: false
+            });
+        }
+
+        return hours;
     };
 
     const getHours = () => {
@@ -284,7 +350,9 @@ const safeFilters = {
                                         className="outline-none text-lg font-medium bg-transparent"
                                     >
                                         {startHours.map(h => (
-                                            <option key={h}>{h}</option>
+                                            <option key={h.value} value={h.value} disabled={h.disabled}>
+                                                {h.value} {h.disabled ? " (Ocupado)" : ""}
+                                            </option>
                                         ))}
                                     </select>
                                 </div>
@@ -302,7 +370,9 @@ const safeFilters = {
                                         className="outline-none text-lg font-medium bg-transparent"
                                     >
                                         {endHours.map(h => (
-                                            <option key={h}>{h}</option>
+                                            <option key={h.value} value={h.value} disabled={h.disabled}>
+                                                {h.value} {h.disabled ? " (Ocupado)" : ""}
+                                            </option>
                                         ))}
                                     </select>
                                 </div>
