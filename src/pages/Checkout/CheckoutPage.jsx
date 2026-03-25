@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import { createReservation } from "../../api/axiosConfig";
 import { useState } from "react";
-import { formatDateTime } from "../../utils/dateFormatter";
 import Swal from "sweetalert2";
+import { toUTC } from "../../utils/dateUtils";
 
 export default function CheckoutPage() {
 
@@ -18,9 +18,6 @@ export default function CheckoutPage() {
     return <p>Error cargando reserva</p>;
   }
 
-  const startAt = formatDateTime(filters.date, filters.start);
-  const endAt = formatDateTime(filters.date, filters.end);
-
   const total =
     room.price *
     (parseInt(filters.end.split(":")[0]) -
@@ -32,9 +29,8 @@ export default function CheckoutPage() {
 
       const reservationData = {
         roomId: room.id,
-        startAt,
-        endAt,
-       // people: filters.people,
+        startAt: toUTC(filters.date, filters.start),
+        endAt: toUTC(filters.date, filters.end),    
         note: note || "Reserva Coworking"
       };
 
@@ -50,16 +46,17 @@ export default function CheckoutPage() {
 
     } catch (error) {
       console.error("Error creando reserva:", error);
+
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Hubo un error al crear la reserva. Intenta nuevamente."
+        text: "Hubo un error al crear la reserva."
       });
+
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="bg-slate-100 min-h-screen">

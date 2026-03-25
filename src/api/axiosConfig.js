@@ -1,4 +1,5 @@
 import axios from "axios";
+import {toUTC} from "../utils/dateUtils";
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
@@ -103,8 +104,8 @@ export const getRoomsAvailability = async (filters) => {
   try {
     const { date, start, end, people } = filters;
 
-    const startDateTime = `${date}T${start}`;
-    const endDateTime = `${date}T${end}`;
+    const startDateTime = toUTC(date, start);
+    const endDateTime = toUTC(date, end);
 
     const response = await API.get("/api/rooms/availability", {
       params: {
