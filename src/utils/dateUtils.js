@@ -1,8 +1,15 @@
+import { DateTime } from "luxon";
+
 export function toUTC(date, time) {
-  const local = new Date(`${date}T${time}`);
-  return local.toISOString();
+  return DateTime
+    .fromISO(`${date}T${time}:00`, { zone: "America/El_Salvador" })
+    .toUTC()
+    .toISO();
 }
 
 export function toLocal(utcDate) {
-  return new Date(utcDate).toLocaleString();
+  return DateTime
+    .fromISO(utcDate, { zone: "utc" })
+    .setZone("America/El_Salvador")
+    .toFormat("yyyy-LL-dd HH:mm");
 }

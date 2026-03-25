@@ -1,3 +1,4 @@
+import {DateTime} from "luxon";
 export const formatHour = (hour) =>
   `${String(hour).padStart(2, "0")}:00`;
 
@@ -12,15 +13,19 @@ export const getBlockedHours = (reservations, selectedDate) => {
   const blocked = new Set();
 
   reservations.forEach(r => {
-    const start = new Date(r.start);
-    const end = new Date(r.end);
+    const start = DateTime.fromISO(r.start, { zone: "utc" })
+      .setZone("America/El_Salvador");
 
-    let currentHour = start.getHours();
-    const endHour = end.getHours();
+    const end = DateTime.fromISO(r.end, { zone: "utc" })
+      .setZone("America/El_Salvador");
+
+    if (start.toISODate() !== selectedDate) return;
+
+    let currentHour = start.hour;
+    const endHour = end.hour;
 
     while (currentHour < endHour) {
-      const hourStr = formatHour(currentHour);
-      blocked.add(hourStr);
+      blocked.add(formatHour(currentHour));
       currentHour++;
     }
   });
