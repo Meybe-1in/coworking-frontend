@@ -41,6 +41,47 @@ export default function UserDashboard() {
     loadAllRooms();
   };
 
+  const getNextAvailableTime = (room, reservations, filters) => {
+    const { date, start, end } = filters;
+
+    const startTime = new Date(`${date}T${start}`).getTime();
+    const endTime = new Date(`${date}T${end}`).getTime();
+    const duration = endTime - startTime;
+
+    // Filtrar reservas de esa sala
+    const roomReservations = reservations
+      .filter(r => r.roomName === room.name)
+      .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+
+    let isAvailable = true;
+    let nextAvailable = null;
+
+    let canStart = startTime;
+
+    for (let i = 0; i < roomReservations.length; i++) {
+      const resStart = new Date(roomReservations[i].startAt).getTime();
+      const resEnd = new Date(roomReservations[i].endAt).getTime();
+
+      const canEnd = canStart + duration;
+      //SE SOLAPA CON EL BLOQUE ACTUAL
+      if (canStart < resEnd && canEnd > resStart) {
+        isAvailable = false;
+
+        // mover inicio al final de esta reserva
+        canStart = resEnd;
+
+        // reiniciar loop para validar contra TODAS otra vez
+        i = -1;
+      }
+    }
+
+    if (!isAvailable) {
+      nextAvailable = new Date(canStart);
+    }
+
+    return { isAvailable, nextAvailable };
+  };
+
   const handleSearch = async (filters) => {
     try {
 
