@@ -5,7 +5,7 @@ import RoomCard from "../../components/RoomCard/RoomCard";
 import EmptyRoomsState from "../../components/ui/EmptyRoomsState";
 import RoomCarousel from "../../components/RoomCard/RoomCarousel";
 import { useLocation } from "react-router-dom";
-import { getRooms, getRoomsAvailability } from "../../api/axiosConfig";
+import { getRooms, getRoomsAvailability, getReservations } from "../../api/axiosConfig";
 
 export default function UserDashboard() {
 
@@ -95,7 +95,6 @@ export default function UserDashboard() {
       const reservations = await getReservations();
 
       if (!availabilityRooms || availabilityRooms.length === 0) {
-
         const suggestions = allRooms
           .sort(
             (a, b) =>
@@ -125,9 +124,17 @@ export default function UserDashboard() {
         const fullRooms = availabilityRooms.map(avRoom => {
           const fullData = allRooms.find(r => r.id === avRoom.id);
 
+          const { isAvailable, nextAvailable } = getNextAvailableTime(
+            fullData,
+            reservations,
+            filters
+          );
+
           return {
             ...fullData,   // description, features, etc
-            ...avRoom      // available, etc
+            ...avRoom,    // available, etc
+            isAvailable,
+            nextAvailable
           };
         });
 
