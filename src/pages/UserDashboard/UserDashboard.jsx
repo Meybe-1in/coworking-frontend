@@ -102,11 +102,21 @@ export default function UserDashboard() {
               Math.abs(a.capacity - filters.people) -
               Math.abs(b.capacity - filters.people)
           )
-          .slice(0, 3)
-          .map(room => ({
-            ...room,
-            available: true
-          }));
+          .slice(0, 4)
+          .map(room => {
+            const { isAvailable, nextAvailable } = getNextAvailableTime(
+              room,
+              reservations,
+              filters
+            );
+
+            return {
+              ...room,
+              isAvailable,
+              nextAvailable
+            };
+          });
+
 
         setFiltered([]);
         setSuggestedRooms(suggestions);
