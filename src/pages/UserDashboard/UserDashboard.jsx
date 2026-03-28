@@ -92,6 +92,8 @@ export default function UserDashboard() {
         getRooms()
       ]);
 
+      const reservations = await getReservations();
+
       if (!availabilityRooms || availabilityRooms.length === 0) {
 
         const suggestions = allRooms
