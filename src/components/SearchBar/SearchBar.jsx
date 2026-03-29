@@ -1,6 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar({ onSearch, filters }) {
+
+  const [localFilters, setLocalFilters] = useState({
+    date: "",
+    start: "",
+    end: "",
+    people: "1",
+    autoAdjusted: false,
+  });
+
+  // autoAdjusted
+  useEffect(() => {
+    if (filters) {
+      setLocalFilters({
+        date: filters.date || "",
+        start: filters.start || "",
+        end: filters.end || "",
+        people: filters.people || "1",
+        autoAdjusted: filters.autoAdjusted || false,
+      });
+    }
+  }, [filters]);
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -32,12 +53,16 @@ export default function SearchBar({ onSearch }) {
   const formatHour = (hour) =>
     `${String(hour).padStart(2, "0")}:00`;
 
-  const [filters, setFilters] = useState({
-    date: today,
-    start: formatHour(initialStartHour),
-    end: formatHour(initialStartHour + 1),
-    people: "1",
-  });
+  useEffect(() => {
+    if (!localFilters.date) {
+      setLocalFilters(prev => ({
+        ...prev,
+        date: today,
+        start: formatHour(initialStartHour),
+        end: formatHour(initialStartHour + 1)
+      }));
+    }
+  }, []);
 
   // Generar lista de horas
   const generateHours = (start, end) =>
@@ -54,7 +79,7 @@ export default function SearchBar({ onSearch }) {
   const getStartHours = () => {
     let startHour = 7;
 
-    if (filters.date === todayR) {
+    if (localFilters.date === todayR) {
       startHour = Math.max(7, getCurrentHour());
     }
 
@@ -64,7 +89,7 @@ export default function SearchBar({ onSearch }) {
   // Horas disponibles para fin
   const getEndHours = () => {
     const startHour =
-      parseInt(filters.start.split(":")[0]) + 1;
+      parseInt(localFilters.start.split(":")[0]) + 1;
 
     return generateHours(startHour, 20);
   };
@@ -72,7 +97,7 @@ export default function SearchBar({ onSearch }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    let updated = { ...filters, [name]: value };
+    let updated = { ...localFilters, [name]: value };
 
     if (name === "start") {
       const startHour = parseInt(value);
@@ -88,18 +113,20 @@ export default function SearchBar({ onSearch }) {
 
       updated.start = formatHour(startHour);
       updated.end = formatHour(startHour + 1);
+
+      updated.autoAdjusted = false;
     }
 
-    setFilters(updated);
+    setLocalFilters(updated);
   };
 
   const handleSearch = () => {
-    if (!filters.date || filters.start >= filters.end) {
+    if (!localFilters.date || localFilters.start >= localFilters.end) {
       alert("Horario inválido");
       return;
     }
 
-    onSearch(filters);
+    onSearch(localFilters);
   };
 
   const inputClass =
@@ -111,6 +138,12 @@ export default function SearchBar({ onSearch }) {
       <div className="bg-sky-500 text-white px-6 py-2 rounded-t-md w-fit text-xl font-medium">
         Iniciar Reserva
       </div>
+
+      {localFilters?.autoAdjusted && (
+        <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-md mt-4">
+          Las reservas para hoy han finalizado. Mostrando disponibilidad para mañana.
+        </div>
+      )}
 
       <div
         className="
@@ -128,7 +161,7 @@ export default function SearchBar({ onSearch }) {
           <input
             type="date"
             name="date"
-            value={filters.date}
+            value={localFilters.date}
             min={isNextDay ? today : todayR}
             onChange={handleChange}
             className={inputClass}
@@ -140,7 +173,7 @@ export default function SearchBar({ onSearch }) {
           <label className="font-medium">Hora Inicio</label>
           <select
             name="start"
-            value={filters.start}
+            value={localFilters.start}
             onChange={handleChange}
             className={inputClass}
           >
@@ -155,7 +188,7 @@ export default function SearchBar({ onSearch }) {
           <label className="font-medium">Hora Fin</label>
           <select
             name="end"
-            value={filters.end}
+            value={localFilters.end}
             onChange={handleChange}
             className={inputClass}
           >
@@ -172,7 +205,7 @@ export default function SearchBar({ onSearch }) {
             type="number"
             name="people"
             min="1"
-            value={filters.people}
+            value={localFilters.people}
             onChange={handleChange}
             className={inputClass}
           />
