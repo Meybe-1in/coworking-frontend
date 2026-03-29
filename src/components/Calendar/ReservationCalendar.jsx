@@ -28,7 +28,22 @@ export default function ReservationCalendar() {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin]}
         initialView="timeGridWeek"
-        events={loadEvents} 
+
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay"
+        }}
+
+        buttonText={{
+          today: "Hoy",
+          month: "Mes",
+          week: "Semana",
+          day: "Día"
+        }}
+
+        events={loadEvents}
+
         slotMinTime="07:00:00"
         slotMaxTime="21:00:00"
         allDaySlot={false}
