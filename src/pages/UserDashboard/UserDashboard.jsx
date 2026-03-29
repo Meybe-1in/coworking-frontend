@@ -5,7 +5,7 @@ import RoomCard from "../../components/RoomCard/RoomCard";
 import EmptyRoomsState from "../../components/ui/EmptyRoomsState";
 import RoomCarousel from "../../components/RoomCard/RoomCarousel";
 import { useLocation } from "react-router-dom";
-import { getRooms, getRoomsAvailability } from "../../api/axiosConfig";
+import { getRooms, getRoomsAvailability, getReservations } from "../../api/axiosConfig";
 
 export default function UserDashboard() {
 
@@ -41,6 +41,47 @@ export default function UserDashboard() {
     loadAllRooms();
   };
 
+  const getNextAvailableTime = (room, reservations, filters) => {
+    const { date, start, end } = filters;
+
+    const startTime = new Date(`${date}T${start}`).getTime();
+    const endTime = new Date(`${date}T${end}`).getTime();
+    const duration = endTime - startTime;
+
+    // Filtrar reservas de esa sala
+    const roomReservations = reservations
+      .filter(r => r.roomName === room.name)
+      .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+
+    let isAvailable = true;
+    let nextAvailable = null;
+
+    let canStart = startTime;
+
+    for (let i = 0; i < roomReservations.length; i++) {
+      const resStart = new Date(roomReservations[i].startAt).getTime();
+      const resEnd = new Date(roomReservations[i].endAt).getTime();
+
+      const canEnd = canStart + duration;
+      //SE SOLAPA CON EL BLOQUE ACTUAL
+      if (canStart < resEnd && canEnd > resStart) {
+        isAvailable = false;
+
+        // mover inicio al final de esta reserva
+        canStart = resEnd;
+
+        // reiniciar loop para validar contra TODAS otra vez
+        i = -1;
+      }
+    }
+
+    if (!isAvailable) {
+      nextAvailable = new Date(canStart);
+    }
+
+    return { isAvailable, nextAvailable };
+  };
+
   const handleSearch = async (filters) => {
     try {
 
@@ -51,19 +92,30 @@ export default function UserDashboard() {
         getRooms()
       ]);
 
-      if (!availabilityRooms || availabilityRooms.length === 0) {
+      const reservations = await getReservations();
 
+      if (!availabilityRooms || availabilityRooms.length === 0) {
         const suggestions = allRooms
           .sort(
             (a, b) =>
               Math.abs(a.capacity - filters.people) -
               Math.abs(b.capacity - filters.people)
           )
-          .slice(0, 3)
-          .map(room => ({
-            ...room,
-            available: true
-          }));
+          .slice(0, 4)
+          .map(room => {
+            const { isAvailable, nextAvailable } = getNextAvailableTime(
+              room,
+              reservations,
+              filters
+            );
+
+            return {
+              ...room,
+              isAvailable,
+              nextAvailable
+            };
+          });
+
 
         setFiltered([]);
         setSuggestedRooms(suggestions);
@@ -72,9 +124,17 @@ export default function UserDashboard() {
         const fullRooms = availabilityRooms.map(avRoom => {
           const fullData = allRooms.find(r => r.id === avRoom.id);
 
+          const { isAvailable, nextAvailable } = getNextAvailableTime(
+            fullData,
+            reservations,
+            filters
+          );
+
           return {
             ...fullData,   // description, features, etc
-            ...avRoom      // available, etc
+            ...avRoom,    // available, etc
+            isAvailable,
+            nextAvailable
           };
         });
 
