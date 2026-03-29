@@ -47,6 +47,8 @@ export default function ReservationCalendar() {
 
         slotMinTime="07:00:00"
         slotMaxTime="21:00:00"
+        slotDuration="00:30:00"
+
         allDaySlot={false}
         selectable={false}
         editable={false}
