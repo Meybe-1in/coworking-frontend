@@ -51,6 +51,24 @@ export default function ReservationCalendar() {
         selectable={false}
         editable={false}
         height="auto"
+
+        eventOverlap={true}
+        slotEventOverlap={false}
+
+        eventMinHeight={35}
+        dayMaxEvents={3}
+        eventMaxStack={3}
+
+        eventContent={(arg) => (
+          <div className="text-[10px] leading-tight px-1">
+            <div className="font-medium truncate">
+              {arg.event.title}
+            </div>
+            <div className="opacity-70">
+              {arg.timeText}
+            </div>
+          </div>
+        )}
       />
     </div>
   );
