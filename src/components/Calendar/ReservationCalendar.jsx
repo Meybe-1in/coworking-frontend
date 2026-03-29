@@ -13,8 +13,9 @@ export default function ReservationCalendar() {
         title: e.title,
         start: e.start,
         end: e.end,
-        display: "background",
-        backgroundColor: "#ef4444"
+        backgroundColor: "#3b82f6",
+        borderColor: "#3b82f6",
+        textColor: "#fff"
       }));
 
       successCallback(formatted);
