@@ -49,7 +49,7 @@ function LoginForm() {
       const data = err.response?.data;
 
       //EMAIL NO VERIFICADO
-      if (status === 403 && data?.code === "EMAIL_NOT_VERIFIED") {
+      if (status === 400 && data?.message === "EMAIL_NOT_VERIFIED") {
         Swal.fire({
           icon: "warning",
           title: "Cuenta no verificada",
@@ -64,7 +64,7 @@ function LoginForm() {
           if (result.isConfirmed) {
             try {
               await API.post("/auth/resend-verification", {
-                email: data.email,
+                email: email,
               });
 
               Swal.fire({
