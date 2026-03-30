@@ -43,3 +43,31 @@ export const getButtonText = (isAvailable, room) => {
 
     return "Ver horarios disponibles";
 };
+
+export const adjustDateIfPastClosing = (filters) => {
+  const now = new Date();
+
+  const selectedDate = new Date(filters.date);
+  const isToday =
+    selectedDate.toDateString() === now.toDateString();
+
+  if (!isToday) return filters;
+
+  // hora límite (19:00 = 7pm)
+  const closingHour = 19;
+
+  const currentHour = now.getHours();
+
+  if (currentHour >= closingHour) {
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
+
+    return {
+      ...filters,
+      date: tomorrow.toISOString().split("T")[0],
+      autoAdjusted: true 
+    };
+  }
+
+  return filters;
+};

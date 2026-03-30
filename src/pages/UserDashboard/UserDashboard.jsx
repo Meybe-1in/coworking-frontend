@@ -5,6 +5,7 @@ import RoomCard from "../../components/RoomCard/RoomCard";
 import EmptyRoomsState from "../../components/ui/EmptyRoomsState";
 import RoomCarousel from "../../components/RoomCard/RoomCarousel";
 import { useLocation } from "react-router-dom";
+import { adjustDateIfPastClosing } from "../../utils/timeUtils";
 import { getRooms, getRoomsAvailability, getReservations } from "../../api/axiosConfig";
 
 export default function UserDashboard() {
@@ -85,10 +86,12 @@ export default function UserDashboard() {
   const handleSearch = async (filters) => {
     try {
 
-      setFilters(filters);
+      //setFilters(filters);
+      const adjustedFilters = adjustDateIfPastClosing(filters);
+      setFilters(adjustedFilters);
 
       const [availabilityRooms, allRooms] = await Promise.all([
-        getRoomsAvailability(filters),
+        getRoomsAvailability(adjustedFilters),
         getRooms()
       ]);
 
@@ -106,7 +109,7 @@ export default function UserDashboard() {
             const { isAvailable, nextAvailable } = getNextAvailableTime(
               room,
               reservations,
-              filters
+              adjustedFilters
             );
 
             return {
@@ -162,7 +165,10 @@ export default function UserDashboard() {
           </h1>
 
 
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar 
+          onSearch={handleSearch}
+          filters={filters}
+          />
           {/* Carrusel de sugerencias */}
 
           {filtered && !filters && (
