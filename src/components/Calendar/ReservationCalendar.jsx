@@ -13,8 +13,9 @@ export default function ReservationCalendar() {
         title: e.title,
         start: e.start,
         end: e.end,
-        display: "background",
-        backgroundColor: "#ef4444"
+        backgroundColor: "#3b82f6",
+        borderColor: "#3b82f6",
+        textColor: "#fff"
       }));
 
       successCallback(formatted);
@@ -28,13 +29,48 @@ export default function ReservationCalendar() {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin]}
         initialView="timeGridWeek"
-        events={loadEvents} 
+
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay"
+        }}
+
+        buttonText={{
+          today: "Hoy",
+          month: "Mes",
+          week: "Semana",
+          day: "Día"
+        }}
+
+        events={loadEvents}
+
         slotMinTime="07:00:00"
         slotMaxTime="21:00:00"
+        slotDuration="00:30:00"
+
         allDaySlot={false}
         selectable={false}
         editable={false}
         height="auto"
+
+        eventOverlap={true}
+        slotEventOverlap={false}
+
+        eventMinHeight={35}
+        dayMaxEvents={3}
+        eventMaxStack={3}
+
+        eventContent={(arg) => (
+          <div className="text-[10px] leading-tight px-1">
+            <div className="font-medium truncate">
+              {arg.event.title}
+            </div>
+            <div className="opacity-70">
+              {arg.timeText}
+            </div>
+          </div>
+        )}
       />
     </div>
   );
