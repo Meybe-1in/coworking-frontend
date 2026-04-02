@@ -39,9 +39,9 @@ function LoginForm() {
 
       const storage = remember ? localStorage : sessionStorage;
 
-      storage.setItem("token", res.data.token);
-      storage.setItem("username", res.data.username);
-      storage.setItem("role", res.data.role);
+      storage.setItem("token", res.data.data.token);
+      storage.setItem("username", res.data.data.username);
+      storage.setItem("role", res.data.data.role);
 
       navigate("/userdashboard");
     } catch (err) {
