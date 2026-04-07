@@ -27,12 +27,7 @@ export default function RoomCard({ room, filters, preview = false }) {
         className="cursor-pointer bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
       >
         <img
-          src={
-            room.imageUrl ? 
-            salaImg
-              //? `${import.meta.env.VITE_API_URL}${room.imageUrl}`
-              : salaImg
-          }
+          src={room.imageUrl || salaImg}
 
           alt={room.name}
           className="w-full h-40 object-cover"
@@ -107,12 +102,7 @@ export default function RoomCard({ room, filters, preview = false }) {
         </div>
 
         <img
-          src={
-            room.imageUrl ?
-              salaImg
-              //? `${import.meta.env.VITE_API_URL}${room.imageUrl}`
-              : salaImg
-          }
+          src={room.imageUrl || salaImg}
           alt={room.name}
           className="rounded-xl object-cover w-full h-full max-h-72"
         />
@@ -132,7 +122,7 @@ export default function RoomCard({ room, filters, preview = false }) {
     `}
           disabled={!isAvailable && !room.nextAvailable}
         >
-          {getButtonText( isAvailable, room)}
+          {getButtonText(isAvailable, room)}
         </button>
       </div>
     </article>
