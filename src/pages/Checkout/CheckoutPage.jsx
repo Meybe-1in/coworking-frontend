@@ -18,10 +18,11 @@ export default function CheckoutPage() {
     return <p>Error cargando reserva</p>;
   }
 
-  const total =
-    room.price *
-    (parseInt(filters.end.split(":")[0]) -
-      parseInt(filters.start.split(":")[0]));
+  const getHours =
+    parseInt(filters.end.split(":")[0]) -
+    parseInt(filters.start.split(":")[0]);
+
+  const total = Number(room.price) * getHours; 
 
   const handleReservation = async () => {
     try {
