@@ -16,6 +16,7 @@ function SignUpForm() {
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordValid, setPasswordValid] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
 
@@ -69,10 +70,25 @@ function SignUpForm() {
 
 
     } catch (err) {
+
+      const data = err.response?.data;
+
+      let errorMessage = "Error al registrarse";
+
+      if (data?.message) {
+        errorMessage = data.message;
+      } else if (data?.password) {
+        errorMessage = data.password[0];
+      } else if (data?.email) {
+        errorMessage = data.email[0];
+      } else if (data?.username) {
+        errorMessage = data.username[0];
+      }
+
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: err.response?.data?.message || "Error al registrarse",
+        text: errorMessage,
       });
     }
 
@@ -90,8 +106,6 @@ function SignUpForm() {
           redirectTo="/userdashboard"
           text="Sign up with Google"
         />
-        
-        <div className={styles.divider}></div>
 
         <InputField
           label="Usename"
@@ -115,15 +129,26 @@ function SignUpForm() {
 
         <InputField
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => validatePassword(e.target.value)}
-          placeholder="at least 8 characteres"
+          placeholder="Al menos 8 caracteres"
         />
+
+        <div className={styles.showPasswordRow}>
+          <label>
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={(e) => setShowPassword(e.target.checked)}
+            />
+            Mostrar contraseña
+          </label>
+        </div>
 
         {!passwordValid && (
           <p className={styles.error}>
-            La contraseña debe contener mayúscula, minúscula, número y símbolo.
+            La contraseña debe tener al menos 8 caracteres, incluir mayúscula, minúscula, número y símbolo.
           </p>
         )}
 
