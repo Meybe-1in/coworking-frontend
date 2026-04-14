@@ -2,7 +2,6 @@ import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getRoomById, getCalendar } from "../../api/axiosConfig";
-import Img from "../../assets/sala.png";
 import { getBlockedHours, formatHour, generateHours } from "../../utils/timeSlots";
 import { toUTC } from "../../utils/dateUtils";
 
@@ -99,7 +98,6 @@ export default function RoomDetailsPage() {
                 const end = toUTC(safeFilters.date, "23:59");
 
                 const data = await getCalendar(start, end);
-                console.log("CALENDAR DATA:", data);
 
                 //filtrar por sala
                 const roomReservations = data.filter(r => r.roomId === parseInt(id));
@@ -245,11 +243,7 @@ export default function RoomDetailsPage() {
                     <div className="flex flex-col gap-8">
 
                         <img
-                            src={
-                                room.imageUrl
-                                    ? `${import.meta.env.VITE_API_URL}${room.imageUrl}`
-                                    : Img
-                            }
+                            src={room.imageUrl || salaImg}
                             className="w-full h-96 object-cover rounded-2xl"
                         />
 
