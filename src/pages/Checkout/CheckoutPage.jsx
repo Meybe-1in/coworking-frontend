@@ -22,7 +22,7 @@ export default function CheckoutPage() {
     parseInt(filters.end.split(":")[0]) -
     parseInt(filters.start.split(":")[0]);
 
-  const total = Number(room.price) * getHours; 
+  const total = Number(room.price) * getHours;
 
   const handleReservation = async () => {
     try {
@@ -31,7 +31,7 @@ export default function CheckoutPage() {
       const reservationData = {
         roomId: room.id,
         startAt: toUTC(filters.date, filters.start),
-        endAt: toUTC(filters.date, filters.end),    
+        endAt: toUTC(filters.date, filters.end),
         note: note || "Reserva Coworking"
       };
 
@@ -48,12 +48,38 @@ export default function CheckoutPage() {
     } catch (error) {
       console.error("Error creando reserva:", error);
 
+      const code = error.response?.data?.code;
+      const backendMessage = error.response?.data?.message;
+
+      let userMessage = backendMessage || "Error inesperado";
+
+      switch (code) {
+        case "RESERVATION_OVERLAP":
+          userMessage = "Esta sala ya está ocupada en ese horario.";
+          break;
+
+        case "DUPLICATE_RESERVATION":
+          userMessage = "Ya tienes esta reserva registrada.";
+          break;
+
+        case "PAST_TIME_NOT_ALLOWED":
+          userMessage = "No puedes reservar en el pasado.";
+          break;
+
+        case "INVALID_TIME_RANGE":
+          userMessage = "Solo puedes reservar entre 7:00 AM y 8:00 PM.";
+          break;
+
+        case "INVALID_DURATION":
+          userMessage = "La reserva no puede durar más de 8 horas.";
+          break;
+      }
+
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "Hubo un error al crear la reserva."
+        title: "No se pudo completar la reserva",
+        text: userMessage
       });
-
     } finally {
       setLoading(false);
     }

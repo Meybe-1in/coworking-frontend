@@ -139,8 +139,9 @@ export const createReservation = async (reservationData) => {
     const res = await API.post("/api/reservations", reservationData);
     return res.data;
   } catch (error) {
-    console.error("Error creando reserva:", error);
-    throw new Error("Error al crear la reserva");
+    console.error("AXIOS ERROR:", error);
+
+    throw error; //relanzar el error para que pueda ser manejado en el componente
   }
 };
 
