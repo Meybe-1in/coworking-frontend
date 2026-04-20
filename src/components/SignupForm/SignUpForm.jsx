@@ -70,26 +70,7 @@ function SignUpForm() {
 
 
     } catch (err) {
-
-      const data = err.response?.data;
-
-      let errorMessage = "Error al registrarse";
-
-      if (data?.message) {
-        errorMessage = data.message;
-      } else if (data?.password) {
-        errorMessage = data.password[0];
-      } else if (data?.email) {
-        errorMessage = data.email[0];
-      } else if (data?.username) {
-        errorMessage = data.username[0];
-      }
-
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: errorMessage,
-      });
+      console.error(error);
     }
 
   };
