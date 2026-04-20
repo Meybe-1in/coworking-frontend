@@ -97,11 +97,11 @@ export default function RoomDetailsPage() {
                 const start = toUTC(safeFilters.date, "00:00");
                 const end = toUTC(safeFilters.date, "23:59");
 
-                const data = await getCalendar(start, end);
+                const data = await getCalendar(start, end) || [];
 
-                //filtrar por sala
-                const roomReservations = data.filter(r => r.roomId === parseInt(id));
-
+                const roomReservations = Array.isArray(data)
+                    ? data.filter(r => r.roomId === parseInt(id))
+                    : [];
                 const blocked = getBlockedHours(roomReservations, safeFilters.date);
 
                 setBlockedHours(blocked);
