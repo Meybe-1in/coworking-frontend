@@ -102,7 +102,7 @@ export default function RoomCard({ room, filters, preview = false }) {
         </div>
 
         <img
-          src={room.imageUrl || salaImg}
+          src={room.imageUrl || null}
           alt={room.name}
           className="rounded-xl object-cover w-full h-full max-h-72"
         />

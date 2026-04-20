@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
-import { createReservation } from "../../api/axiosConfig";
+import { createReservation } from "../../api/reservationApi";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { toUTC } from "../../utils/dateUtils";
@@ -49,9 +49,10 @@ export default function CheckoutPage() {
       console.error(error);
       Swal.fire({
         icon: "error",
-        title: "No se pudo completar la reserva",
-        text: userMessage
+        title: "Error",
+        text: "No se pudo completar la reserva"
       });
+
     } finally {
       setLoading(false);
     }
@@ -117,3 +118,4 @@ export default function CheckoutPage() {
     </div>
   );
 }
+

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RoomCard from "./RoomCard";
-import { getRooms } from "../../api/axiosConfig";
+import { getRooms } from "../../api/roomApi";
 
 export default function RoomList() {
   const [rooms, setRooms] = useState([]);

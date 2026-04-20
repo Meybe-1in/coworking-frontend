@@ -103,7 +103,7 @@ export default function UserDashboard() {
       ? allRoomsRes
       : allRoomsRes?.data || [];
 
-      const reservations = await getReservations();
+    const reservations = await getReservations();
 
     // NO HAY DISPONIBLES
     if (availabilityRooms.length === 0) {
@@ -175,9 +175,9 @@ export default function UserDashboard() {
           </h1>
 
 
-          <SearchBar 
-          onSearch={handleSearch}
-          filters={filters}
+          <SearchBar
+            onSearch={handleSearch}
+            filters={filters}
           />
           {/* Carrusel de sugerencias */}
 
