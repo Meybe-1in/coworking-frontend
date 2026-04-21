@@ -1,7 +1,7 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { getCalendar } from "../../api/axiosConfig";
+import { getCalendar } from "../../api/reservationApi";
 
 
 export default function ReservationCalendar() {

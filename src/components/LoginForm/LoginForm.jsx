@@ -4,7 +4,7 @@ import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
 import googleLogo from "../../assets/google.svg";
 import { useNavigate } from 'react-router-dom';
-import API from "../../api/axiosConfig";
+import { login, resendVerification } from "../../api/authApi";
 import Swal from 'sweetalert2';
 import GoogleLoginButton from '../Button/GoogleButton';
 
@@ -19,7 +19,7 @@ function LoginForm() {
     e.preventDefault();
 
     try {
-      const res = await API.post("/auth/login", {
+      const res = await login({
         email,
         password,
         rememberMe: remember
@@ -27,13 +27,8 @@ function LoginForm() {
 
       // Limpiar tokens anteriores
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("username");
-      sessionStorage.removeItem("role");
+      localStorage.clear();
+      sessionStorage.clear();
 
       // Guardar nuevo token
 
@@ -63,9 +58,7 @@ function LoginForm() {
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
-              await API.post("/auth/resend-verification", {
-                email: email,
-              });
+              await resendVerification(email);
 
               Swal.fire({
                 icon: "success",
@@ -83,24 +76,8 @@ function LoginForm() {
         });
         return;
       }
-
-      //CREDENCIALES INCORRECTAS
-      if (status === 401) {
-        Swal.fire({
-          icon: "error",
-          title: "Error de autenticación",
-          text: "Correo o contraseña incorrectos",
-        });
-        return;
-      }
-
-      //ERROR GENERAL
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo iniciar sesión. Intenta más tarde.",
-      });
     }
+    
   };
 
 

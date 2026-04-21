@@ -1,7 +1,8 @@
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getRoomById, getCalendar } from "../../api/axiosConfig";
+import { getRoomById } from "../../api/roomApi";
+import { getCalendar } from "../../api/reservationApi";
 import { getBlockedHours, formatHour, generateHours } from "../../utils/timeSlots";
 import { toUTC } from "../../utils/dateUtils";
 
@@ -97,11 +98,11 @@ export default function RoomDetailsPage() {
                 const start = toUTC(safeFilters.date, "00:00");
                 const end = toUTC(safeFilters.date, "23:59");
 
-                const data = await getCalendar(start, end);
+                const data = await getCalendar(start, end) || [];
 
-                //filtrar por sala
-                const roomReservations = data.filter(r => r.roomId === parseInt(id));
-
+                const roomReservations = Array.isArray(data)
+                    ? data.filter(r => r.roomId === parseInt(id))
+                    : [];
                 const blocked = getBlockedHours(roomReservations, safeFilters.date);
 
                 setBlockedHours(blocked);
@@ -218,7 +219,14 @@ export default function RoomDetailsPage() {
 
     const goToCheckout = () => {
         navigate("/checkout", {
-            state: { room, filters }
+            state: {
+                room: {
+                    id: room.id,
+                    name: room.name,
+                    price: room.price
+                },
+                filters
+            }
         });
     };
 
@@ -243,7 +251,7 @@ export default function RoomDetailsPage() {
                     <div className="flex flex-col gap-8">
 
                         <img
-                            src={room.imageUrl || salaImg}
+                            src={room.imageUrl ? room.imageUrl : null}
                             className="w-full h-96 object-cover rounded-2xl"
                         />
 

@@ -15,6 +15,7 @@ import ResetPassword from "./pages/Password/ResetPassword";
 import UserCalendar from "./pages/UserCalendar/UserCalendar";
 import CheckoutPage from "./pages/Checkout/CheckoutPage";
 import RoomDetailsPage from "./pages/Checkout/RoomDetailsPage";
+import AuthWatcher from "./components/Auth/AuthWatcher";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -95,6 +96,7 @@ function LayoutWrapper() {
 export default function App() {
   return (
     <Router>
+      <AuthWatcher />
       <LayoutWrapper />
     </Router>
   );

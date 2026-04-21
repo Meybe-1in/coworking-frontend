@@ -1,5 +1,5 @@
 import axios from "axios";
-import {toUTC} from "../utils/dateUtils";
+import Swal from "sweetalert2";
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
@@ -9,39 +9,12 @@ const API = axios.create({
 });
 
 //interceptor request
-API.interceptors.request.use((config) => {
-
-  const token = localStorage.getItem("token") || 
-  sessionStorage.getItem("token");
-  //endpoint
-  const publicEndpoints = [
-    "/auth/login",
-    "/auth/register",
-    "/auth/resend-verification",
-    "/contact",
-  ];
-
-  const isPublic = publicEndpoints.some((url) =>
-    config.url?.includes(url)
-  );
-
-  if (token && !isPublic) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-},
-  (error) => Promise.reject(error)
-
-  );
-
-  // interceptor response
-API.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const status = error.response?.status;
-    const url = error.config?.url;
-
+API.interceptors.request.use(
+  (config) => {
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+    //endpoint
     const publicEndpoints = [
       "/auth/login",
       "/auth/register",
@@ -49,111 +22,67 @@ API.interceptors.response.use(
       "/contact",
     ];
 
-    const isPublic = publicEndpoints.some((u) =>
-      url?.includes(u)
+    const isPublic = publicEndpoints.some((url) =>
+      config.url?.includes(url)
     );
 
-    const token = 
-    localStorage.getItem("token") || 
-    sessionStorage.getItem("token");
-
-    //redirigir si hay token o el endpoint publico o error 401/403
-    if (
-      token &&
-      !isPublic &&
-      (status === 401 || status === 403)
-    ) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("role");
-
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("username");
-      sessionStorage.removeItem("role");
-
-      //window.location.replace("/Login");
+    if (token && !isPublic) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
-    return Promise.reject(error);
-  } 
+    return config;
+  },
+  (error) => Promise.reject(error)
+
 );
 
+// interceptor response
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
 
-export const getReservations = async () => {
-  try {
-    const res = await API.get("/api/reservations");
-    return res.data; // Axios envuelve la respuesta en .data
-  } catch (error) {
-    console.error("Error en getReservations:", error);
-    throw new Error("Error al obtener reservaciones");
-  }
-};
+    if (!error.response) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de conexión",
+        text: "No se pudo conectar con el servidor",
+      });
+      return Promise.reject(error);
+    }
 
-export const getRooms = async () => {
-  try {
-    const res = await API.get("/api/rooms");
-    return res.data;
-  } catch (error) {
-    console.error("Error en getRooms:", error);
-    throw new Error("Error al obtener las salas");
-  }
-};
+    const { status, data } = error.response;
+    const { code, message } = data || {};
 
-//Obtener salas disponibles y no disponibles para un rango de fecha y hora
-export const getRoomsAvailability = async (filters) => {
-  try {
-    const { date, start, end, people } = filters;
+    let userMessage = message || "Ocurrió un error inesperado";
 
-    const startDateTime = toUTC(date, start);
-    const endDateTime = toUTC(date, end);
+    switch (code) {
+      case "RESERVATION_OVERLAP":
+        userMessage = "Esta sala ya está ocupada.";
+        break;
+      case "DUPLICATE_RESERVATION":
+        userMessage = "Ya tienes esta reserva.";
+        break;
+      case "INVALID_TIME_RANGE":
+        userMessage = "Horario inválido.";
+        break;
+      case "INVALID_DURATION":
+        userMessage = "Máximo 8 horas.";
+        break;
+    }
 
-    const response = await API.get("/api/rooms/availability", {
-      params: {
-        start: startDateTime,
-        end: endDateTime,
-        people
-      }
+    // limpiar sesión (sin lógica extra)
+    if (status === 401 || status === 403) {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
+
+    Swal.fire({
+      icon: "error",
+      title: `Error ${status}`,
+      text: userMessage,
     });
 
-    return response.data;
-
-  } catch (error) {
-    console.error("Error obteniendo disponibilidad", error);
-    throw error;
+    return Promise.reject(error);
   }
-};
-
-//crear calendario
-export const getCalendar = async (from, to) => {
-
-  const res = await API.get("/api/reservations/calendar", {
-    params: { from, to }
-  });
-
-  return res.data;
-};
-
-//API para crear reserva 
-export const createReservation = async (reservationData) => {
-  try {
-    const res = await API.post("/api/reservations", reservationData);
-    return res.data;
-  } catch (error) {
-    console.error("Error creando reserva:", error);
-    throw new Error("Error al crear la reserva");
-  }
-};
-
-//API para obtener sala por ID
-export const getRoomById = async (id) => {
-  try {
-    const res = await API.get(`/api/rooms/${id}`);
-    return res.data;
-  } catch (error) {
-    console.error("Error obteniendo sala por ID:", error);
-    throw new Error("Error al obtener la sala");
-  }
-};
-
+);
 export default API;
-

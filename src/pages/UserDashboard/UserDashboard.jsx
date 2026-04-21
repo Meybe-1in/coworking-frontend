@@ -6,7 +6,8 @@ import EmptyRoomsState from "../../components/ui/EmptyRoomsState";
 import RoomCarousel from "../../components/RoomCard/RoomCarousel";
 import { useLocation } from "react-router-dom";
 import { adjustDateIfPastClosing } from "../../utils/timeUtils";
-import { getRooms, getRoomsAvailability, getReservations } from "../../api/axiosConfig";
+import { getRooms, getRoomsAvailability } from "../../api/roomApi";
+import { getReservations } from "../../api/reservationApi";
 
 export default function UserDashboard() {
 
@@ -84,73 +85,82 @@ export default function UserDashboard() {
   };
 
   const handleSearch = async (filters) => {
-    try {
+  try {
+    const adjustedFilters = adjustDateIfPastClosing(filters);
+    setFilters(adjustedFilters);
 
-      //setFilters(filters);
-      const adjustedFilters = adjustDateIfPastClosing(filters);
-      setFilters(adjustedFilters);
+    const [availabilityRoomsRes, allRoomsRes] = await Promise.all([
+      getRoomsAvailability(adjustedFilters),
+      getRooms()
+    ]);
 
-      const [availabilityRooms, allRooms] = await Promise.all([
-        getRoomsAvailability(adjustedFilters),
-        getRooms()
-      ]);
+    // RESPUESTAS
+    const availabilityRooms = Array.isArray(availabilityRoomsRes)
+      ? availabilityRoomsRes
+      : availabilityRoomsRes?.data || [];
 
-      const reservations = await getReservations();
+    const allRooms = Array.isArray(allRoomsRes)
+      ? allRoomsRes
+      : allRoomsRes?.data || [];
 
-      if (!availabilityRooms || availabilityRooms.length === 0) {
-        const suggestions = allRooms
-          .sort(
-            (a, b) =>
-              Math.abs(a.capacity - filters.people) -
-              Math.abs(b.capacity - filters.people)
-          )
-          .slice(0, 4)
-          .map(room => {
-            const { isAvailable, nextAvailable } = getNextAvailableTime(
-              room,
-              reservations,
-              adjustedFilters
-            );
+    const reservations = await getReservations();
 
-            return {
-              ...room,
-              isAvailable,
-              nextAvailable
-            };
-          });
-
-
-        setFiltered([]);
-        setSuggestedRooms(suggestions);
-
-      } else {
-        const fullRooms = availabilityRooms.map(avRoom => {
-          const fullData = allRooms.find(r => r.id === avRoom.id);
-
+    // NO HAY DISPONIBLES
+    if (availabilityRooms.length === 0) {
+      const suggestions = allRooms
+        .sort(
+          (a, b) =>
+            Math.abs(a.capacity - filters.people) -
+            Math.abs(b.capacity - filters.people)
+        )
+        .slice(0, 4)
+        .map(room => {
           const { isAvailable, nextAvailable } = getNextAvailableTime(
-            fullData,
+            room,
             reservations,
-            filters
+            adjustedFilters
           );
 
           return {
-            ...fullData,   // description, features, etc
-            ...avRoom,    // available, etc
+            ...room,
             isAvailable,
             nextAvailable
           };
         });
 
-        setFiltered(fullRooms);
-        setSuggestedRooms([]);
-
-      }
-
-    } catch (err) {
-      console.error(err);
       setFiltered([]);
+      setSuggestedRooms(suggestions);
+      return;
     }
-  };
+
+    // HAY DISPONIBLES
+    const fullRooms = availabilityRooms.map(avRoom => {
+      const fullData = allRooms.find(r => r.id === avRoom.id);
+
+      if (!fullData) return null;
+
+      const { isAvailable, nextAvailable } = getNextAvailableTime(
+        fullData,
+        reservations,
+        adjustedFilters
+      );
+
+      return {
+        ...fullData,
+        ...avRoom,
+        isAvailable,
+        nextAvailable
+      };
+    }).filter(Boolean); // elimina nulls
+
+    setFiltered(fullRooms);
+    setSuggestedRooms([]);
+
+  } catch (err) {
+    console.error(err);
+    setFiltered([]);
+  }
+};
 
   return (
     <div className="bg-slate-100 min-h-screen">
@@ -165,9 +175,9 @@ export default function UserDashboard() {
           </h1>
 
 
-          <SearchBar 
-          onSearch={handleSearch}
-          filters={filters}
+          <SearchBar
+            onSearch={handleSearch}
+            filters={filters}
           />
           {/* Carrusel de sugerencias */}
 
