@@ -16,6 +16,7 @@ import UserCalendar from "./pages/UserCalendar/UserCalendar";
 import CheckoutPage from "./pages/Checkout/CheckoutPage";
 import RoomDetailsPage from "./pages/Checkout/RoomDetailsPage";
 import AuthWatcher from "./components/Auth/AuthWatcher";
+import PaymentPage from "./pages/payment/PaymentPage";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -86,6 +87,13 @@ function LayoutWrapper() {
                 <CheckoutPage />
               </ProtectedRoute>
             }
+          />
+          <Route path="/payment" 
+          element={
+          <ProtectedRoute>
+          <PaymentPage />
+          </ProtectedRoute>
+          } 
           />
         </Routes>
       </div>
