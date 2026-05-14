@@ -6,6 +6,11 @@ export const getReservations = async () => {
   return res.data.data || res.data;
 };
 
+export const getMyReservations = async () => {
+  const response = await API.get("api/reservations/my");
+  return response.data;
+};
+
 export const getCalendar = async (start, end) => {
   const res = await API.get(
     `/api/reservations/calendar?from=${start}&to=${end}`
