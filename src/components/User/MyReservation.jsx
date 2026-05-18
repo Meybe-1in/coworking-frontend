@@ -49,7 +49,13 @@ export default function MyReservations() {
       setReservations(prev => prev.map(r => r.id === id ? { ...r, status: "CANCELLED" } : r));
       Swal.fire({ icon: "success", title: "Reserva cancelada", timer: 1600, showConfirmButton: false });
     } catch (e) {
-      Swal.fire({ icon: "error", title: "Error", text: e.message });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          e.response?.data?.message ||
+          "No se pudo cancelar la reservación"
+      });
     }
   };
 
