@@ -5,10 +5,10 @@ import { getMyReservations } from "../../api/reservationApi";
 import Swal from "sweetalert2";
 
 const STATUS_MAP = {
-  PENDING:   { label: "Pendiente",  dot: "bg-amber-400",  pill: "bg-amber-50 text-amber-700 ring-amber-200/60"  },
-  PAID:      { label: "Pagada",     dot: "bg-green-400",  pill: "bg-green-50 text-green-700 ring-green-200/60"  },
-  CANCELLED: { label: "Cancelada",  dot: "bg-gray-300",   pill: "bg-gray-50 text-gray-500 ring-gray-200/60"     },
-  UNPAID:    { label: "Sin pagar",  dot: "bg-red-400",    pill: "bg-red-50 text-red-600 ring-red-200/60"        },
+  PENDING: { label: "Pendiente", dot: "bg-amber-400", pill: "bg-amber-50 text-amber-700 ring-amber-200/60" },
+  PAID: { label: "Pagada", dot: "bg-green-400", pill: "bg-green-50 text-green-700 ring-green-200/60" },
+  CANCELLED: { label: "Cancelada", dot: "bg-gray-300", pill: "bg-gray-50 text-gray-500 ring-gray-200/60" },
+  EXPIRED: { label: "Expirada", dot: "bg-gray-400", pill: "bg-gray-100 text-gray-500 ring-gray-200/60" }
 };
 
 const TABS = ["ALL", "PENDING", "PAID", "UNPAID", "CANCELLED"];
