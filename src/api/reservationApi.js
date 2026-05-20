@@ -11,6 +11,10 @@ export const getMyReservations = async () => {
   return response.data;
 };
 
+export const cancelReservation = async (id) => {
+  await API.patch(`/api/reservations/${id}/cancel`);
+};
+
 export const getCalendar = async (start, end) => {
   const res = await API.get(
     `/api/reservations/calendar?from=${start}&to=${end}`
