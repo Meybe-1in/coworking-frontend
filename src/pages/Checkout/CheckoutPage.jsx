@@ -4,36 +4,36 @@ import { createReservation } from "../../api/reservationApi";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { toUTC } from "../../utils/dateUtils";
- 
+
 export default function CheckoutPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { room, filters } = location.state || {};
- 
+
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
- 
+
   if (!room || !filters) {
     return <p>Error cargando reserva</p>;
   }
- 
+
   const getHours =
     parseInt(filters.end.split(":")[0]) -
     parseInt(filters.start.split(":")[0]);
- 
+
   const total = Number(room.price) * getHours;
- 
+
   const handleReservation = async () => {
     try {
       setLoading(true);
- 
+
       const reservationData = {
         roomId: room.id,
         startAt: toUTC(filters.date, filters.start),
         endAt: toUTC(filters.date, filters.end),
-        note: note || "Reserva Coworking",
+        notes: note || "Reserva Coworking",
       };
- 
+
       const res = await createReservation(reservationData);
       navigate("/payment", {
         state: {
@@ -41,6 +41,7 @@ export default function CheckoutPage() {
           room,
           filters,
           total,
+          createdAt: res.data.createdAt
         },
       });
     } catch (error) {
@@ -54,11 +55,11 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   };
- 
+
   return (
     <div className="checkout-page">
       <NavbarUser />
- 
+
       <main className="checkout-main">
         {/* Step breadcrumb */}
         <nav className="step-nav">
@@ -70,12 +71,12 @@ export default function CheckoutPage() {
           <span className="step-arrow">›</span>
           <span className="step">Confirmación</span>
         </nav>
- 
+
         <div className="checkout-layout">
           {/* LEFT */}
           <div className="checkout-left">
             <h1 className="checkout-title">Confirmar reserva</h1>
- 
+
             {/* Room card */}
             <div className="info-card">
               <div className="info-card-header">
@@ -86,7 +87,7 @@ export default function CheckoutPage() {
                 <p className="room-description">{room.description}</p>
               )}
             </div>
- 
+
             {/* Details grid */}
             <div className="info-card">
               <div className="detail-grid">
@@ -120,7 +121,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
             </div>
- 
+
             {/* Note */}
             <div className="info-card">
               <label className="field-label">
@@ -135,7 +136,7 @@ export default function CheckoutPage() {
                 rows={3}
               />
             </div>
- 
+
             <button
               onClick={handleReservation}
               disabled={loading}
@@ -152,16 +153,47 @@ export default function CheckoutPage() {
                 </span>
               )}
             </button>
+
+            <div className="
+              inline-flex items-center gap-2 px-3 py-1.5
+              bg-blue-50 text-blue-700
+              rounded-full text-sm font-medium
+              border border-blue-100
+              mt-3
+            ">
+              <svg
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M12 8v5l3 3"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+
+              Tu reserva se mantendrá durante 15 minutos mientras completas el pago
+            </div>
+
           </div>
- 
+
           {/* RIGHT — Summary */}
           <aside className="summary-card">
             <h2 className="summary-title">Resumen</h2>
- 
+
             <div className="summary-room">{room.name}</div>
- 
+
             <div className="summary-divider" />
- 
+
             <div className="summary-rows">
               <div className="summary-row">
                 <span>Precio por hora</span>
@@ -178,14 +210,14 @@ export default function CheckoutPage() {
                 <span>{filters.people}</span>
               </div>
             </div>
- 
+
             <div className="summary-divider" />
- 
+
             <div className="summary-total">
               <span>Total</span>
               <span className="total-amount">${total}</span>
             </div>
- 
+
             <p className="summary-note">
               Pago único · Sin cargos adicionales
             </p>

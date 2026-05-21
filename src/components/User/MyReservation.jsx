@@ -1,35 +1,67 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
-import { getMyReservations } from "../../api/reservationApi";
+import { getMyReservations, cancelReservation } from "../../api/reservationApi";
 import Swal from "sweetalert2";
 
 const STATUS_MAP = {
-  PENDING:   { label: "Pendiente",  dot: "bg-amber-400",  pill: "bg-amber-50 text-amber-700 ring-amber-200/60"  },
-  PAID:      { label: "Pagada",     dot: "bg-green-400",  pill: "bg-green-50 text-green-700 ring-green-200/60"  },
-  CANCELLED: { label: "Cancelada",  dot: "bg-gray-300",   pill: "bg-gray-50 text-gray-500 ring-gray-200/60"     },
-  UNPAID:    { label: "Sin pagar",  dot: "bg-red-400",    pill: "bg-red-50 text-red-600 ring-red-200/60"        },
+  PENDING: { label: "Pendiente", dot: "bg-amber-400", pill: "bg-amber-50 text-amber-700 ring-amber-200/60" },
+  PAID: { label: "Pagada", dot: "bg-green-400", pill: "bg-green-50 text-green-700 ring-green-200/60" },
+  CANCELLED: { label: "Cancelada", dot: "bg-gray-300", pill: "bg-gray-50 text-gray-500 ring-gray-200/60" },
+  EXPIRED: { label: "Expirada", dot: "bg-gray-400", pill: "bg-gray-100 text-gray-500 ring-gray-200/60" }
 };
 
-const TABS = ["ALL", "PENDING", "PAID", "UNPAID", "CANCELLED"];
+const TABS = ["ALL", "PENDING", "PAID", "CANCELLED", "EXPIRED"];
 
 const fmt = (d, type) =>
   new Date(d).toLocaleString("es-SV", type === "date"
     ? { weekday: "short", day: "numeric", month: "short", year: "numeric" }
     : { hour: "2-digit", minute: "2-digit" });
 
+const getTimeLeft = (createdAt) => {
+  if (!createdAt) return null;
+
+  const created = new Date(createdAt).getTime();
+  const expiresAt = created + 15 * 60 * 1000;
+  const diff = expiresAt - Date.now();
+
+  if (diff <= 0) {
+    return {
+      expired: true,
+      text: "Expirada",
+    };
+  }
+
+  const minutes = Math.floor(diff / 1000 / 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return {
+    expired: false,
+    text: `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`,
+  };
+};
+
 export default function MyReservations() {
   const [reservations, setReservations] = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [tab, setTab]                   = useState("ALL");
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState("ALL");
+  const [, forceUpdate] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
-      try   { setReservations(await getMyReservations()); }
+      try { setReservations(await getMyReservations()); }
       catch (e) { console.error(e); }
-      finally   { setLoading(false); }
+      finally { setLoading(false); }
     })();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      forceUpdate((v) => v + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleCancel = async (id) => {
@@ -49,7 +81,13 @@ export default function MyReservations() {
       setReservations(prev => prev.map(r => r.id === id ? { ...r, status: "CANCELLED" } : r));
       Swal.fire({ icon: "success", title: "Reserva cancelada", timer: 1600, showConfirmButton: false });
     } catch (e) {
-      Swal.fire({ icon: "error", title: "Error", text: e.message });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          e.response?.data?.message ||
+          "No se pudo cancelar la reservación"
+      });
     }
   };
 
@@ -57,20 +95,20 @@ export default function MyReservations() {
     navigate("/payment", {
       state: {
         reservationId: r.id,
-        room:    { name: r.roomName, id: r.roomId },
+        room: { name: r.roomName, id: r.roomId },
         filters: { date: fmt(r.startAt, "date"), start: fmt(r.startAt, "time"), end: fmt(r.endAt, "time") },
-        total:   r.price,
+        total: r.price,
+        createdAt: r.createdAt,
       },
     });
 
-  const count  = (s) => s === "ALL" ? reservations.length : reservations.filter(r => r.status === s).length;
-  const list   = tab === "ALL" ? reservations : reservations.filter(r => r.status === tab);
+  const count = (s) => s === "ALL" ? reservations.length : reservations.filter(r => r.status === s).length;
+  const list = tab === "ALL" ? reservations : reservations.filter(r => r.status === tab);
 
   return (
     <>
       <NavbarUser />
 
-      {/* offset for floating navbar (h-14 + mt-3 + gap = ~80px) */}
       <div className="min-h-dvh bg-gray-50 pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-8">
 
@@ -82,7 +120,7 @@ export default function MyReservations() {
             </p>
           </div>
 
-          {/* Filter tabs — horizontal scroll on mobile */}
+          {/* Filter tabs — horizontal scroll */}
           <div className="overflow-x-auto -mx-4 px-4 pb-1 mb-5 [&::-webkit-scrollbar]:hidden">
             <div className="flex gap-1.5 w-max">
               {TABS.map(t => {
@@ -120,7 +158,6 @@ export default function MyReservations() {
           {/* Empty */}
           {!loading && list.length === 0 && (
             <div className="flex flex-col items-center py-24 gap-3 text-center">
-              <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl">📋</div>
               <p className="font-semibold text-gray-800">Sin resultados</p>
               <p className="text-sm text-gray-400 max-w-xs">
                 {tab === "ALL" ? "Aún no tienes reservas." : `Sin reservas con estado "${STATUS_MAP[tab]?.label ?? tab}".`}
@@ -138,9 +175,16 @@ export default function MyReservations() {
           {!loading && list.length > 0 && (
             <div className="flex flex-col gap-2.5">
               {list.map((r, i) => {
-                const s       = STATUS_MAP[r.status] ?? { label: r.status, dot: "bg-gray-300", pill: "bg-gray-50 text-gray-500 ring-gray-200" };
-                const canPay  = ["UNPAID", "PENDING"].includes(r.status);
-                const canCancel = ["PENDING", "CONFIRMED"].includes(r.status);
+                const s = STATUS_MAP[r.status] ?? { label: r.status, dot: "bg-gray-300", pill: "bg-gray-50 text-gray-500 ring-gray-200" };
+                const timer = getTimeLeft(r.createdAt);
+
+                const canPay =
+                  r.status === "PENDING" &&
+                  !timer?.expired;
+
+                const canCancel =
+                  r.status === "PENDING" &&
+                  !timer?.expired;
 
                 return (
                   <div
@@ -172,19 +216,53 @@ export default function MyReservations() {
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3">
                         <span className="flex items-center gap-1.5 text-[13px] text-gray-500">
                           <svg className="w-3.5 h-3.5 text-gray-300 shrink-0" viewBox="0 0 14 14" fill="none">
-                            <rect x=".7" y="1.7" width="12.6" height="11.6" rx="1.6" stroke="currentColor" strokeWidth="1.1"/>
-                            <path d="M4.5.7v1.5M9.5.7v1.5M.7 5.2h12.6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
+                            <rect x=".7" y="1.7" width="12.6" height="11.6" rx="1.6" stroke="currentColor" strokeWidth="1.1" />
+                            <path d="M4.5.7v1.5M9.5.7v1.5M.7 5.2h12.6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
                           </svg>
                           {fmt(r.startAt, "date")}
                         </span>
 
                         <span className="flex items-center gap-1.5 text-[13px] text-gray-500">
                           <svg className="w-3.5 h-3.5 text-gray-300 shrink-0" viewBox="0 0 14 14" fill="none">
-                            <circle cx="7" cy="7" r="6.3" stroke="currentColor" strokeWidth="1.1"/>
-                            <path d="M7 4v3.2l1.8 1.8" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
+                            <circle cx="7" cy="7" r="6.3" stroke="currentColor" strokeWidth="1.1" />
+                            <path d="M7 4v3.2l1.8 1.8" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
                           </svg>
                           {fmt(r.startAt, "time")} – {fmt(r.endAt, "time")}
                         </span>
+
+                        {r.status === "PENDING" && timer && (
+                          <span
+                            className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-semibold
+                                ${timer.expired
+                                ? "bg-red-100 text-red-700"
+                                : "bg-amber-100 text-amber-700"
+                              }`}
+                          >
+                            <svg
+                              className="w-3 h-3"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <path
+                                d="M12 8v5l3 3"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                              />
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              />
+                            </svg>
+
+                            {timer.expired
+                              ? "Expirada"
+                              : `${timer.text} restantes`}
+                          </span>
+                        )}
 
                         <span className="ml-auto text-[15px] font-bold text-gray-900">${r.price}</span>
                       </div>
@@ -193,15 +271,15 @@ export default function MyReservations() {
                     {/* Actions footer */}
                     {(canPay || canCancel) && (
                       <div className="flex justify-end gap-2 px-5 py-3 border-t border-gray-50 bg-gray-50/50"> {canPay && (
-                          <button
-                            onClick={() => handlePay(r)}
-                            className="flex items-center justify-center gap-2 py-2 px-4
+                        <button
+                          onClick={() => handlePay(r)}
+                          className="flex items-center justify-center gap-2 py-2 px-4
                               bg-gray-900 text-white text-[13px] font-semibold rounded-xl
                               hover:bg-gray-800 active:scale-[.98] transition-all duration-150"
-                          >
-                            Pagar ahora
-                          </button>
-                        )}
+                        >
+                          Pagar ahora
+                        </button>
+                      )}
                         {canCancel && (
                           <button
                             onClick={() => handleCancel(r.id)}
@@ -211,7 +289,7 @@ export default function MyReservations() {
                               transition-all duration-150"
                           >
                             <svg className="w-3.5 h-3.5" viewBox="0 0 12 12" fill="none">
-                              <path d="M2 2l8 8M10 2L2 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                              <path d="M2 2l8 8M10 2L2 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
                             </svg>
                             Cancelar
                           </button>
