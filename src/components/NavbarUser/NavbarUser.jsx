@@ -110,6 +110,16 @@ export default function NavbarUser() {
             Mis reservaciones
           </div>
 
+          <div
+            onClick={() => {
+              navigate("/my-payments");
+              setDropdownOpen(false);
+            }}
+            className="px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer transition"
+          >
+            Mis pagos
+          </div>
+
           <div className="border-t border-gray-100 my-1"></div>
 
           <div
@@ -170,6 +180,16 @@ export default function NavbarUser() {
             className={isActive("/my-reservations")}
           >
             Mis reservaciones
+          </span>
+
+          <span
+            onClick={() => {
+              navigate("/my-payments");
+              setOpen(false);
+            }}
+            className={isActive("/my-payments")}
+          >
+            Mis pagos
           </span>
 
           <span

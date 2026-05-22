@@ -18,6 +18,7 @@ import RoomDetailsPage from "./pages/Checkout/RoomDetailsPage";
 import AuthWatcher from "./components/Auth/AuthWatcher";
 import PaymentPage from "./pages/payment/PaymentPage";
 import MyReservations from "./components/User/MyReservation";
+import MyPayments from "./pages/payment/MyPayments";
 
 function LayoutWrapper() {
   const location = useLocation();
@@ -101,6 +102,14 @@ function LayoutWrapper() {
             element={
               <ProtectedRoute>
                 <MyReservations />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-payments"
+            element={
+              <ProtectedRoute>
+                <MyPayments />
               </ProtectedRoute>
             }
           />
