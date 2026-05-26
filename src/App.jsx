@@ -107,14 +107,18 @@ function LayoutWrapper() {
             }
           />
           <Route
-            path="/admin"
-            element={
-              <ProtectedRoute adminOnly={true}>
-                <AdminDashboard />
             path="/my-payments"
             element={
               <ProtectedRoute>
                 <MyPayments />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />
