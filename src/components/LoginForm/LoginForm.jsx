@@ -38,7 +38,15 @@ function LoginForm() {
       storage.setItem("username", res.data.data.username);
       storage.setItem("role", res.data.data.role);
 
-      navigate("/userdashboard");
+      //obtener role y redirigir
+
+      const role = res.data.data.role;
+      if(role === "ROLE_ADMIN"){
+        navigate("/admin");
+      }else {
+        navigate("/userdashboard");
+      }
+
     } catch (err) {
       const status = err.response?.status;
       const data = err.response?.data;
