@@ -1,16 +1,20 @@
 import StatCard from "./StatCard";
+import Loader from "./Loader";
+import Err from "./Err";
 
 export default function DashboardStats({
   stats,
   loading,
   error,
   setTab,
-  Loader,
-  Err,
   ICONS,
   fmt,
   Icon,
 }) {
+  if (loading) return <Loader />;
+
+  if (error) return <Err msg={error} />;
+
   return (
     <div>
       <h1
@@ -33,13 +37,8 @@ export default function DashboardStats({
         Resumen general del sistema
       </p>
 
-      {loading && <Loader />}
-
-      {error && <Err msg={error} />}
-
       {stats && (
         <>
-          {/* Revenue row */}
           <div
             style={{
               display: "grid",
@@ -63,7 +62,6 @@ export default function DashboardStats({
             />
           </div>
 
-          {/* Reservations row */}
           <div
             style={{
               display: "grid",
@@ -116,7 +114,6 @@ export default function DashboardStats({
             </div>
           )}
 
-          {/* Quick actions */}
           <div
             style={{
               marginTop: 28,
@@ -172,19 +169,6 @@ export default function DashboardStats({
                     fontSize: 13.5,
                     fontWeight: 500,
                     color: "#374151",
-                    transition: "all .12s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background =
-                      "#f9fafb";
-                    e.currentTarget.style.borderColor =
-                      "#d1d5db";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background =
-                      "#fff";
-                    e.currentTarget.style.borderColor =
-                      "#e5e7eb";
                   }}
                 >
                   <Icon d={a.icon} size={15} />

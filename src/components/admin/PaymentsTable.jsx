@@ -1,4 +1,6 @@
 import AdminTable from "./AdminTable";
+import Loader from "./Loader";
+import Err from "./Err";
 
 export default function PaymentsTable({
   payments,
@@ -8,8 +10,6 @@ export default function PaymentsTable({
   setPayments,
   getAllPayments,
   payCol,
-  Loader,
-  Err,
   Icon,
   ICONS,
 }) {

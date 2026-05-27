@@ -1,4 +1,6 @@
 import AdminTable from "./AdminTable";
+import Loader from "./Loader";
+import Err from "./Err";
 
 export default function ReservationsTable({
   reservations,
@@ -8,8 +10,6 @@ export default function ReservationsTable({
   setReservations,
   getAllReservations,
   resCols,
-  Loader,
-  Err,
   Icon,
   ICONS,
 }) {
@@ -52,19 +52,6 @@ export default function ReservationsTable({
               setReservations
             )
           }
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 7,
-            padding: "8px 14px",
-            border: "1px solid #e5e7eb",
-            borderRadius: 8,
-            background: "#fff",
-            cursor: "pointer",
-            fontSize: 13,
-            fontWeight: 500,
-            color: "#6b7280",
-          }}
         >
           <Icon d={ICONS.refresh} size={14} />
           Actualizar
