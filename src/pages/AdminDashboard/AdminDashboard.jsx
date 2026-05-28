@@ -10,6 +10,7 @@ import Icon from "../../components/admin/Icon";
 import { ICONS } from "../../helpers/admin/icons";
 import { fmt, fmtDate, fmtDateTime, } from "../../helpers/admin/formatters";
 import { TABS } from "../../helpers/admin/tabs";
+import ReservationActions from "../../components/admin/ReservationActions";
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState("stats");
@@ -140,6 +141,23 @@ export default function AdminDashboard() {
       label: "Creada",
       render: (r) =>
         fmtDate(r.createdAt),
+    },
+
+    {
+      key: "actions",
+      label: "Acciones",
+      render: (r) => (
+        <ReservationActions
+          reservation={r}
+          reloadReservations={() =>
+            load(
+              "reservations",
+              getAllReservations,
+              setReservations
+            )
+          }
+        />
+      ),
     },
   ];
 
