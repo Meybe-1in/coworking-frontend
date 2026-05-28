@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { getAdminStats, getAllReservations, getAllPayments } from "../../api/adminApi";
-import StatusPill from "../../components/admin/StatusPill";
-import AdminHeader from "../../components/admin/AdminHeader";
-import AdminSidebar from "../../components/admin/AdminSidebar";
+import StatusPill from "../../components/admin/ui/StatusPill";
+import AdminHeader from "../../components/admin/layout/AdminHeader";
+import AdminSidebar from "../../components/admin/layout/AdminSidebar";
 import DashboardStats from "../../components/admin/DashboardStats";
-import ReservationsTable from "../../components/admin/ReservationsTable";
-import PaymentsTable from "../../components/admin/PaymentsTable";
-import Icon from "../../components/admin/Icon";
+import ReservationsTable from "../../components/admin/tables/ReservationsTable";
+import PaymentsTable from "../../components/admin/tables/PaymentsTable";
+import Icon from "../../components/admin/ui/Icon";
 import { ICONS } from "../../helpers/admin/icons";
 import { fmt, fmtDate, fmtDateTime, } from "../../helpers/admin/formatters";
 import { TABS } from "../../helpers/admin/tabs";
-import ReservationActions from "../../components/admin/ReservationActions";
+import ReservationActions from "../../components/admin/reservations/ReservationActions";
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState("stats");

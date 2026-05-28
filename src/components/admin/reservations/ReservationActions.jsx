@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { cancelReservationAdmin } from "../../api/adminApi";
+import { cancelReservationAdmin } from "../../../api/adminApi";
 
 export default function ReservationActions({
   reservation,
