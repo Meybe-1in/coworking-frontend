@@ -1,6 +1,6 @@
 import AdminTable from "./AdminTable";
-import Loader from "./Loader";
-import Err from "./Err";
+import Loader from "../ui/Loader";
+import Err from "../ui/Err";
 
 export default function ReservationsTable({
   reservations,
