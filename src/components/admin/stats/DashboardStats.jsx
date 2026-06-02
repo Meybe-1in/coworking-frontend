@@ -1,14 +1,13 @@
 import StatCard from "./StatCard";
-import Loader from "./Loader";
-import Err from "./Err";
-
+import Loader from "../ui/Loader";
+import Err from "../ui/Err";
+import { fmt } from "../../../helpers/admin/formatters";
 export default function DashboardStats({
   stats,
   loading,
   error,
   setTab,
   ICONS,
-  fmt,
   Icon,
 }) {
   if (loading) return <Loader />;
