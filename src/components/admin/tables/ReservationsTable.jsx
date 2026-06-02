@@ -6,9 +6,7 @@ export default function ReservationsTable({
   reservations,
   loading,
   error,
-  load,
-  setReservations,
-  getAllReservations,
+  reloadReservations,
   resCols,
   Icon,
   ICONS,
@@ -45,13 +43,20 @@ export default function ReservationsTable({
         </div>
 
         <button
-          onClick={() =>
-            load(
-              "reservations",
-              getAllReservations,
-              setReservations
-            )
-          }
+          onClick={reloadReservations}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 7,
+            padding: "8px 14px",
+            border: "1px solid #e5e7eb",
+            borderRadius: 8,
+            background: "#fff",
+            cursor: "pointer",
+            fontSize: 13,
+            fontWeight: 500,
+            color: "#6b7280",
+          }}
         >
           <Icon d={ICONS.refresh} size={14} />
           Actualizar

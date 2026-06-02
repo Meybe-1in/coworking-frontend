@@ -6,9 +6,7 @@ export default function PaymentsTable({
   payments,
   loading,
   error,
-  load,
-  setPayments,
-  getAllPayments,
+  reloadPayments,
   payCol,
   Icon,
   ICONS,
@@ -45,13 +43,7 @@ export default function PaymentsTable({
         </div>
 
         <button
-          onClick={() =>
-            load(
-              "payments",
-              getAllPayments,
-              setPayments
-            )
-          }
+          onClick={reloadPayments}
           style={{
             display: "flex",
             alignItems: "center",
