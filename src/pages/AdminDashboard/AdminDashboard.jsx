@@ -41,6 +41,17 @@ export default function AdminDashboard() {
     reloadPayments,
   } = usePayments(tab);
 
+  // ─── useMemo ──────────────────
+   const resCols = useMemo(
+    () => reservationColumns(reloadReservations),
+    [reloadReservations]
+  );
+
+  const payCols = useMemo(
+    () => paymentColumns(reloadPayments),
+    [reloadPayments]
+  );
+
   return (
     <div
       style={{
@@ -92,20 +103,10 @@ export default function AdminDashboard() {
           {tab === "reservations" && (
             <ReservationsTable
               reservations={reservations}
-              loading={
-                reservationsLoading
-              }
-              error={
-                reservationsError
-              }
-              reloadReservations={
-                reloadReservations
-              }
-              resCols={
-                reservationColumns(
-                  reloadReservations
-                )
-              }
+              loading={reservationsLoading}
+              error={reservationsError}
+              reloadReservations={reloadReservations}
+              resCols={resCols}
               Icon={Icon}
               ICONS={ICONS}
             />
@@ -117,10 +118,8 @@ export default function AdminDashboard() {
               payments={payments}
               loading={paymentsLoading}
               error={paymentsError}
-              reloadPayments={
-                reloadPayments
-              }
-              payCol={paymentColumns}
+              reloadPayments={reloadPayments}
+              payCol={payCols}
               Icon={Icon}
               ICONS={ICONS}
             />
