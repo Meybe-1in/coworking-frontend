@@ -5,7 +5,8 @@ import {
   fmtDateTime,
 } from "../../../helpers/admin/formatters";
 
-export const paymentColumns = [
+export const paymentColumns = (reloadPayments) => [
+
   {
     key: "id",
     label: "#",
