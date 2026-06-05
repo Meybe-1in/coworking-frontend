@@ -3,6 +3,8 @@ import AdminTable from "./AdminTable";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
 import TableFilters from "../filters/TableFilters";
+import {exportReservationsCSV} from "../../../api/adminApi";
+import { downloadFile } from "../../../helpers/admin/downloadFile";
 
 const STATUSES = [
   { value: "ALL", label: "Todos los estados" },
@@ -66,6 +68,24 @@ export default function ReservationsTable({
       setRefreshing(false);
     };
 
+  const handleExportReservations =
+  async () => {
+    try {
+      const blob =
+        await exportReservationsCSV();
+
+      downloadFile(
+        blob,
+        "reservations.csv"
+      );
+    } catch (error) {
+      console.error(
+        "Error exportando reservas",
+        error
+      );
+    }
+  };
+
   return (
     <div>
       <TableFilters
@@ -86,6 +106,8 @@ export default function ReservationsTable({
         statuses={STATUSES}
         onRefresh={handleRefresh}
         refreshing={refreshing}
+        onExport={handleExportReservations}
+        exportLabel="Exportar reservas CSV"
         Icon={Icon}
         ICONS={ICONS}
       />

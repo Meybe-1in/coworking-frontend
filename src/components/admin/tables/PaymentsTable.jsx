@@ -3,6 +3,8 @@ import AdminTable from "./AdminTable";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
 import TableFilters from "../filters/TableFilters";
+import {exportPaymentsCSV} from "../../../api/adminApi";
+import { downloadFile } from "../../../helpers/admin/downloadFile";
 
 const PAYMENT_STATUSES = [
   { value: "ALL", label: "Todos los estados" },
@@ -68,6 +70,20 @@ export default function PaymentsTable({
       setRefreshing(false);
     };
 
+  const handleExportPayments =
+  async () => {
+    try {
+      const blob =
+        await exportPaymentsCSV();
+      downloadFile(blob, "payments.csv");
+    } catch (err) {
+      console.error(
+        "Error al exportar pagos:",
+        err
+      );
+    }
+  };
+
   return (
     <div>
       <TableFilters
@@ -84,6 +100,8 @@ export default function PaymentsTable({
         statuses={PAYMENT_STATUSES}
         onRefresh={handleRefresh}
         refreshing={refreshing}
+        onExport={handleExportPayments}
+        exportLabel="Exportar pagos CSV"
         Icon={Icon}
         ICONS={ICONS}
       />
