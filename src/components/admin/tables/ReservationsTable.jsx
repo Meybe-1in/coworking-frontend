@@ -1,6 +1,16 @@
+import { useMemo, useState } from "react";
 import AdminTable from "./AdminTable";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
+import TableFilters from "../filters/TableFilters";
+
+const STATUSES = [
+  { value: "ALL", label: "Todos los estados" },
+  { value: "PENDING", label: "Pendiente" },
+  { value: "PAID", label: "Pagada" },
+  { value: "CANCELLED", label: "Cancelada" },
+  { value: "EXPIRED", label: "Expirada" },
+];
 
 export default function ReservationsTable({
   reservations,
@@ -11,57 +21,74 @@ export default function ReservationsTable({
   Icon,
   ICONS,
 }) {
+  const [search, setSearch] =
+    useState("");
+
+  const [statusFilter, setStatusFilter] =
+    useState("ALL");
+
+  const [refreshing, setRefreshing] =
+    useState(false);
+
+  const filtered = useMemo(() => {
+    return reservations.filter((r) => {
+      const term =
+        search.toLowerCase().trim();
+
+      const matchSearch =
+        !term ||
+        r.username
+          ?.toLowerCase()
+          .includes(term) ||
+        r.roomName
+          ?.toLowerCase()
+          .includes(term);
+
+      const matchStatus =
+        statusFilter === "ALL" ||
+        r.status === statusFilter;
+
+      return (
+        matchSearch &&
+        matchStatus
+      );
+    });
+  }, [
+    reservations,
+    search,
+    statusFilter,
+  ]);
+
+  const handleRefresh =
+    async () => {
+      setRefreshing(true);
+      await reloadReservations();
+      setRefreshing(false);
+    };
+
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 20,
-        }}
-      >
-        <div>
-          <h1
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-              marginBottom: 2,
-            }}
-          >
-            Reservas
-          </h1>
-
-          <p
-            style={{
-              fontSize: 13,
-              color: "#9ca3af",
-            }}
-          >
-            {reservations.length} reservas en total
-          </p>
-        </div>
-
-        <button
-          onClick={reloadReservations}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 7,
-            padding: "8px 14px",
-            border: "1px solid #e5e7eb",
-            borderRadius: 8,
-            background: "#fff",
-            cursor: "pointer",
-            fontSize: 13,
-            fontWeight: 500,
-            color: "#6b7280",
-          }}
-        >
-          <Icon d={ICONS.refresh} size={14} />
-          Actualizar
-        </button>
-      </div>
+      <TableFilters
+        title="Reservas"
+        totalCount={
+          reservations.length
+        }
+        filteredCount={
+          filtered.length
+        }
+        search={search}
+        setSearch={setSearch}
+        searchPlaceholder="Buscar usuario o sala..."
+        statusFilter={statusFilter}
+        setStatusFilter={
+          setStatusFilter
+        }
+        statuses={STATUSES}
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
+        Icon={Icon}
+        ICONS={ICONS}
+      />
 
       <div
         style={{
@@ -73,15 +100,18 @@ export default function ReservationsTable({
       >
         {loading && <Loader />}
 
-        {error && <Err msg={error} />}
-
-        {!loading && !error && (
-          <AdminTable
-            cols={resCols}
-            rows={reservations}
-            emptyMsg="No hay reservas aún"
-          />
+        {error && (
+          <Err msg={error} />
         )}
+
+        {!loading &&
+          !error && (
+            <AdminTable
+              cols={resCols}
+              rows={filtered}
+              emptyMsg="No hay reservas aún"
+            />
+          )}
       </div>
     </div>
   );

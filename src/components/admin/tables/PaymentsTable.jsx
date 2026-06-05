@@ -1,6 +1,15 @@
+import { useMemo, useState } from "react";
 import AdminTable from "./AdminTable";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
+import TableFilters from "../filters/TableFilters";
+
+const PAYMENT_STATUSES = [
+  { value: "ALL", label: "Todos los estados" },
+  { value: "PENDING", label: "Pendiente" },
+  { value: "SUCCEEDED", label: "Pagado" },
+  { value: "FAILED", label: "Fallido" },
+];
 
 export default function PaymentsTable({
   payments,
@@ -11,57 +20,73 @@ export default function PaymentsTable({
   Icon,
   ICONS,
 }) {
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] =
+    useState("ALL");
+
+  const [refreshing, setRefreshing] =
+    useState(false);
+
+  const filtered = useMemo(() => {
+    return payments.filter((payment) => {
+      const term =
+        search.toLowerCase().trim();
+
+      const matchesSearch =
+        !term ||
+        payment.id
+          ?.toString()
+          .includes(term) ||
+        payment.reservationId
+          ?.toString()
+          .includes(term) ||
+        payment.roomName
+          ?.toLowerCase()
+          .includes(term);
+
+      const matchesStatus =
+        statusFilter === "ALL" ||
+        payment.status === statusFilter;
+
+      return (
+        matchesSearch &&
+        matchesStatus
+      );
+    });
+  }, [
+    payments,
+    search,
+    statusFilter,
+  ]);
+
+  const handleRefresh =
+    async () => {
+      setRefreshing(true);
+
+      await reloadPayments();
+
+      setRefreshing(false);
+    };
+
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 20,
-        }}
-      >
-        <div>
-          <h1
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-              marginBottom: 2,
-            }}
-          >
-            Pagos
-          </h1>
-
-          <p
-            style={{
-              fontSize: 13,
-              color: "#9ca3af",
-            }}
-          >
-            {payments.length} transacciones
-          </p>
-        </div>
-
-        <button
-          onClick={reloadPayments}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 7,
-            padding: "8px 14px",
-            border: "1px solid #e5e7eb",
-            borderRadius: 8,
-            background: "#fff",
-            cursor: "pointer",
-            fontSize: 13,
-            fontWeight: 500,
-            color: "#6b7280",
-          }}
-        >
-          <Icon d={ICONS.refresh} size={14} />
-          Actualizar
-        </button>
-      </div>
+      <TableFilters
+        title="Pagos"
+        totalCount={payments.length}
+        filteredCount={filtered.length}
+        search={search}
+        setSearch={setSearch}
+        searchPlaceholder="Buscar pago, reserva o sala..."
+        statusFilter={statusFilter}
+        setStatusFilter={
+          setStatusFilter
+        }
+        statuses={PAYMENT_STATUSES}
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
+        Icon={Icon}
+        ICONS={ICONS}
+      />
 
       <div
         style={{
@@ -73,15 +98,18 @@ export default function PaymentsTable({
       >
         {loading && <Loader />}
 
-        {error && <Err msg={error} />}
-
-        {!loading && !error && (
-          <AdminTable
-            cols={payCol}
-            rows={payments}
-            emptyMsg="No hay pagos registrados"
-          />
+        {error && (
+          <Err msg={error} />
         )}
+
+        {!loading &&
+          !error && (
+            <AdminTable
+              cols={payCol}
+              rows={filtered}
+              emptyMsg="No hay pagos registrados"
+            />
+          )}
       </div>
     </div>
   );
