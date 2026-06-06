@@ -16,6 +16,8 @@ export default function TableFilters({
   statuses,
   onRefresh,
   refreshing,
+  onExport,
+  exportLabel = "Exportar CSV",
   Icon,
   ICONS,
 }) {
@@ -167,6 +169,17 @@ export default function TableFilters({
 
             Actualizar
           </button>
+
+          {onExport && (
+            <button
+              onClick={onExport}
+              style={{
+                ...buttonStyle,
+              }}
+            >
+              {exportLabel}
+            </button>
+          )}
         </div>
       </div>
     </>
