@@ -152,6 +152,11 @@ export default function DashboardStats({
                   tab: "payments",
                   icon: ICONS.credit,
                 },
+                {
+                  label: "Ver salas",
+                  tab: "rooms",
+                  icon: ICONS.room,
+                },
               ].map((a) => (
                 <button
                   key={a.tab}
