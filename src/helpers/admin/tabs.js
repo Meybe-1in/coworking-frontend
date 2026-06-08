@@ -7,19 +7,26 @@ export const TABS = [
     icon: ICONS.grid,
   },
   {
-    id: "reservations",
-    label: "Reservas",
+    id: "tables",
+    label: "Tablas",
     icon: ICONS.list,
-  },
-  {
-    id: "payments",
-    label: "Pagos",
-    icon: ICONS.credit,
-  },
+    children: [
+      {
+        id: "reservations",
+        label: "Reservas",
+        icon: ICONS.calendar,
+      },
+      {
+        id: "payments",
+        label: "Pagos",
+        icon: ICONS.credit,
+      },
 
-  {
-    id: "rooms",
-    label: "Salas",
-    icon: ICONS.room,
-  }
+      {
+        id: "rooms",
+        label: "Salas",
+        icon: ICONS.room,
+      }
+    ],
+  },
 ];
