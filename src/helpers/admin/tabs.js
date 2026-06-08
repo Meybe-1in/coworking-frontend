@@ -16,4 +16,10 @@ export const TABS = [
     label: "Pagos",
     icon: ICONS.credit,
   },
+
+  {
+    id: "rooms",
+    label: "Salas",
+    icon: ICONS.room,
+  }
 ];

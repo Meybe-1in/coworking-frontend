@@ -2,16 +2,23 @@ import { useState, useMemo } from "react";
 import AdminHeader from "../../components/admin/layout/AdminHeader";
 import AdminSidebar from "../../components/admin/layout/AdminSidebar";
 import DashboardStats from "../../components/admin/stats/DashboardStats";
+
 import ReservationsTable from "../../components/admin/tables/ReservationsTable";
 import PaymentsTable from "../../components/admin/tables/PaymentsTable";
+import RoomsTable from "../../components/admin/tables/RoomsTable";
 import Icon from "../../components/admin/ui/Icon";
 import { ICONS } from "../../helpers/admin/icons";
 import { TABS } from "../../helpers/admin/tabs";
+
 import useAdminStats from "../../components/admin/hooks/useAdminStats";
 import useReservations from "../../components/admin/hooks/useReservations";
 import usePayments from "../../components/admin/hooks/usePayments";
+import useRooms from "../../components/admin/hooks/useRooms";
+
 import {reservationColumns} from "../../components/admin/columns/reservationColumns";
 import {paymentColumns} from "../../components/admin/columns/paymentColumns";
+import {roomColumns} from "../../components/admin/columns/roomColumns";
+
 
 export default function AdminDashboard() {
 
@@ -41,6 +48,14 @@ export default function AdminDashboard() {
     reloadPayments,
   } = usePayments(tab);
 
+  // ─── Rooms hook ──────────────────
+  const {
+    rooms,
+    loading: roomsLoading,
+    error: roomsError,
+    reloadRooms,
+  } = useRooms(tab);
+
   // ─── useMemo ──────────────────
    const resCols = useMemo(
     () => reservationColumns(reloadReservations),
@@ -50,6 +65,11 @@ export default function AdminDashboard() {
   const payCols = useMemo(
     () => paymentColumns(reloadPayments),
     [reloadPayments]
+  );
+
+  const roomCols = useMemo(
+    () => roomColumns(reloadRooms),
+    [reloadRooms]
   );
 
   return (
@@ -121,6 +141,19 @@ export default function AdminDashboard() {
               error={paymentsError}
               reloadPayments={reloadPayments}
               payCol={payCols}
+              Icon={Icon}
+              ICONS={ICONS}
+            />
+          )}
+
+          {/* Rooms */}
+          {tab === "rooms" && (
+            <RoomsTable
+              rooms={rooms}
+              loading={roomsLoading}
+              error={roomsError}
+              reloadRooms={reloadRooms}
+              roomCols={roomCols}
               Icon={Icon}
               ICONS={ICONS}
             />
