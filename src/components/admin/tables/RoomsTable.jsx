@@ -74,6 +74,11 @@ export default function RoomsTable({
     statusFilter,
   ]);
 
+  const handleCreateRoom = () => {
+    // Aquí iría la lógica para crear una nueva sala, como abrir un modal con un formulario
+    alert("Crear nueva sala");
+  };
+
   const handleRefresh =
     async () => {
       setRefreshing(true);
@@ -100,6 +105,10 @@ export default function RoomsTable({
         }
         statuses={STATUS_OPTIONS}
         onRefresh={handleRefresh}
+        onCreate={handleCreateRoom}
+        onExport={() =>
+          alert("Exportar CSV")
+        }
         refreshing={refreshing}
         Icon={Icon}
         ICONS={ICONS}
