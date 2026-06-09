@@ -1,4 +1,6 @@
-export const roomColumns = () => [
+import RoomActions from "../rooms/RoomActions";
+
+export const roomColumns = (handleEdit, handleDelete) => [
   {
     key: "id",
     label: "#",
@@ -58,6 +60,17 @@ export const roomColumns = () => [
           ? "Disponible"
           : "No disponible"}
       </span>
+    ),
+  },
+  {
+    key: "actions",
+    label: "Acciones",
+    render: (r) => (
+      <RoomActions
+        room={r}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     ),
   },
 ];

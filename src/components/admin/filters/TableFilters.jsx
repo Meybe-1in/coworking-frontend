@@ -3,6 +3,7 @@ import {
   inputStyle,
   buttonStyle,
 } from "./filterStyles";
+import {Plus} from "lucide-react";
 
 export default function TableFilters({
   title,
@@ -16,6 +17,7 @@ export default function TableFilters({
   statuses,
   onRefresh,
   refreshing,
+  onCreate,
   onExport,
   exportLabel = "Exportar CSV",
   Icon,
@@ -169,6 +171,20 @@ export default function TableFilters({
 
             Actualizar
           </button>
+
+          {onCreate && (
+            <button
+              onClick={onCreate}
+              style={{
+                ...buttonStyle,
+                background: "#eff6ff",
+                color: "#1d4ed8",
+                border: "1px solid #bfdbfe",
+              }}
+            >
+             <Plus size={16} /> Nueva Sala
+            </button>
+          )}
 
           {onExport && (
             <button

@@ -15,9 +15,9 @@ import useReservations from "../../components/admin/hooks/useReservations";
 import usePayments from "../../components/admin/hooks/usePayments";
 import useRooms from "../../components/admin/hooks/useRooms";
 
-import {reservationColumns} from "../../components/admin/columns/reservationColumns";
-import {paymentColumns} from "../../components/admin/columns/paymentColumns";
-import {roomColumns} from "../../components/admin/columns/roomColumns";
+import { reservationColumns } from "../../components/admin/columns/reservationColumns";
+import { paymentColumns } from "../../components/admin/columns/paymentColumns";
+import { roomColumns } from "../../components/admin/columns/roomColumns";
 
 
 export default function AdminDashboard() {
@@ -48,6 +48,20 @@ export default function AdminDashboard() {
     reloadPayments,
   } = usePayments(tab);
 
+  // Room handlers
+  const handleEditRoom = (room) => {
+    // Aquí iría la lógica para editar la sala, como abrir un modal con un formulario
+    //alert(`Editar sala: ${room.name}`); 
+  };
+
+  const handleDeleteRoom = (room) => {
+    // Aquí iría la lógica para eliminar la sala, como mostrar una confirmación
+    if (window.confirm(`¿Eliminar sala: ${room.name}?`)) {
+      alert(`Sala eliminada: ${room.name}`);
+    }
+  };
+
+
   // ─── Rooms hook ──────────────────
   const {
     rooms,
@@ -57,7 +71,7 @@ export default function AdminDashboard() {
   } = useRooms(tab);
 
   // ─── useMemo ──────────────────
-   const resCols = useMemo(
+  const resCols = useMemo(
     () => reservationColumns(reloadReservations),
     [reloadReservations]
   );
@@ -68,12 +82,16 @@ export default function AdminDashboard() {
   );
 
   const roomCols = useMemo(
-    () => roomColumns(reloadRooms),
-    [reloadRooms]
+    () =>
+      roomColumns(
+        handleEditRoom,
+        handleDeleteRoom
+      ),
+    [ handleEditRoom, handleDeleteRoom]
   );
 
   return (
-    
+
     <div
       style={{
         minHeight: "100vh",
@@ -93,7 +111,7 @@ export default function AdminDashboard() {
         ICONS={ICONS}
       />
 
-      <div style={{ display: "flex",minHeight:"calc(100vh - 60px)",}}>
+      <div style={{ display: "flex", minHeight: "calc(100vh - 60px)", }}>
 
         {/* Sidebar */}
         <AdminSidebar
@@ -105,7 +123,7 @@ export default function AdminDashboard() {
 
         {/* Main */}
         <main
-          style={{ flex: 1,padding: "28px 32px",maxWidth: 1100,}}
+          style={{ flex: 1, padding: "28px 32px", maxWidth: 1100, }}
         >
 
           {/* Stats */}
