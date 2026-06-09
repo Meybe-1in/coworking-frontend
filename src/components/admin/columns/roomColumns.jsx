@@ -1,6 +1,6 @@
 import RoomActions from "../rooms/RoomActions";
 
-export const roomColumns = (reloadRooms, handleEdit, handleDelete) => [
+export const roomColumns = (handleEdit, handleDelete) => [
   {
     key: "id",
     label: "#",

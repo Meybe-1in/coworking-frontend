@@ -84,11 +84,10 @@ export default function AdminDashboard() {
   const roomCols = useMemo(
     () =>
       roomColumns(
-        reloadRooms,
         handleEditRoom,
         handleDeleteRoom
       ),
-    [reloadRooms, handleEditRoom, handleDeleteRoom]
+    [ handleEditRoom, handleDeleteRoom]
   );
 
   return (
