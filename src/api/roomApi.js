@@ -18,18 +18,55 @@ export const getAllRooms = async () => {
 };
 
 export const getRoomsAvailability = async (filters) => {
-    const { date, start, end, people } = filters;
+  const { date, start, end, people } = filters;
 
-    const startDateTime = toUTC(date, start);
-    const endDateTime = toUTC(date, end);
+  const startDateTime = toUTC(date, start);
+  const endDateTime = toUTC(date, end);
 
-    const response = await API.get("/api/rooms/availability", {
-      params: {
-        start: startDateTime,
-        end: endDateTime,
-        people
+  const response = await API.get("/api/rooms/availability", {
+    params: {
+      start: startDateTime,
+      end: endDateTime,
+      people
+    }
+  });
+
+  return response.data;
+}
+
+export const createRoom = async (
+  roomData,
+  image
+) => {
+  const formData = new FormData();
+
+  formData.append(
+    "room",
+    new Blob(
+      [JSON.stringify(roomData)],
+      {
+        type: "application/json",
       }
-    });
+    )
+  );
 
-    return response.data;
+  if (image) {
+    formData.append(
+      "image",
+      image
+    );
   }
+
+  const res = await API.post(
+    "/api/rooms",
+    formData,
+    {
+      headers: {
+        "Content-Type":
+          "multipart/form-data",
+      },
+    }
+  );
+
+  return res.data;
+};
