@@ -4,6 +4,7 @@ import AdminTable from "./AdminTable";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
 import TableFilters from "../filters/TableFilters";
+import CreateRoomModal from "../rooms/CreateRoomModal";
 
 const STATUS_OPTIONS = [
   {
@@ -74,9 +75,12 @@ export default function RoomsTable({
     statusFilter,
   ]);
 
+  const [showCreateModal,
+  setShowCreateModal] =
+  useState(false);
+
   const handleCreateRoom = () => {
-    // Aquí iría la lógica para crear una nueva sala, como abrir un modal con un formulario
-    alert("Crear nueva sala");
+    setShowCreateModal(true);
   };
 
   const handleRefresh =
@@ -138,6 +142,13 @@ export default function RoomsTable({
             />
           )}
       </div>
+      <CreateRoomModal
+        open={showCreateModal}
+        onClose={() =>
+          setShowCreateModal(false)
+        }
+        reloadRooms={reloadRooms}
+      />
     </div>
   );
 }
