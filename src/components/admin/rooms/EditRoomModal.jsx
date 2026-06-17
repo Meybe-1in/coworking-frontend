@@ -42,6 +42,7 @@ export default function EditRoomModal({
         initialData={room}
         onSubmit={handleUpdate}
         loading={loading}
+        isEdit={true}
       />
     </Modal>
   );
