@@ -34,6 +34,46 @@ export const getRoomsAvailability = async (filters) => {
   return response.data;
 }
 
+//createRoom y updateRoom se pueden unificar en una función saveRoom que reciba un id opcional, si el id existe hace un PUT, si no hace un POST. Pero por ahora los dejo separados para mantener la claridad.
+
+export const updateRoom = async (
+  id,
+  roomData,
+  image
+) => {
+  const formData = new FormData();
+
+  formData.append(
+    "room",
+    new Blob(
+      [JSON.stringify(roomData)],
+      {
+        type: "application/json",
+      }
+    )
+  );
+
+  if (image) {
+    formData.append(
+      "image",
+      image
+    );
+  }
+
+  const res = await API.put(
+    `/api/rooms/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type":
+          "multipart/form-data",
+      },
+    }
+  );
+
+  return res.data;
+};
+
 export const createRoom = async (
   roomData,
   image

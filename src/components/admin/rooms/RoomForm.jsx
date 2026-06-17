@@ -1,15 +1,15 @@
-import { useState, useRef } from "react";
-import {Building2,Users,MapPin,List,Camera,Loader2,Plus,} from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Building2, Users, MapPin, List, Camera, Loader2, Plus, } from "lucide-react";
 
-function Field({label,hint,error,children,}) {
+function Field({ label, hint, error, children, }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 4, }}>
-      <label style={{ fontSize: 11,fontWeight: 500, textTransform: "uppercase", letterSpacing: ".5px", color: "#9ca3af",}}>
+      <label style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: ".5px", color: "#9ca3af", }}>
         {label}
 
         {hint && (
           <span
-            style={{textTransform: "none", fontWeight: 400, color: "#d1d5db", marginLeft: 4, }}
+            style={{ textTransform: "none", fontWeight: 400, color: "#d1d5db", marginLeft: 4, }}
           >
             {hint}
           </span>
@@ -20,7 +20,7 @@ function Field({label,hint,error,children,}) {
 
       {error && (
         <p
-          style={{ fontSize: 11, color: "#ef4444", margin: 0,}}
+          style={{ fontSize: 11, color: "#ef4444", margin: 0, }}
         >
           {error}
         </p>
@@ -56,7 +56,7 @@ function IconInput({
       {Icon && (
         <Icon
           size={14}
-          style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#9ca3af",}}
+          style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", }}
         />
       )}
 
@@ -70,7 +70,8 @@ function IconInput({
 
       <input
         {...props}
-        style={{...inputStyle, paddingLeft:
+        style={{
+          ...inputStyle, paddingLeft:
             Icon || dollar
               ? 32
               : 10,
@@ -80,23 +81,27 @@ function IconInput({
   );
 }
 
-export default function RoomForm({onSubmit,loading,initialData,}) {
+export default function RoomForm({ onSubmit, loading, initialData, isEdit = false, }) {
   const [form, setForm] =
     useState({
-      name:initialData?.name ?? "",
-      description:initialData?.description ?? "",
-      capacity:initialData?.capacity ?? "",
-      price:initialData?.price ?? "",
-      location:initialData?.location ?? "",
-      features:initialData?.features?.join( ", ") ?? "",
-      available:initialData?.available ??true,
+      name: initialData?.name ?? "",
+      description: initialData?.description ?? "",
+      capacity: initialData?.capacity ?? "",
+      price: initialData?.price ?? "",
+      location: initialData?.location ?? "",
+      features: initialData?.features?.join(", ") ?? "",
+      available: initialData?.available ?? true,
     });
 
   const [image, setImage] =
     useState(null);
 
   const [preview, setPreview] =
-    useState(null);
+    useState(initialData?.imageUrl ?? null);
+
+  useEffect(() => {
+    setPreview(initialData?.imageUrl ?? null);
+  }, [initialData]);
 
   const [errors, setErrors] =
     useState({});
@@ -176,27 +181,27 @@ export default function RoomForm({onSubmit,loading,initialData,}) {
   return (
     <form
       onSubmit={submit}
-      style={{ display: "flex", flexDirection: "column", gap: 12,}}
+      style={{ display: "flex", flexDirection: "column", gap: 12, }}
     >
       <Field label="Nombre" error={errors.name}
       >
         <IconInput icon={Building2} placeholder="Sala Focus A" value={form.name} onChange={(e) =>
-            set(
-              "name",
-              e.target.value
-            )
-          }
+          set(
+            "name",
+            e.target.value
+          )
+        }
         />
       </Field>
 
       <Field label="Descripción">
         <textarea rows={2} placeholder="Descripción de la sala" value={form.description} onChange={(e) =>
-            set(
-              "description",
-              e.target.value
-            )
-          }
-          style={{ ...inputStyle, padding: 10, height: "auto", resize: "none",}}
+          set(
+            "description",
+            e.target.value
+          )
+        }
+          style={{ ...inputStyle, padding: 10, height: "auto", resize: "none", }}
         />
       </Field>
 
@@ -399,7 +404,7 @@ export default function RoomForm({onSubmit,loading,initialData,}) {
       </Field>
 
       <div
-        style={{borderTop: "1px solid #f3f4f6",paddingTop: 8,display: "flex",justifyContent:"flex-end", }}
+        style={{ borderTop: "1px solid #f3f4f6", paddingTop: 8, display: "flex", justifyContent: "flex-end", }}
       >
         <button
           type="submit"
@@ -437,7 +442,9 @@ export default function RoomForm({onSubmit,loading,initialData,}) {
 
           {loading
             ? "Guardando..."
-            : "Crear sala"}
+            : isEdit
+              ? "Actualizar sala"
+              : "Crear sala"}
         </button>
       </div>
 

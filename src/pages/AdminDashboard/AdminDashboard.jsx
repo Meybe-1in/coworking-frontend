@@ -18,12 +18,16 @@ import useRooms from "../../components/admin/hooks/useRooms";
 import { reservationColumns } from "../../components/admin/columns/reservationColumns";
 import { paymentColumns } from "../../components/admin/columns/paymentColumns";
 import { roomColumns } from "../../components/admin/columns/roomColumns";
+import EditRoomModal from "../../components/admin/rooms/EditRoomModal";
 
 
 export default function AdminDashboard() {
 
   const [tab, setTab] =
     useState("stats");
+
+  const [editingRoom, setEditingRoom] =
+    useState(null);
 
   // ─── Stats hook ─────────────────────
   const {
@@ -50,8 +54,7 @@ export default function AdminDashboard() {
 
   // Room handlers
   const handleEditRoom = (room) => {
-    // Aquí iría la lógica para editar la sala, como abrir un modal con un formulario
-    //alert(`Editar sala: ${room.name}`); 
+    setEditingRoom(room);
   };
 
   const handleDeleteRoom = (room) => {
@@ -87,7 +90,7 @@ export default function AdminDashboard() {
         handleEditRoom,
         handleDeleteRoom
       ),
-    [ handleEditRoom, handleDeleteRoom]
+    [handleEditRoom, handleDeleteRoom]
   );
 
   return (
@@ -174,6 +177,15 @@ export default function AdminDashboard() {
               roomCols={roomCols}
               Icon={Icon}
               ICONS={ICONS}
+            />
+          )}
+
+          {editingRoom && (
+            <EditRoomModal
+              room={editingRoom}
+              open={!!editingRoom}
+              onClose={() => setEditingRoom(null)}
+              reloadRooms={reloadRooms}
             />
           )}
 
