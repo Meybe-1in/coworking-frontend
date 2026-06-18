@@ -17,6 +17,10 @@ export const getAllRooms = async () => {
   return res.data.data || res.data;
 };
 
+export const deleteRoom = async (id) => {
+  await API.delete(`/api/rooms/${id}`);
+};
+
 export const getRoomsAvailability = async (filters) => {
   const { date, start, end, people } = filters;
 
