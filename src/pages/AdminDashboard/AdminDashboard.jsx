@@ -19,6 +19,7 @@ import { reservationColumns } from "../../components/admin/columns/reservationCo
 import { paymentColumns } from "../../components/admin/columns/paymentColumns";
 import { roomColumns } from "../../components/admin/columns/roomColumns";
 import EditRoomModal from "../../components/admin/rooms/EditRoomModal";
+import DeleteRoomModal from "../../components/admin/rooms/DeleteRoomModal";
 
 
 export default function AdminDashboard() {
@@ -27,6 +28,9 @@ export default function AdminDashboard() {
     useState("stats");
 
   const [editingRoom, setEditingRoom] =
+    useState(null);
+
+  const [deletingRoom, setDeletingRoom] =
     useState(null);
 
   // ─── Stats hook ─────────────────────
@@ -58,10 +62,7 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteRoom = (room) => {
-    // Aquí iría la lógica para eliminar la sala, como mostrar una confirmación
-    if (window.confirm(`¿Eliminar sala: ${room.name}?`)) {
-      alert(`Sala eliminada: ${room.name}`);
-    }
+    setDeletingRoom(room);
   };
 
 
@@ -185,6 +186,15 @@ export default function AdminDashboard() {
               room={editingRoom}
               open={!!editingRoom}
               onClose={() => setEditingRoom(null)}
+              reloadRooms={reloadRooms}
+            />
+          )}
+
+          {deletingRoom && (
+            <DeleteRoomModal
+              room={deletingRoom}
+              open={!!deletingRoom}
+              onClose={() => setDeletingRoom(null)}
               reloadRooms={reloadRooms}
             />
           )}
