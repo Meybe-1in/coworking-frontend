@@ -3,23 +3,32 @@ import {
   inputStyle,
   buttonStyle,
 } from "./filterStyles";
-import {Plus} from "lucide-react";
+import { Plus } from "lucide-react";
 
 export default function TableFilters({
   title,
   totalCount,
   filteredCount,
+
   search,
   setSearch,
   searchPlaceholder,
+
   statusFilter,
   setStatusFilter,
   statuses,
+
+  roleFilter,
+  setRoleFilter,
+  roles,
+
   onRefresh,
   refreshing,
+
   onCreate,
   onExport,
   exportLabel = "Exportar CSV",
+
   Icon,
   ICONS,
 }) {
@@ -96,6 +105,61 @@ export default function TableFilters({
               alignItems: "center",
             }}
           >
+            {roles && (
+              <div
+                style={{
+                  position: "relative",
+                  height: CONTROL_HEIGHT,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <select
+                  value={roleFilter}
+                  onChange={(e) =>
+                    setRoleFilter(e.target.value)
+                  }
+                  style={{
+                    ...inputStyle,
+                    minWidth: 180,
+                    paddingRight: 30,
+                    appearance: "none",
+                    WebkitAppearance: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {roles.map((role) => (
+                    <option
+                      key={role.value}
+                      value={role.value}
+                    >
+                      {role.label}
+                    </option>
+                  ))}
+                </select>
+
+                <svg
+                  viewBox="0 0 10 6"
+                  width="10"
+                  height="6"
+                  style={{
+                    position: "absolute",
+                    right: 10,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    pointerEvents: "none",
+                    fill: "none",
+                    stroke: "#9ca3af",
+                    strokeWidth: 1.6,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                  }}
+                >
+                  <path d="M1 1l4 4 4-4" />
+                </svg>
+              </div>
+            )}
+            
             <select
               value={statusFilter}
               onChange={(e) =>
@@ -182,7 +246,7 @@ export default function TableFilters({
                 border: "1px solid #bfdbfe",
               }}
             >
-             <Plus size={16} /> Nueva Sala
+              <Plus size={16} /> Nueva Sala
             </button>
           )}
 
