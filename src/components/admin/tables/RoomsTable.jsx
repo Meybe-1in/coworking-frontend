@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
-
-import AdminTable from "./AdminTable";
-import Loader from "../ui/Loader";
-import Err from "../ui/Err";
-import TableFilters from "../filters/TableFilters";
+import DataTable from "./DataTable";
+import AdminSection from "./AdminSection";
+import useRefresh from "../hooks/useRefresh";
+import useTableFilters from "../hooks/useTableFilters";
 import CreateRoomModal from "../rooms/CreateRoomModal";
 
 const STATUS_OPTIONS = [
@@ -30,16 +29,19 @@ export default function RoomsTable({
   Icon,
   ICONS,
 }) {
-  const [search, setSearch] =
-    useState("");
+  const {
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+  } = useTableFilters();
 
-  const [statusFilter,
-    setStatusFilter] =
-    useState("ALL");
-
-  const [refreshing,
-    setRefreshing] =
-    useState(false);
+  const {
+    refreshing,
+    refresh,
+  } = useRefresh(
+    reloadRooms
+  );
 
   const filtered = useMemo(() => {
     return rooms.filter((room) => {
@@ -76,72 +78,45 @@ export default function RoomsTable({
   ]);
 
   const [showCreateModal,
-  setShowCreateModal] =
-  useState(false);
+    setShowCreateModal] =
+    useState(false);
 
   const handleCreateRoom = () => {
     setShowCreateModal(true);
   };
 
-  const handleRefresh =
-    async () => {
-      setRefreshing(true);
-
-      await reloadRooms();
-
-      setRefreshing(false);
-    };
-
   return (
     <div>
-      <TableFilters
+      <AdminSection
         title="Salas"
         totalCount={rooms.length}
         filteredCount={
           filtered.length
         }
-        search={search}
-        setSearch={setSearch}
-        searchPlaceholder="Buscar por nombre o capacidad..."
-        statusFilter={statusFilter}
-        setStatusFilter={
-          setStatusFilter
-        }
-        statuses={STATUS_OPTIONS}
-        onRefresh={handleRefresh}
-        onCreate={handleCreateRoom}
-        onExport={() =>
-          alert("Exportar CSV")
-        }
-        refreshing={refreshing}
-        Icon={Icon}
-        ICONS={ICONS}
+        filters={{
+          search,
+          setSearch,
+          searchPlaceholder: "Buscar por nombre o capacidad...",
+          statusFilter,
+          setStatusFilter,
+          statuses: STATUS_OPTIONS,
+          onRefresh: refresh,
+          onCreate: handleCreateRoom,
+          refreshing,
+          exportLabel: "Exportar CSV",
+          Icon,
+          ICONS,
+        }}
+        table={{
+          loading,
+          error,
+          cols: roomCols,
+          rows: filtered,
+          emptyMsg: "No se encontraron salas.",
+        }}
       />
 
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 14,
-          border:
-            "1px solid #f0f0f0",
-          overflow: "hidden",
-        }}
-      >
-        {loading && <Loader />}
-
-        {error && (
-          <Err msg={error} />
-        )}
-
-        {!loading &&
-          !error && (
-            <AdminTable
-              cols={roomCols}
-              rows={filtered}
-              emptyMsg="No hay salas registradas"
-            />
-          )}
-      </div>
+      {/* Modals */}
       <CreateRoomModal
         open={showCreateModal}
         onClose={() =>

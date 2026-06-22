@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import AdminTable from "./AdminTable";
-import Loader from "../ui/Loader";
-import Err from "../ui/Err";
-import TableFilters from "../filters/TableFilters";
-import {exportPaymentsCSV} from "../../../api/adminApi";
+import AdminSection from "./AdminSection";
+import useRefresh from "../hooks/useRefresh";
+import useTableFilters from "../hooks/useTableFilters";
+import DataTable from "./DataTable";
+import { exportPaymentsCSV } from "../../../api/adminApi";
 import { downloadFile } from "../../../helpers/admin/downloadFile";
 
 const PAYMENT_STATUSES = [
@@ -22,13 +22,19 @@ export default function PaymentsTable({
   Icon,
   ICONS,
 }) {
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] =
-    useState("ALL");
+  const {
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+  } = useTableFilters();
 
-  const [refreshing, setRefreshing] =
-    useState(false);
-
+  const {
+    refreshing,
+    refresh,
+  } = useRefresh(
+    reloadPayments
+  );
   const filtered = useMemo(() => {
     return payments.filter((payment) => {
       const term =
@@ -61,74 +67,50 @@ export default function PaymentsTable({
     statusFilter,
   ]);
 
-  const handleRefresh =
+  const handleExportPayments =
     async () => {
-      setRefreshing(true);
-
-      await reloadPayments();
-
-      setRefreshing(false);
+      try {
+        const blob =
+          await exportPaymentsCSV();
+        downloadFile(blob, "payments.csv");
+      } catch (err) {
+        console.error(
+          "Error al exportar pagos:",
+          err
+        );
+      }
     };
 
-  const handleExportPayments =
-  async () => {
-    try {
-      const blob =
-        await exportPaymentsCSV();
-      downloadFile(blob, "payments.csv");
-    } catch (err) {
-      console.error(
-        "Error al exportar pagos:",
-        err
-      );
-    }
-  };
-
   return (
-    <div>
-      <TableFilters
-        title="Pagos"
-        totalCount={payments.length}
-        filteredCount={filtered.length}
-        search={search}
-        setSearch={setSearch}
-        searchPlaceholder="Buscar pago, reserva o sala..."
-        statusFilter={statusFilter}
-        setStatusFilter={
-          setStatusFilter
-        }
-        statuses={PAYMENT_STATUSES}
-        onRefresh={handleRefresh}
-        refreshing={refreshing}
-        onExport={handleExportPayments}
-        exportLabel="Exportar pagos CSV"
-        Icon={Icon}
-        ICONS={ICONS}
-      />
-
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 14,
-          border: "1px solid #f0f0f0",
-          overflow: "hidden",
-        }}
-      >
-        {loading && <Loader />}
-
-        {error && (
-          <Err msg={error} />
-        )}
-
-        {!loading &&
-          !error && (
-            <AdminTable
-              cols={payCol}
-              rows={filtered}
-              emptyMsg="No hay pagos registrados"
-            />
-          )}
-      </div>
-    </div>
+    <AdminSection
+      title="Pagos"
+      totalCount={payments.length}
+      filteredCount={filtered.length}
+      filters={{
+        search,
+        setSearch,
+        searchPlaceholder:
+          "Buscar pago, reserva o sala...",
+        statusFilter,
+        setStatusFilter,
+        statuses: PAYMENT_STATUSES,
+        onRefresh: refresh,
+        refreshing,
+        onExport:
+          handleExportPayments,
+        exportLabel:
+          "Exportar pagos CSV",
+        Icon,
+        ICONS,
+      }}
+      table={{
+        loading,
+        error,
+        rows: filtered,
+        cols: payCol,
+        emptyMsg:
+          "No hay pagos registrados",
+      }}
+    />
   );
 }
