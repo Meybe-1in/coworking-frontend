@@ -97,6 +97,61 @@ export default function TableFilters({
             }}
           />
 
+          {roles && (
+            <div
+              style={{
+                position: "relative",
+                height: CONTROL_HEIGHT,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <select
+                value={roleFilter}
+                onChange={(e) =>
+                  setRoleFilter(e.target.value)
+                }
+                style={{
+                  ...inputStyle,
+                  minWidth: 180,
+                  paddingRight: 30,
+                  appearance: "none",
+                  WebkitAppearance: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {roles.map((role) => (
+                  <option
+                    key={role.value}
+                    value={role.value}
+                  >
+                    {role.label}
+                  </option>
+                ))}
+              </select>
+
+              <svg
+                viewBox="0 0 10 6"
+                width="10"
+                height="6"
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  pointerEvents: "none",
+                  fill: "none",
+                  stroke: "#9ca3af",
+                  strokeWidth: 1.6,
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                }}
+              >
+                <path d="M1 1l4 4 4-4" />
+              </svg>
+            </div>
+          )}
+
           <div
             style={{
               position: "relative",
@@ -105,61 +160,6 @@ export default function TableFilters({
               alignItems: "center",
             }}
           >
-            {roles && (
-              <div
-                style={{
-                  position: "relative",
-                  height: CONTROL_HEIGHT,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <select
-                  value={roleFilter}
-                  onChange={(e) =>
-                    setRoleFilter(e.target.value)
-                  }
-                  style={{
-                    ...inputStyle,
-                    minWidth: 180,
-                    paddingRight: 30,
-                    appearance: "none",
-                    WebkitAppearance: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  {roles.map((role) => (
-                    <option
-                      key={role.value}
-                      value={role.value}
-                    >
-                      {role.label}
-                    </option>
-                  ))}
-                </select>
-
-                <svg
-                  viewBox="0 0 10 6"
-                  width="10"
-                  height="6"
-                  style={{
-                    position: "absolute",
-                    right: 10,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    pointerEvents: "none",
-                    fill: "none",
-                    stroke: "#9ca3af",
-                    strokeWidth: 1.6,
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round",
-                  }}
-                >
-                  <path d="M1 1l4 4 4-4" />
-                </svg>
-              </div>
-            )}
-            
             <select
               value={statusFilter}
               onChange={(e) =>
