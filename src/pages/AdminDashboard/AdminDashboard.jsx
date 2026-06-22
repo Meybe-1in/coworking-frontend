@@ -6,6 +6,8 @@ import DashboardStats from "../../components/admin/stats/DashboardStats";
 import ReservationsTable from "../../components/admin/tables/ReservationsTable";
 import PaymentsTable from "../../components/admin/tables/PaymentsTable";
 import RoomsTable from "../../components/admin/tables/RoomsTable";
+import UsersTable from "../../components/admin/tables/UsersTable";
+
 import Icon from "../../components/admin/ui/Icon";
 import { ICONS } from "../../helpers/admin/icons";
 import { TABS } from "../../helpers/admin/tabs";
@@ -14,10 +16,13 @@ import useAdminStats from "../../components/admin/hooks/useAdminStats";
 import useReservations from "../../components/admin/hooks/useReservations";
 import usePayments from "../../components/admin/hooks/usePayments";
 import useRooms from "../../components/admin/hooks/useRooms";
+import useUsers from "../../components/admin/hooks/useUsers";
 
 import { reservationColumns } from "../../components/admin/columns/reservationColumns";
 import { paymentColumns } from "../../components/admin/columns/paymentColumns";
 import { roomColumns } from "../../components/admin/columns/roomColumns";
+import { userColumns } from "../../components/admin/columns/userColumns";
+
 import EditRoomModal from "../../components/admin/rooms/EditRoomModal";
 import DeleteRoomModal from "../../components/admin/rooms/DeleteRoomModal";
 
@@ -33,6 +38,7 @@ export default function AdminDashboard() {
   const [deletingRoom, setDeletingRoom] =
     useState(null);
 
+  // ------------HOOKS------------
   // ─── Stats hook ─────────────────────
   const {
     stats,
@@ -56,6 +62,22 @@ export default function AdminDashboard() {
     reloadPayments,
   } = usePayments(tab);
 
+  // ─── Rooms hook ──────────────────
+  const {
+    rooms,
+    loading: roomsLoading,
+    error: roomsError,
+    reloadRooms,
+  } = useRooms(tab);
+
+  // ─── Users hook ──────────────────
+  const {
+    users,
+    loading: usersLoading,
+    error: usersError,
+    reloadUsers,
+  } = useUsers(tab);
+
   // Room handlers
   const handleEditRoom = (room) => {
     setEditingRoom(room);
@@ -64,15 +86,6 @@ export default function AdminDashboard() {
   const handleDeleteRoom = (room) => {
     setDeletingRoom(room);
   };
-
-
-  // ─── Rooms hook ──────────────────
-  const {
-    rooms,
-    loading: roomsLoading,
-    error: roomsError,
-    reloadRooms,
-  } = useRooms(tab);
 
   // ─── useMemo ──────────────────
   const resCols = useMemo(
@@ -130,6 +143,8 @@ export default function AdminDashboard() {
           style={{ flex: 1, padding: "28px 32px", maxWidth: 1100, }}
         >
 
+        {/* Tables */}
+
           {/* Stats */}
           {tab === "stats" && (
             <DashboardStats
@@ -181,6 +196,20 @@ export default function AdminDashboard() {
             />
           )}
 
+          {/* Users */}
+          {tab === "users" && (
+            <UsersTable
+              users={users}
+              loading={usersLoading}
+              error={usersError}
+              reloadUsers={reloadUsers}
+              userCols={userColumns}
+              Icon={Icon}
+              ICONS={ICONS}
+            />
+          )}
+
+          {/* Modals */}
           {editingRoom && (
             <EditRoomModal
               room={editingRoom}

@@ -33,3 +33,8 @@ export const exportPaymentsCSV = async () =>{
     });
     return response.data;
 }
+
+export const getUsers = async () => {
+  const res = await API.get("/admin/users");
+  return res.data;
+};

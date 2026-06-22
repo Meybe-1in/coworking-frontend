@@ -26,6 +26,12 @@ export const TABS = [
         id: "rooms",
         label: "Salas",
         icon: ICONS.room,
+      },
+
+      {
+        id: "users",
+        label: "Usuarios",
+        icon: ICONS.users,
       }
     ],
   },
