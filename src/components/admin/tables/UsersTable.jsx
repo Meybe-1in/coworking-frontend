@@ -4,13 +4,6 @@ import AdminSection from "./AdminSection";
 import useRefresh from "../hooks/useRefresh";
 import useTableFilters from "../hooks/useTableFilters";
 
-const EMPTY_STATUSES = [
-  {
-    value: "ALL",
-    label: "Todos",
-  },
-];
-
 const ROLE_OPTIONS = [
   {
     value: "ALL",
@@ -87,9 +80,9 @@ export default function UsersTable({
       const matchesStatus =
         statusFilter === "ALL" ||
         (statusFilter === "ACTIVE" &&
-          user.active) ||
+          user.enabled) ||
         (statusFilter === "INACTIVE" &&
-          !user.active);
+          !user.enabled);
       return (
         matchesSearch &&
         matchesRole &&
@@ -106,12 +99,19 @@ export default function UsersTable({
         filters={{
           search,
           setSearch,
-          searchPlaceholder: "Buscar...",
+          searchPlaceholder: "Buscar usuario o correo...",
+
+          roleFilter,
+          setRoleFilter,
+          roles: ROLE_OPTIONS,
+
           statusFilter,
           setStatusFilter,
-          statuses: EMPTY_STATUSES,
+          statuses: STATUS_OPTIONS,
+
           onRefresh: refresh,
           refreshing,
+
           Icon,
           ICONS,
         }}

@@ -1,6 +1,6 @@
 import Badge from "../ui/Badge";
-import { idColumn }
-  from "../../../helpers/admin/tableColumns";
+import { idColumn } from "../../../helpers/admin/tableColumns";
+import RoleBadge from "../ui/RoleBadge";
 
 export const userColumns = [
 
@@ -20,7 +20,9 @@ export const userColumns = [
     key: "roles",
     label: "Rol",
     render: (u) =>
-      u.roles.join(", "),
+      u.roles.map((role) => (
+        <RoleBadge key={role} role={role} />
+      )),
   },
 
   {
