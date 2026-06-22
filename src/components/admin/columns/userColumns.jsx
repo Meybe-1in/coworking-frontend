@@ -1,18 +1,10 @@
+import Badge from "../ui/Badge";
+import { idColumn }
+  from "../../../helpers/admin/tableColumns";
+
 export const userColumns = [
-  {
-    key: "id",
-    label: "#",
-    render: (u) => (
-      <span
-        style={{
-          color: "#d1d5db",
-          fontFamily: "monospace",
-        }}
-      >
-        #{u.id}
-      </span>
-    ),
-  },
+
+  idColumn,
 
   {
     key: "username",
@@ -35,24 +27,11 @@ export const userColumns = [
     key: "enabled",
     label: "Estado",
     render: (u) => (
-      <span
-        style={{
-          padding: "4px 10px",
-          borderRadius: 999,
-          fontSize: 12,
-          fontWeight: 600,
-          background: u.enabled
-            ? "#dcfce7"
-            : "#fee2e2",
-          color: u.enabled
-            ? "#166534"
-            : "#991b1b",
-        }}
-      >
-        {u.enabled
-          ? "Activo"
-          : "Inactivo"}
-      </span>
+      <Badge
+        active={u.enabled}
+        activeText="Activo"
+        inactiveText="Inactivo"
+      />
     ),
   },
 ];

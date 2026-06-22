@@ -4,23 +4,11 @@ import {
   fmt,
   fmtDateTime,
 } from "../../../helpers/admin/formatters";
+import { idColumn } from "../../../helpers/admin/tableColumns";
 
 export const paymentColumns = (reloadPayments) => [
 
-  {
-    key: "id",
-    label: "#",
-    render: (r) => (
-      <span
-        style={{
-          color: "#d1d5db",
-          fontFamily: "monospace",
-        }}
-      >
-        #{r.id}
-      </span>
-    ),
-  },
+  idColumn,
 
   {
     key: "reservationId",
