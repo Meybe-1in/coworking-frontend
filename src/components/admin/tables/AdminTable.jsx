@@ -1,6 +1,6 @@
 export default function AdminTable({
-  cols,
-  rows,
+  cols = [],
+  rows = [],
   emptyMsg = "Sin datos",
 }) {
   return (

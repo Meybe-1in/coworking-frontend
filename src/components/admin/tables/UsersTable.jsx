@@ -1,14 +1,43 @@
-import { useState } from "react";
-
-import Loader from "../ui/Loader";
-import Err from "../ui/Err";
-import AdminTable from "./AdminTable";
-import TableFilters from "../filters/TableFilters";
+import { useState, useMemo } from "react";
+import DataTable from "./DataTable";
+import AdminSection from "./AdminSection";
+import useRefresh from "../hooks/useRefresh";
+import useTableFilters from "../hooks/useTableFilters";
 
 const EMPTY_STATUSES = [
   {
     value: "ALL",
     label: "Todos",
+  },
+];
+
+const ROLE_OPTIONS = [
+  {
+    value: "ALL",
+    label: "Todos los roles",
+  },
+  {
+    value: "ROLE_USER",
+    label: "Usuarios",
+  },
+  {
+    value: "ROLE_ADMIN",
+    label: "Administradores",
+  },
+];
+
+const STATUS_OPTIONS = [
+  {
+    value: "ALL",
+    label: "Todos los estados",
+  },
+  {
+    value: "ACTIVE",
+    label: "Activos",
+  },
+  {
+    value: "INACTIVE",
+    label: "Inactivos",
   },
 ];
 
@@ -21,66 +50,79 @@ export default function UsersTable({
   Icon,
   ICONS,
 }) {
-  const [refreshing, setRefreshing] =
-    useState(false);
+  const {
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+  } = useTableFilters();
 
-  const [search, setSearch] =
-    useState("");
+  const {
+    refreshing,
+    refresh,
+  } = useRefresh(reloadUsers);
 
-  const [statusFilter,
-    setStatusFilter] =
+
+  const [roleFilter,
+    setRoleFilter] =
     useState("ALL");
 
-  const handleRefresh =
-    async () => {
-      setRefreshing(true);
+  const filtered = useMemo(() => {
+    return users.filter((user) => {
+      const term =
+        search.toLowerCase().trim();
 
-      await reloadUsers();
+      const matchesSearch =
+        !term ||
+        user.username
+          ?.toLowerCase()
+          .includes(term) ||
+        user.email
+          ?.toLowerCase()
+          .includes(term);
 
-      setRefreshing(false);
-    };
+      const matchesRole =
+        roleFilter === "ALL" ||
+        user.roles.includes(roleFilter);
+      const matchesStatus =
+        statusFilter === "ALL" ||
+        (statusFilter === "ACTIVE" &&
+          user.active) ||
+        (statusFilter === "INACTIVE" &&
+          !user.active);
+      return (
+        matchesSearch &&
+        matchesRole &&
+        matchesStatus);
+    });
+  }, [users, search, roleFilter, statusFilter]);
 
   return (
     <div>
-      <TableFilters
+      <AdminSection
         title="Usuarios"
         totalCount={users.length}
-        filteredCount={users.length}
-        search={search}
-        setSearch={setSearch}
-        searchPlaceholder="Buscar..."
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        statuses={EMPTY_STATUSES}
-        onRefresh={handleRefresh}
-        refreshing={refreshing}
-        Icon={Icon}
-        ICONS={ICONS}
-      />
-
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 14,
-          border: "1px solid #f0f0f0",
-          overflow: "hidden",
+        filteredCount={filtered.length}
+        filters={{
+          search,
+          setSearch,
+          searchPlaceholder: "Buscar...",
+          statusFilter,
+          setStatusFilter,
+          statuses: EMPTY_STATUSES,
+          onRefresh: refresh,
+          refreshing,
+          Icon,
+          ICONS,
         }}
-      >
-        {loading && <Loader />}
-
-        {error && (
-          <Err msg={error} />
-        )}
-
-        {!loading &&
-          !error && (
-            <AdminTable
-              cols={userCols}
-              rows={users}
-              emptyMsg="No hay usuarios registrados"
-            />
-          )}
-      </div>
+        table={{
+          loading,
+          error,
+          cols: userCols,
+          rows: filtered,
+          emptyMsg: "No hay usuarios registrados",
+        }}
+      />
     </div>
   );
 }

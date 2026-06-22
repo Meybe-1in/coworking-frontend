@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import AdminTable from "./AdminTable";
-import Loader from "../ui/Loader";
-import Err from "../ui/Err";
-import TableFilters from "../filters/TableFilters";
-import {exportReservationsCSV} from "../../../api/adminApi";
+import AdminSection from "./AdminSection";
+import useRefresh from "../hooks/useRefresh";
+import useTableFilters from "../hooks/useTableFilters";
+import DataTable from "./DataTable";
+import { exportReservationsCSV } from "../../../api/adminApi";
 import { downloadFile } from "../../../helpers/admin/downloadFile";
 
 const STATUSES = [
@@ -23,14 +23,19 @@ export default function ReservationsTable({
   Icon,
   ICONS,
 }) {
-  const [search, setSearch] =
-    useState("");
+  const {
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+  } = useTableFilters();
 
-  const [statusFilter, setStatusFilter] =
-    useState("ALL");
-
-  const [refreshing, setRefreshing] =
-    useState(false);
+  const {
+    refreshing,
+    refresh,
+  } = useRefresh(
+    reloadReservations
+  );
 
   const filtered = useMemo(() => {
     return reservations.filter((r) => {
@@ -61,80 +66,50 @@ export default function ReservationsTable({
     statusFilter,
   ]);
 
-  const handleRefresh =
+  const handleExportReservations =
     async () => {
-      setRefreshing(true);
-      await reloadReservations();
-      setRefreshing(false);
+      try {
+        const blob =
+          await exportReservationsCSV();
+
+        downloadFile(
+          blob,
+          "reservations.csv"
+        );
+      } catch (error) {
+        console.error(
+          "Error exportando reservas",
+          error
+        );
+      }
     };
 
-  const handleExportReservations =
-  async () => {
-    try {
-      const blob =
-        await exportReservationsCSV();
-
-      downloadFile(
-        blob,
-        "reservations.csv"
-      );
-    } catch (error) {
-      console.error(
-        "Error exportando reservas",
-        error
-      );
-    }
-  };
-
   return (
-    <div>
-      <TableFilters
-        title="Reservas"
-        totalCount={
-          reservations.length
-        }
-        filteredCount={
-          filtered.length
-        }
-        search={search}
-        setSearch={setSearch}
-        searchPlaceholder="Buscar usuario o sala..."
-        statusFilter={statusFilter}
-        setStatusFilter={
-          setStatusFilter
-        }
-        statuses={STATUSES}
-        onRefresh={handleRefresh}
-        refreshing={refreshing}
-        onExport={handleExportReservations}
-        exportLabel="Exportar reservas CSV"
-        Icon={Icon}
-        ICONS={ICONS}
-      />
-
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 14,
-          border: "1px solid #f0f0f0",
-          overflow: "hidden",
-        }}
-      >
-        {loading && <Loader />}
-
-        {error && (
-          <Err msg={error} />
-        )}
-
-        {!loading &&
-          !error && (
-            <AdminTable
-              cols={resCols}
-              rows={filtered}
-              emptyMsg="No hay reservas aún"
-            />
-          )}
-      </div>
-    </div>
+    <AdminSection
+      title="Reservas"
+      totalCount={reservations.length}
+      filteredCount={filtered.length}
+      filters={{
+        search,
+        setSearch,
+        searchPlaceholder: "Buscar usuario o sala...",
+        statusFilter,
+        setStatusFilter,
+        statuses: STATUSES,
+        onRefresh: refresh,
+        refreshing,
+        onExport: handleExportReservations,
+        exportLabel: "Exportar reservas CSV",
+        Icon,
+        ICONS,
+      }}
+      table={{
+        loading,
+        error,
+        cols: resCols,
+        rows: filtered,
+        emptyMsg: "No hay reservas aún",
+      }}
+    />
   );
 }

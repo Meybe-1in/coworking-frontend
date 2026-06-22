@@ -1,5 +1,6 @@
 import StatusPill from "../ui/StatusPill";
 import ReservationActions from "../reservations/ReservationActions";
+import { idColumn } from "../../../helpers/admin/tableColumns";
 
 import {
   fmt,
@@ -10,20 +11,7 @@ import {
 export const reservationColumns = (
   reloadReservations
 ) => [
-  {
-    key: "id",
-    label: "#",
-    render: (r) => (
-      <span
-        style={{
-          color: "#d1d5db",
-          fontFamily: "monospace",
-        }}
-      >
-        #{r.id}
-      </span>
-    ),
-  },
+  idColumn,
 
   {
     key: "username",

@@ -1,20 +1,9 @@
 import RoomActions from "../rooms/RoomActions";
+import { idColumn } from "../../../helpers/admin/tableColumns";
+import Badge from "../ui/Badge";
 
 export const roomColumns = (handleEdit, handleDelete) => [
-  {
-    key: "id",
-    label: "#",
-    render: (r) => (
-      <span
-        style={{
-          color: "#d1d5db",
-          fontFamily: "monospace",
-        }}
-      >
-        #{r.id}
-      </span>
-    ),
-  },
+  idColumn,
 
   {
     key: "name",
@@ -24,13 +13,15 @@ export const roomColumns = (handleEdit, handleDelete) => [
   {
     key: "capacity",
     label: "Capacidad",
-    render: (r) => `${r.capacity} personas`,
+    render: (r) =>
+      `${r.capacity} personas`,
   },
 
   {
     key: "price",
     label: "Precio",
-    render: (r) => `$${r.price}`,
+    render: (r) =>
+      `$${r.price}`,
   },
 
   {
@@ -42,26 +33,14 @@ export const roomColumns = (handleEdit, handleDelete) => [
     key: "available",
     label: "Disponible",
     render: (r) => (
-      <span
-        style={{
-          padding: "4px 10px",
-          borderRadius: 999,
-          fontSize: 12,
-          fontWeight: 600,
-          background: r.available
-            ? "#dcfce7"
-            : "#fee2e2",
-          color: r.available
-            ? "#166534"
-            : "#991b1b",
-        }}
-      >
-        {r.available
-          ? "Disponible"
-          : "No disponible"}
-      </span>
+      <Badge
+        active={r.available}
+        activeText="Disponible"
+        inactiveText="No disponible"
+      />
     ),
   },
+
   {
     key: "actions",
     label: "Acciones",
