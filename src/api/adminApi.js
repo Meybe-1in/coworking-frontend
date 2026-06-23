@@ -38,3 +38,8 @@ export const getUsers = async () => {
   const res = await API.get("/admin/users");
   return res.data;
 };
+
+export const createAdmin = async (userData) => {
+  const res = await API.post("/admin/users/admin", userData);
+  return res.data;
+} 

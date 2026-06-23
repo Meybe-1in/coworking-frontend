@@ -26,6 +26,7 @@ export default function TableFilters({
   refreshing,
 
   onCreate,
+  createLabel,
   onExport,
   exportLabel = "Exportar CSV",
 
@@ -246,7 +247,8 @@ export default function TableFilters({
                 border: "1px solid #bfdbfe",
               }}
             >
-              <Plus size={16} /> Nueva Sala
+              <Plus size={16} />
+              {createLabel}
             </button>
           )}
 
