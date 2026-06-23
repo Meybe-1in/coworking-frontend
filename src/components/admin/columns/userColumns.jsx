@@ -1,6 +1,7 @@
 import Badge from "../ui/Badge";
 import { idColumn } from "../../../helpers/admin/tableColumns";
 import RoleBadge from "../ui/RoleBadge";
+import { fmtDate } from "../../../helpers/admin/formatters";
 
 export const userColumns = [
 
@@ -35,5 +36,11 @@ export const userColumns = [
         inactiveText="Inactivo"
       />
     ),
+  },
+
+  {
+    key: "createdAt",
+    label: "Fecha registro",
+    render: (u) => fmtDate(u.createdAt),
   },
 ];
