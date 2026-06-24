@@ -102,6 +102,7 @@ export default function RoomsTable({
           statuses: STATUS_OPTIONS,
           onRefresh: refresh,
           onCreate: handleCreateRoom,
+          createLabel: "Crear sala",
           refreshing,
           exportLabel: "Exportar CSV",
           Icon,

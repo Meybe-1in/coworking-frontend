@@ -3,6 +3,7 @@ import DataTable from "./DataTable";
 import AdminSection from "./AdminSection";
 import useRefresh from "../hooks/useRefresh";
 import useTableFilters from "../hooks/useTableFilters";
+import CreateAdminModal from "../users/CreateAdminModal";
 
 const ROLE_OPTIONS = [
   {
@@ -60,6 +61,11 @@ export default function UsersTable({
     setRoleFilter] =
     useState("ALL");
 
+  const [
+    showCreateModal,
+    setShowCreateModal,
+  ] = useState(false);
+
   const filtered = useMemo(() => {
     return users.filter((user) => {
       const term =
@@ -90,6 +96,12 @@ export default function UsersTable({
     });
   }, [users, search, roleFilter, statusFilter]);
 
+  //handler
+  const handleCreateAdmin =
+    () => {
+      setShowCreateModal(true);
+    };
+
   return (
     <div>
       <AdminSection
@@ -112,6 +124,9 @@ export default function UsersTable({
           onRefresh: refresh,
           refreshing,
 
+          onCreate: handleCreateAdmin,
+          createLabel: "Crear administrador",        
+
           Icon,
           ICONS,
         }}
@@ -122,6 +137,11 @@ export default function UsersTable({
           rows: filtered,
           emptyMsg: "No hay usuarios registrados",
         }}
+      />
+      <CreateAdminModal
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        reloadUsers={reloadUsers}
       />
     </div>
   );
