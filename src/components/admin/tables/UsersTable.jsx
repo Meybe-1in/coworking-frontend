@@ -125,7 +125,7 @@ export default function UsersTable({
           refreshing,
 
           onCreate: handleCreateAdmin,
-          createLabel: "Crear administrador",        
+          createLabel: "Crear administrador",
 
           Icon,
           ICONS,

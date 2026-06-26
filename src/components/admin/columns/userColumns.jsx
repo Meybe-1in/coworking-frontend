@@ -2,8 +2,9 @@ import Badge from "../ui/Badge";
 import { idColumn } from "../../../helpers/admin/tableColumns";
 import RoleBadge from "../ui/RoleBadge";
 import { fmtDate } from "../../../helpers/admin/formatters";
+import UserActions from "../users/UserActions";
 
-export const userColumns = [
+export const userColumns = (handleToggleStatus) => [
 
   idColumn,
 
@@ -42,5 +43,18 @@ export const userColumns = [
     key: "createdAt",
     label: "Fecha registro",
     render: (u) => fmtDate(u.createdAt),
+  },
+
+  {
+    key: "actions",
+    label: "Acciones",
+    render: (u) => (
+      <UserActions
+        user={u}
+        onToggleStatus={
+          handleToggleStatus
+        }
+      />
+    ),
   },
 ];
