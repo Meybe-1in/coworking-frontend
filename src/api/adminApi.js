@@ -43,3 +43,8 @@ export const createAdmin = async (userData) => {
   const res = await API.post("/admin/users/admin", userData);
   return res.data;
 } 
+
+export const updateUserStatus = async (userId,enabled) => {
+  const res = await API.patch( `/admin/users/${userId}/status`, { enabled });
+  return res.data;
+};
