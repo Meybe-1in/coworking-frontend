@@ -109,6 +109,25 @@ export default function UserForm({
   const strongPasswordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
 
+  const validate = () => {
+    const errs = {};
+
+    if (form.username.trim().length < 3) {
+      errs.username = "Mínimo 3 caracteres";
+    }
+
+    if (!emailRegex.test(form.email)) {
+      errs.email = "Ingresa un email válido";
+    }
+
+    if (!strongPasswordRegex.test(form.password)) {
+      errs.password =
+        "Mínimo 8 caracteres, mayúscula, minúscula, número y símbolo";
+    }
+
+    return errs;
+  };
+
   const set = (key, value) => {
     setForm((prev) => ({
       ...prev,
