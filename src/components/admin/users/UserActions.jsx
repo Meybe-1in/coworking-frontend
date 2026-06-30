@@ -3,8 +3,19 @@ import Swal from "sweetalert2";
 export default function UserActions({
   user,
   onToggleStatus,
+  isCurrentUsername,
 }) {
   const handleClick = async () => {
+    if (isCurrentUsername) {
+      Swal.fire({
+        icon: "info",
+        title: "Acción no permitida",
+        text: "No puedes desactivar tu propia cuenta.",
+      });
+
+      return;
+    }
+
     const activating = !user.enabled;
 
     const result = await Swal.fire({
@@ -41,8 +52,11 @@ export default function UserActions({
           ? "#10b981"
           : "#d1d5db",
         position: "relative",
-        cursor: "pointer",
+        cursor: isCurrentUsername
+          ? "not-allowed"
+          : "pointer",
         transition: ".2s",
+        opacity: isCurrentUsername ? 0.6 : 1,
       }}
     >
       <div

@@ -139,6 +139,11 @@ export default function AdminDashboard() {
     [handleToggleStatus]
   );
 
+  // ------------UI------------
+  const isCurrentUsername =
+    localStorage.getItem("username") ||
+    sessionStorage.getItem("username");
+
   return (
 
     <div
@@ -235,7 +240,7 @@ export default function AdminDashboard() {
               loading={usersLoading}
               error={usersError}
               reloadUsers={reloadUsers}
-              userCols={userColumns(handleToggleStatus)}
+              userCols={userColumns(handleToggleStatus, isCurrentUsername)}
               Icon={Icon}
               ICONS={ICONS}
             />

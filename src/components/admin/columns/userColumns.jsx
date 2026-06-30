@@ -4,7 +4,7 @@ import RoleBadge from "../ui/RoleBadge";
 import { fmtDate } from "../../../helpers/admin/formatters";
 import UserActions from "../users/UserActions";
 
-export const userColumns = (handleToggleStatus) => [
+export const userColumns = (handleToggleStatus, isCurrentUsername,) => [
 
   idColumn,
 
@@ -65,6 +65,9 @@ export const userColumns = (handleToggleStatus) => [
         user={u}
         onToggleStatus={
           handleToggleStatus
+        }
+        isCurrentUsername= {
+          u.username === isCurrentUsername
         }
       />
     ),
