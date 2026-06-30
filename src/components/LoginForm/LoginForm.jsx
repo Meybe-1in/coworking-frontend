@@ -41,9 +41,9 @@ function LoginForm() {
       //obtener role y redirigir
 
       const role = res.data.data.role;
-      if(role === "ROLE_ADMIN"){
+      if (role === "ROLE_ADMIN") {
         navigate("/admin");
-      }else {
+      } else {
         navigate("/userdashboard");
       }
 
@@ -51,13 +51,26 @@ function LoginForm() {
       const status = err.response?.status;
       const data = err.response?.data;
 
+      // CUENTA DESACTIVADA
+      if (
+        status === 400 &&
+        data?.message === "ACCOUNT_DISABLED"
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Cuenta desactivada",
+          text: "Tu cuenta ha sido desactivada por un administrador.",
+        });
+
+        return;
+      }
       //EMAIL NO VERIFICADO
       if (status === 400 && data?.message === "EMAIL_NOT_VERIFIED") {
         Swal.fire({
           icon: "warning",
-          title: "Cuenta no verificada",
+          title: "Correo no verificado",
           html: `
-            <p>Tu cuenta aún no ha sido activada.</p>
+            <p>Debes verificar tu correo electrónico antes de iniciar sesión.</p>
             <p>¿Deseas que reenviemos el correo de verificación?</p>
           `,
           showCancelButton: true,
@@ -85,7 +98,6 @@ function LoginForm() {
         return;
       }
     }
-    
   };
 
 
