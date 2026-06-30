@@ -28,6 +28,18 @@ export const userColumns = (handleToggleStatus) => [
   },
 
   {
+    key: "emailVerified",
+    label: "Verificación",
+    render: (u) => (
+      <Badge
+        active={u.emailVerified}
+        activeText="Verificado"
+        inactiveText="Pendiente"
+      />
+    ),
+  },
+
+  {
     key: "enabled",
     label: "Estado",
     render: (u) => (
