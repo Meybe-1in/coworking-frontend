@@ -60,8 +60,9 @@ function SignUpForm() {
         icon: "success",
         title: "Registro exitoso",
         html: `
-        <p>Hemos enviado un correo de verificación.</p>
-        <p><b>Revisa tu bandeja de entrada</b>.</p>
+          <p>Tu cuenta ha sido creada correctamente.</p>
+          <p>Hemos enviado un correo de verificación a <b>${email}</b>.</p>
+          <p>Debes verificar tu correo antes de iniciar sesión.</p>
       `,
         confirmButtonText: "Ir al login"
       }).then(() => {
@@ -70,7 +71,12 @@ function SignUpForm() {
 
 
     } catch (err) {
-      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.message ||
+        "No se pudo completar el registro",
+      })
     }
 
   };
