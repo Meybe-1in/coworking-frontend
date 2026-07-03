@@ -2,80 +2,67 @@ import Swal from "sweetalert2";
 
 export default function UserActions({
   user,
-  onToggleStatus,
+  onChangeRole,
   isCurrentUsername,
 }) {
-  const handleClick = async () => {
+
+  const handleRoleChange = async () => {
+
     if (isCurrentUsername) {
       Swal.fire({
         icon: "info",
         title: "Acción no permitida",
-        text: "No puedes desactivar tu propia cuenta.",
+        text: "No puedes remover tus propios privilegios administrativos.",
       });
 
       return;
     }
 
-    const activating = !user.enabled;
+    const isAdmin =
+      user.roles.includes("ROLE_ADMIN");
 
     const result = await Swal.fire({
-      icon: activating ? "question" : "warning",
-      title: activating
-        ? "Activar usuario"
-        : "Desactivar usuario",
-      text: activating
-        ? "El usuario podrá iniciar sesión nuevamente."
-        : "El usuario no podrá iniciar sesión hasta ser activado nuevamente.",
+      icon: "question",
+      title: isAdmin
+        ? "Remover privilegios administrativos"
+        : "Convertir en administrador",
+      text: isAdmin
+        ? "¿Desea remover privilegios administrativos de este usuario?"
+        : "¿Desea convertir este usuario en administrador?",
       showCancelButton: true,
-      confirmButtonText: activating
-        ? "Activar"
-        : "Desactivar",
+      confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
-      confirmButtonColor: activating
-        ? "#10b981"
-        : "#ef4444",
     });
 
     if (result.isConfirmed) {
-      onToggleStatus(user);
+      onChangeRole(user);
     }
   };
 
   return (
-    <div
-      onClick={handleClick}
+    <button
+      type="button"
+      onClick={handleRoleChange}
+      disabled={isCurrentUsername}
       style={{
-        width: 42,
-        height: 22,
+        height: 28,
+        border: "1px solid #4338ca",
         borderRadius: 999,
-        background: user.enabled
-          ? "#10b981"
-          : "#d1d5db",
-        position: "relative",
+        background: "#eef2ff",
+        color: "#4338ca",
+        padding: "0 12px",
+        fontSize: 12,
+        fontWeight: 600,
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
         cursor: isCurrentUsername
           ? "not-allowed"
           : "pointer",
-        transition: ".2s",
         opacity: isCurrentUsername ? 0.6 : 1,
       }}
     >
-      <div
-        style={{
-          width: 18,
-          height: 18,
-          borderRadius: "50%",
-          background: "#fff",
-          position: "absolute",
-          top: 2,
-          left: 2,
-          transform: user.enabled
-            ? "translateX(20px)"
-            : "translateX(0)",
-          transition: ".2s",
-          boxShadow:
-            "0 1px 3px rgba(0,0,0,.15)",
-        }}
-      />
-    </div>
+      Cambiar rol
+    </button>
   );
 }

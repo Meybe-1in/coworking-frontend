@@ -27,7 +27,7 @@ import { userColumns } from "../../components/admin/columns/userColumns";
 import EditRoomModal from "../../components/admin/rooms/EditRoomModal";
 import DeleteRoomModal from "../../components/admin/rooms/DeleteRoomModal";
 
-import { updateUserStatus } from "../../api/adminApi";
+import useUserActions from "../../components/admin/hooks/useUserActions";
 
 export default function AdminDashboard() {
 
@@ -90,29 +90,9 @@ export default function AdminDashboard() {
   };
 
   // User handlers
-  const handleToggleStatus = async (user) => {
-    try {
-      await updateUserStatus(user.id, !user.enabled);
-
-      await reloadUsers();
-
-      Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: "Estado actualizado correctamente",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text:
-          error.response?.data?.message ||
-          "No fue posible actualizar el estado",
-      });
-    }
-  };
+  const { toggleStatus, changeRole } = useUserActions(
+    reloadUsers
+  );
 
   // ─── useMemo ──────────────────
   const resCols = useMemo(
@@ -132,11 +112,6 @@ export default function AdminDashboard() {
         handleDeleteRoom
       ),
     [handleEditRoom, handleDeleteRoom]
-  );
-
-  const userColsMemo = useMemo(
-    () => userColumns(handleToggleStatus),
-    [handleToggleStatus]
   );
 
   // ------------UI------------
@@ -240,7 +215,7 @@ export default function AdminDashboard() {
               loading={usersLoading}
               error={usersError}
               reloadUsers={reloadUsers}
-              userCols={userColumns(handleToggleStatus, isCurrentUsername)}
+              userCols={userColumns(toggleStatus, changeRole, isCurrentUsername)}
               Icon={Icon}
               ICONS={ICONS}
             />
