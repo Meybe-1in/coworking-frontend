@@ -48,3 +48,8 @@ export const updateUserStatus = async (userId,enabled) => {
   const res = await API.patch( `/admin/users/${userId}/status`, { enabled });
   return res.data;
 };
+
+export const updateUserRole = async (userId, role) => {
+  const res = await API.patch(`/admin/users/${userId}/role`, { role });
+  return res.data;
+}

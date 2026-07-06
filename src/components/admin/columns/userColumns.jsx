@@ -3,8 +3,9 @@ import { idColumn } from "../../../helpers/admin/tableColumns";
 import RoleBadge from "../ui/RoleBadge";
 import { fmtDate } from "../../../helpers/admin/formatters";
 import UserActions from "../users/UserActions";
+import UserStatusToggle from "../users/UserStatusToggle";
 
-export const userColumns = (handleToggleStatus, isCurrentUsername,) => [
+export const userColumns = (onToggleStatus, onChangeRole, isCurrentUsername) => [
 
   idColumn,
 
@@ -43,11 +44,24 @@ export const userColumns = (handleToggleStatus, isCurrentUsername,) => [
     key: "enabled",
     label: "Estado",
     render: (u) => (
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+      }}>
       <Badge
         active={u.enabled}
         activeText="Activo"
         inactiveText="Inactivo"
       />
+      <UserStatusToggle
+        user={u}
+        onToggleStatus={onToggleStatus}
+        isCurrentUsername={
+          u.username === isCurrentUsername
+        }
+      />
+      </div>
     ),
   },
 
@@ -61,15 +75,22 @@ export const userColumns = (handleToggleStatus, isCurrentUsername,) => [
     key: "actions",
     label: "Acciones",
     render: (u) => (
+      <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: 60,
+      }}
+    >
       <UserActions
         user={u}
-        onToggleStatus={
-          handleToggleStatus
-        }
+        onChangeRole={onChangeRole}
         isCurrentUsername= {
           u.username === isCurrentUsername
         }
       />
+      </div>
     ),
   },
 ];

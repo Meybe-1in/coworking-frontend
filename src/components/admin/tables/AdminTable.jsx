@@ -55,6 +55,8 @@ export default function AdminTable({
                     key={c.key}
                     style={{
                       padding: "11px 14px",
+                      verticalAlign: "middle",
+                      height: 60,
                     }}
                   >
                     {c.render
