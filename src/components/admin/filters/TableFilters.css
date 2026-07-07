@@ -1,0 +1,130 @@
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Contenedor ---------- */
+
+.filter-group {
+  margin-bottom: 14px;
+}
+
+.filter-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #6b7280;
+}
+
+/* ---------- Tabla ---------- */
+
+.table-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.table-filters__info h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.table-filters__info p {
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 3px 0 0;
+}
+
+.table-filters__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.table-filters__search {
+  width: 220px;
+}
+
+.table-filters__filter {
+  margin-bottom: 14px;
+}
+
+.table-filters__icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.table-filters__icon--spin {
+  animation: spin 1s linear infinite;
+}
+
+.table-filters__refreshing {
+  opacity: 0.6;
+}
+
+.table-filters__create {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+/* ---------- Dropdown ---------- */
+
+.filters-dropdown {
+  position: relative;
+}
+
+.filters-dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  width: 260px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+
+.filters-dropdown-chevron {
+  transition: transform .2s;
+}
+
+.filters-dropdown-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* ---------- Select ---------- */
+
+.filter-select-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 36px;
+}
+
+.filter-select {
+  height: 36px;
+  padding: 0 12px;
+  padding-right: 30px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13.5px;
+  background: #fff;
+  color: #374151;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}

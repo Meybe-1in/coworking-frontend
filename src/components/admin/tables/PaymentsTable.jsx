@@ -91,15 +91,25 @@ export default function PaymentsTable({
         setSearch,
         searchPlaceholder:
           "Buscar pago, reserva o sala...",
-        statusFilter,
-        setStatusFilter,
-        statuses: PAYMENT_STATUSES,
+
+        filters: [
+          {
+            key: "status",
+            label: "Estado",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: PAYMENT_STATUSES,
+          },
+        ],
+
         onRefresh: refresh,
         refreshing,
+
         onExport:
           handleExportPayments,
         exportLabel:
           "Exportar pagos CSV",
+
         Icon,
         ICONS,
       }}

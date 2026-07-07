@@ -102,6 +102,24 @@ export default function UsersTable({
       setShowCreateModal(true);
     };
 
+  //filters
+  const tableFilters = [
+    {
+      key: "role",
+      label: "Rol",
+      value: roleFilter,
+      onChange: setRoleFilter,
+      options: ROLE_OPTIONS,
+    },
+    {
+      key: "status",
+      label: "Estado",
+      value: statusFilter,
+      onChange: setStatusFilter,
+      options: STATUS_OPTIONS,
+    },
+  ];
+
   return (
     <div>
       <AdminSection
@@ -113,13 +131,22 @@ export default function UsersTable({
           setSearch,
           searchPlaceholder: "Buscar usuario o correo...",
 
-          roleFilter,
-          setRoleFilter,
-          roles: ROLE_OPTIONS,
-
-          statusFilter,
-          setStatusFilter,
-          statuses: STATUS_OPTIONS,
+          filters: [
+            {
+              key: "role",
+              label: "Rol",
+              value: roleFilter,
+              onChange: setRoleFilter,
+              options: ROLE_OPTIONS,
+            },
+            {
+              key: "status",
+              label: "Estado",
+              value: statusFilter,
+              onChange: setStatusFilter,
+              options: STATUS_OPTIONS,
+            },
+          ],
 
           onRefresh: refresh,
           refreshing,

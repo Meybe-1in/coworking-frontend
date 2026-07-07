@@ -96,15 +96,25 @@ export default function RoomsTable({
         filters={{
           search,
           setSearch,
-          searchPlaceholder: "Buscar por nombre o capacidad...",
-          statusFilter,
-          setStatusFilter,
-          statuses: STATUS_OPTIONS,
+          searchPlaceholder:
+            "Buscar por nombre o capacidad...",
+
+          filters: [
+            {
+              key: "availability",
+              label: "Disponibilidad",
+              value: statusFilter,
+              onChange: setStatusFilter,
+              options: STATUS_OPTIONS,
+            },
+          ],
+
           onRefresh: refresh,
+          refreshing,
+
           onCreate: handleCreateRoom,
           createLabel: "Crear sala",
-          refreshing,
-          exportLabel: "Exportar CSV",
+
           Icon,
           ICONS,
         }}

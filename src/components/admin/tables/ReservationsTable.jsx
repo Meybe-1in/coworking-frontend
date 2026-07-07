@@ -92,14 +92,27 @@ export default function ReservationsTable({
       filters={{
         search,
         setSearch,
-        searchPlaceholder: "Buscar usuario o sala...",
-        statusFilter,
-        setStatusFilter,
-        statuses: STATUSES,
+        searchPlaceholder:
+          "Buscar usuario o sala...",
+
+        filters: [
+          {
+            key: "status",
+            label: "Estado",
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: STATUSES,
+          },
+        ],
+
         onRefresh: refresh,
         refreshing,
-        onExport: handleExportReservations,
-        exportLabel: "Exportar reservas CSV",
+
+        onExport:
+          handleExportReservations,
+        exportLabel:
+          "Exportar reservas CSV",
+
         Icon,
         ICONS,
       }}
