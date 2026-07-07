@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { cancelReservationAdmin } from "../../../api/adminApi";
+import AdminActionButton from "../ui/AdminActionButton";
 
 export default function ReservationActions({
   reservation,
@@ -49,11 +50,12 @@ export default function ReservationActions({
     reservation.status === "EXPIRED";
 
   return (
-    <button
-      disabled={disabled}
+    <AdminActionButton
       onClick={handleCancel}
+      disabled={disabled}
+      variant="danger"
     >
       Cancelar
-    </button>
+    </AdminActionButton>
   );
 }

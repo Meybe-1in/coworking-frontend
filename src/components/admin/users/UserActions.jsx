@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import AdminActionButton from "../ui/AdminActionButton";
 
 export default function UserActions({
   user,
@@ -40,29 +41,12 @@ export default function UserActions({
   };
 
   return (
-    <button
-      type="button"
+    <AdminActionButton
       onClick={handleRoleChange}
       disabled={isCurrentUsername}
-      style={{
-        height: 28,
-        border: "1px solid #4338ca",
-        borderRadius: 999,
-        background: "#eef2ff",
-        color: "#4338ca",
-        padding: "0 12px",
-        fontSize: 12,
-        fontWeight: 600,
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-        cursor: isCurrentUsername
-          ? "not-allowed"
-          : "pointer",
-        opacity: isCurrentUsername ? 0.6 : 1,
-      }}
+      variant="primary"
     >
       Cambiar rol
-    </button>
+    </AdminActionButton>
   );
 }
