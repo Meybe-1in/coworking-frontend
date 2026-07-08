@@ -1,5 +1,5 @@
 import * as LucideIcons from "lucide-react";
-import "./AdminActionButton.css";
+import "./styles/AdminActionButton.css";
 
 export default function AdminActionButton({
   icon,
