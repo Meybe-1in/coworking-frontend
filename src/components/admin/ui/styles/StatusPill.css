@@ -1,0 +1,26 @@
+.status-pill {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pill--pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-pill--paid {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-pill--cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-pill--default {
+  background: #f3f4f6;
+  color: #6b7280;
+}
