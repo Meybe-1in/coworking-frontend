@@ -1,3 +1,5 @@
+import "./styles/ExportButton.css";
+
 export default function ExportButton({
   label,
   onClick,
@@ -7,15 +9,7 @@ export default function ExportButton({
     <button
       onClick={onClick}
       disabled={loading}
-      style={{
-        padding: "8px 14px",
-        borderRadius: "8px",
-        border: "1px solid #d1d5db",
-        background: "#fff",
-        cursor: loading
-          ? "not-allowed"
-          : "pointer",
-      }}
+      className="export-button"
     >
       {loading
         ? "Descargando..."
