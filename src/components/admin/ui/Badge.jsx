@@ -1,3 +1,5 @@
+import "./styles/Badge.css";
+
 export default function Badge({
   active,
   activeText,
@@ -5,18 +7,10 @@ export default function Badge({
 }) {
   return (
     <span
-      style={{
-        padding: "4px 10px",
-        borderRadius: 999,
-        fontSize: 12,
-        fontWeight: 600,
-        background: active
-          ? "#dcfce7"
-          : "#fee2e2",
-        color: active
-          ? "#166534"
-          : "#991b1b",
-      }}
+      className={`badge ${active
+          ? "badge--active"
+          : "badge--inactive"
+        }`}
     >
       {active
         ? activeText
