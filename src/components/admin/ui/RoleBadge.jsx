@@ -1,38 +1,31 @@
+import "./styles/RoleBadge.css";
+
+const ROLE_CONFIG = {
+  ROLE_ADMIN: {
+    text: "Administrador",
+    className: "role-badge--admin",
+  },
+
+  ROLE_USER: {
+    text: "Usuario",
+    className: "role-badge--user",
+  },
+};
+
 export default function RoleBadge({
   role,
 }) {
-  const config = {
-    ROLE_ADMIN: {
-      text: "Administrador",
-      background: "#ede9fe",
-      color: "#6d28d9",
-    },
-    ROLE_USER: {
-      text: "Usuario",
-      background: "#dbeafe",
-      color: "#1d4ed8",
-    },
-  };
-
-  const badge =
-    config[role] || {
+  const config =
+    ROLE_CONFIG[role] || {
       text: role,
-      background: "#f3f4f6",
-      color: "#374151",
+      className: "role-badge--default",
     };
 
   return (
     <span
-      style={{
-        padding: "4px 10px",
-        borderRadius: 999,
-        fontSize: 12,
-        fontWeight: 600,
-        background: badge.background,
-        color: badge.color,
-      }}
+      className={`role-badge ${config.className}`}
     >
-      {badge.text}
+      {config.text}
     </span>
   );
 }
