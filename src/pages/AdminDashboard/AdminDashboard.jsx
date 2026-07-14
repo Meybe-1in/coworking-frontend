@@ -25,8 +25,7 @@ import { roomColumns } from "../../components/admin/columns/roomColumns";
 import { userColumns } from "../../components/admin/columns/userColumns";
 
 import EditRoomModal from "../../components/admin/rooms/EditRoomModal";
-import DeleteRoomModal from "../../components/admin/rooms/DeleteRoomModal";
-
+import useRoomActions from "../../components/admin/hooks/useRoomActions";
 import useUserActions from "../../components/admin/hooks/useUserActions";
 
 export default function AdminDashboard() {
@@ -35,9 +34,6 @@ export default function AdminDashboard() {
     useState("stats");
 
   const [editingRoom, setEditingRoom] =
-    useState(null);
-
-  const [deletingRoom, setDeletingRoom] =
     useState(null);
 
   // ------------HOOKS------------
@@ -72,6 +68,13 @@ export default function AdminDashboard() {
     reloadRooms,
   } = useRooms(tab);
 
+  // ─── Rooms actions hook ──────────────────
+  const {
+    deleteRoomAction,
+  } = useRoomActions(
+    reloadRooms
+  );
+
   // ─── Users hook ──────────────────
   const {
     users,
@@ -83,10 +86,6 @@ export default function AdminDashboard() {
   // Room handlers
   const handleEditRoom = (room) => {
     setEditingRoom(room);
-  };
-
-  const handleDeleteRoom = (room) => {
-    setDeletingRoom(room);
   };
 
   // User handlers
@@ -109,9 +108,9 @@ export default function AdminDashboard() {
     () =>
       roomColumns(
         handleEditRoom,
-        handleDeleteRoom
+        deleteRoomAction
       ),
-    [handleEditRoom, handleDeleteRoom]
+    [handleEditRoom, deleteRoomAction]
   );
 
   // ------------UI------------
@@ -227,15 +226,6 @@ export default function AdminDashboard() {
               room={editingRoom}
               open={!!editingRoom}
               onClose={() => setEditingRoom(null)}
-              reloadRooms={reloadRooms}
-            />
-          )}
-
-          {deletingRoom && (
-            <DeleteRoomModal
-              room={deletingRoom}
-              open={!!deletingRoom}
-              onClose={() => setDeletingRoom(null)}
               reloadRooms={reloadRooms}
             />
           )}
