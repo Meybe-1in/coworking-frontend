@@ -177,22 +177,7 @@ export default function UserForm({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            style={{
-              position: "absolute",
-              right: 10,
-              top: "50%",
-              transform: "translateY(-50%)",
-              border: "none",
-              background: "transparent",
-              padding: 0,
-              margin: 0,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#9ca3af",
-              zIndex: 1,
-            }}
+            className="admin-password-toggle"
           >
             {showPassword ? (
               <EyeOff size={16} />
