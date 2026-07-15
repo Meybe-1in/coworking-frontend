@@ -1,16 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Building2, Users, MapPin, List, Camera, Loader2, Plus, } from "lucide-react";
-
+import "../forms/AdminForm.css";
 function Field({ label, hint, error, children, }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 4, }}>
-      <label style={{ fontSize: 11, fontWeight: 500, textTransform: "uppercase", letterSpacing: ".5px", color: "#9ca3af", }}>
+    <div className="admin-form-field">
+      <label className="admin-form-label">
         {label}
 
         {hint && (
-          <span
-            style={{ textTransform: "none", fontWeight: 400, color: "#d1d5db", marginLeft: 4, }}
-          >
+          <span className="admin-form-hint">
             {hint}
           </span>
         )}
@@ -19,9 +17,7 @@ function Field({ label, hint, error, children, }) {
       {children}
 
       {error && (
-        <p
-          style={{ fontSize: 11, color: "#ef4444", margin: 0, }}
-        >
+        <p className="admin-form-error">
           {error}
         </p>
       )}
@@ -29,40 +25,26 @@ function Field({ label, hint, error, children, }) {
   );
 }
 
-const inputStyle = {
-  height: 36,
-  width: "100%",
-  boxSizing: "border-box",
-  padding: "0 10px 0 32px",
-  fontSize: 13,
-  fontFamily: "inherit",
-  background: "#f9fafb",
-  border: "1px solid #e5e7eb",
-  borderRadius: 8,
-  color: "#111827",
-};
-
 function IconInput({
   icon: Icon,
   dollar,
   ...props
 }) {
   return (
-    <div
-      style={{
-        position: "relative",
-      }}
-    >
+    <div className="admin-form-input-wrapper">
       {Icon && (
         <Icon
           size={14}
-          style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", }}
+          className="admin-form-icon"
         />
       )}
 
       {dollar && (
         <span
-          style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", fontSize: 13, }}
+          className="admin-form-icon"
+          style={{
+            fontSize: 13,
+          }}
         >
           $
         </span>
@@ -70,8 +52,9 @@ function IconInput({
 
       <input
         {...props}
+        className="admin-form-input"
         style={{
-          ...inputStyle, paddingLeft:
+          paddingLeft:
             Icon || dollar
               ? 32
               : 10,
@@ -181,7 +164,7 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
   return (
     <form
       onSubmit={submit}
-      style={{ display: "flex", flexDirection: "column", gap: 12, }}
+      className="admin-form"
     >
       <Field label="Nombre" error={errors.name}
       >
@@ -201,7 +184,12 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             e.target.value
           )
         }
-          style={{ ...inputStyle, padding: 10, height: "auto", resize: "none", }}
+          className="admin-form-input"
+          style={{
+            padding: 10,
+            height: "auto",
+            resize: "none",
+          }}
         />
       </Field>
 
@@ -403,38 +391,26 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
         )}
       </Field>
 
-      <div
-        style={{ borderTop: "1px solid #f3f4f6", paddingTop: 8, display: "flex", justifyContent: "flex-end", }}
-      >
+      <div className="admin-form-footer">
         <button
           type="submit"
           disabled={loading}
+          className="admin-form-submit"
           style={{
-            height: 34,
-            padding: "0 16px",
-            border: "none",
-            borderRadius: 8,
             background:
               loading
                 ? "#93c5fd"
                 : "#1d4ed8",
-            color: "#fff",
             cursor:
               loading
                 ? "not-allowed"
                 : "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
           }}
         >
           {loading ? (
             <Loader2
               size={14}
-              style={{
-                animation:
-                  "spin 1s linear infinite",
-              }}
+              className="admin-form-spin"
             />
           ) : (
             <Plus size={14} />
@@ -447,16 +423,6 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
               : "Crear sala"}
         </button>
       </div>
-
-      <style>
-        {`
-          @keyframes spin {
-            to {
-              transform: rotate(360deg);
-            }
-          }
-        `}
-      </style>
     </form>
   );
 }

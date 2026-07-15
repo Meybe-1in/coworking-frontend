@@ -1,0 +1,89 @@
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-form-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #9ca3af;
+}
+
+.admin-form-hint {
+  text-transform: none;
+  font-weight: 400;
+  color: #d1d5db;
+  margin-left: 4px;
+}
+
+.admin-form-error {
+  font-size: 11px;
+  color: #ef4444;
+  margin: 0;
+}
+
+.admin-form-input-wrapper {
+  position: relative;
+}
+
+.admin-form-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.admin-form-input {
+  height: 36px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 13px;
+  font-family: inherit;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #111827;
+}
+
+.admin-form-footer {
+  border-top: 1px solid #f3f4f6;
+  padding-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-form-submit {
+  height: 34px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-form-submit:disabled {
+  cursor: not-allowed;
+}
+
+.admin-form-spin {
+  animation: admin-spin 1s linear infinite;
+}
+
+@keyframes admin-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
