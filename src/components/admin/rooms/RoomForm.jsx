@@ -1,68 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Building2, Users, MapPin, List, Camera, Loader2, Plus, } from "lucide-react";
 import "../forms/AdminForm.css";
-function Field({ label, hint, error, children, }) {
-  return (
-    <div className="admin-form-field">
-      <label className="admin-form-label">
-        {label}
-
-        {hint && (
-          <span className="admin-form-hint">
-            {hint}
-          </span>
-        )}
-      </label>
-
-      {children}
-
-      {error && (
-        <p className="admin-form-error">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function IconInput({
-  icon: Icon,
-  dollar,
-  ...props
-}) {
-  return (
-    <div className="admin-form-input-wrapper">
-      {Icon && (
-        <Icon
-          size={14}
-          className="admin-form-icon"
-        />
-      )}
-
-      {dollar && (
-        <span
-          className="admin-form-icon"
-          style={{
-            fontSize: 13,
-          }}
-        >
-          $
-        </span>
-      )}
-
-      <input
-        {...props}
-        className="admin-form-input"
-        style={{
-          paddingLeft:
-            Icon || dollar
-              ? 32
-              : 10,
-        }}
-      />
-    </div>
-  );
-}
+import AdminInput from "../forms/AdminInput.jsx";
+import AdminField from "../forms/AdminField.jsx";
+import AdminSubmitBtn from "../forms/AdminSubmitBtn";
 
 export default function RoomForm({ onSubmit, loading, initialData, isEdit = false, }) {
   const [form, setForm] =
@@ -166,18 +107,18 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
       onSubmit={submit}
       className="admin-form"
     >
-      <Field label="Nombre" error={errors.name}
+      <AdminField label="Nombre" error={errors.name}
       >
-        <IconInput icon={Building2} placeholder="Sala Focus A" value={form.name} onChange={(e) =>
+        <AdminInput icon={Building2} placeholder="Sala Focus A" value={form.name} onChange={(e) =>
           set(
             "name",
             e.target.value
           )
         }
         />
-      </Field>
+      </AdminField>
 
-      <Field label="Descripción">
+      <AdminField label="Descripción">
         <textarea rows={2} placeholder="Descripción de la sala" value={form.description} onChange={(e) =>
           set(
             "description",
@@ -191,7 +132,7 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             resize: "none",
           }}
         />
-      </Field>
+      </AdminField>
 
       <div
         style={{
@@ -201,11 +142,11 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
           gap: 10,
         }}
       >
-        <Field
+        <AdminField
           label="Capacidad"
           error={errors.capacity}
         >
-          <IconInput
+          <AdminInput
             icon={Users}
             type="number"
             min="1"
@@ -217,13 +158,13 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
               )
             }
           />
-        </Field>
+        </AdminField>
 
-        <Field
+        <AdminField
           label="Precio / hora"
           error={errors.price}
         >
-          <IconInput
+          <AdminInput
             dollar
             type="number"
             min="0"
@@ -236,10 +177,10 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
               )
             }
           />
-        </Field>
+        </AdminField>
 
         {/* toggle disponible */}
-        <Field label="Disponible">
+        <AdminField label="Disponible">
           <div
             onClick={() =>
               set(
@@ -307,14 +248,14 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
                 : "No"}
             </span>
           </div>
-        </Field>
+        </AdminField>
       </div>
 
-      <Field
+      <AdminField
         label="Ubicación"
         error={errors.location}
       >
-        <IconInput
+        <AdminInput
           icon={MapPin}
           value={form.location}
           onChange={(e) =>
@@ -324,13 +265,13 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             )
           }
         />
-      </Field>
+      </AdminField>
 
-      <Field
+      <AdminField
         label="Características"
         hint="(separar con coma)"
       >
-        <IconInput
+        <AdminInput
           icon={List}
           placeholder="Wifi, Aire, Proyector"
           value={form.features}
@@ -341,10 +282,10 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             )
           }
         />
-      </Field>
+      </AdminField>
 
       {/* imagen */}
-      <Field label="Imagen">
+      <AdminField label="Imagen">
         <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
           onChange={(e) => pickImage(e.target.files[0])} />
 
@@ -389,39 +330,18 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             Subir imagen
           </button>
         )}
-      </Field>
+      </AdminField>
 
       <div className="admin-form-footer">
-        <button
-          type="submit"
-          disabled={loading}
-          className="admin-form-submit"
-          style={{
-            background:
-              loading
-                ? "#93c5fd"
-                : "#1d4ed8",
-            cursor:
-              loading
-                ? "not-allowed"
-                : "pointer",
-          }}
-        >
-          {loading ? (
-            <Loader2
-              size={14}
-              className="admin-form-spin"
-            />
-          ) : (
-            <Plus size={14} />
-          )}
-
-          {loading
-            ? "Guardando..."
-            : isEdit
+        <AdminSubmitBtn
+          loading={loading}
+          loadingText="Guardando..."
+          text={
+            isEdit
               ? "Actualizar sala"
-              : "Crear sala"}
-        </button>
+              : "Crear sala"
+          }
+        />
       </div>
     </form>
   );

@@ -4,50 +4,9 @@ import {
   Users, MapPin, List, Camera, Loader2, Plus,
 } from "lucide-react";
 import "../forms/AdminForm.css";
-
-function Field({
-  label,
-  error,
-  children,
-}) {
-  return (
-    <div className="admin-form-field">
-      <label className="admin-form-label">
-        {label}
-      </label>
-
-      {children}
-
-      {error && (
-        <p className="admin-form-error">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function IconInput({
-  icon: Icon,
-  ...props
-}) {
-  return (
-    <div className="admin-form-input-wrapper">
-      <Icon
-        size={14}
-        className="admin-form-icon"
-      />
-
-      <input
-        {...props}
-        className="admin-form-input"
-        style={{
-          padding: "0 10px 0 32px",
-        }}
-      />
-    </div>
-  );
-}
+import AdminInput from "../forms/AdminInput.jsx";
+import AdminField from "../forms/AdminField.jsx";
+import AdminSubmitBtn from "../forms/AdminSubmitBtn";
 
 export default function UserForm({
   onSubmit,
@@ -156,11 +115,11 @@ export default function UserForm({
       onSubmit={submit}
       className="admin-form"
     >
-      <Field
+      <AdminField
         label="Usuario"
         error={errors.username}
       >
-        <IconInput
+        <AdminInput
           icon={User}
           value={form.username}
           onChange={(e) =>
@@ -170,13 +129,13 @@ export default function UserForm({
             )
           }
         />
-      </Field>
+      </AdminField>
 
-      <Field
+      <AdminField
         label="Correo"
         error={errors.email}
       >
-        <IconInput
+        <AdminInput
           icon={Mail}
           type="email"
           value={form.email}
@@ -185,9 +144,9 @@ export default function UserForm({
             validateField("email", e.target.value);
           }}
         />
-      </Field>
+      </AdminField>
 
-      <Field
+      <AdminField
         label="Contraseña"
         error={errors.password}
       >
@@ -242,33 +201,14 @@ export default function UserForm({
             )}
           </button>
         </div>
-      </Field>
+      </AdminField>
 
       <div className="admin-form-footer">
-        <button
-          type="submit"
-          disabled={loading}
-          className="admin-form-submit"
-          style={{
-            background:
-              loading
-                ? "#93c5fd"
-                : "#1d4ed8",
-          }}
-        >
-          {loading ? (
-            <Loader2
-              size={14}
-              className="admin-form-spin"
-            />
-          ) : (
-            <Plus size={14} />
-          )}
-
-          {loading
-            ? "Guardando..."
-            : "Crear administrador"}
-        </button>
+        <AdminSubmitBtn
+          loading={loading}
+          loadingText="Guardando..."
+          text="Crear administrador"
+        />
       </div>
     </form>
   );
