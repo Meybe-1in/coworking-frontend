@@ -3,6 +3,7 @@ import {
   User, Mail, Lock, Eye, EyeOff, Building2,
   Users, MapPin, List, Camera, Loader2, Plus,
 } from "lucide-react";
+import "../forms/AdminForm.css";
 
 function Field({
   label,
@@ -10,35 +11,15 @@ function Field({
   children,
 }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-      }}
-    >
-      <label
-        style={{
-          fontSize: 11,
-          fontWeight: 500,
-          textTransform: "uppercase",
-          letterSpacing: ".5px",
-          color: "#9ca3af",
-        }}
-      >
+    <div className="admin-form-field">
+      <label className="admin-form-label">
         {label}
       </label>
 
       {children}
 
       {error && (
-        <p
-          style={{
-            fontSize: 11,
-            color: "#ef4444",
-            margin: 0,
-          }}
-        >
+        <p className="admin-form-error">
           {error}
         </p>
       )}
@@ -46,41 +27,23 @@ function Field({
   );
 }
 
-const inputStyle = {
-  height: 36,
-  width: "100%",
-  boxSizing: "border-box",
-  padding: "0 10px 0 32px",
-  fontSize: 13,
-  background: "#f9fafb",
-  border: "1px solid #e5e7eb",
-  borderRadius: 8,
-};
-
 function IconInput({
   icon: Icon,
   ...props
 }) {
   return (
-    <div
-      style={{
-        position: "relative",
-      }}
-    >
+    <div className="admin-form-input-wrapper">
       <Icon
         size={14}
-        style={{
-          position: "absolute",
-          left: 10,
-          top: "50%",
-          transform: "translateY(-50%)",
-          color: "#9ca3af",
-        }}
+        className="admin-form-icon"
       />
 
       <input
         {...props}
-        style={inputStyle}
+        className="admin-form-input"
+        style={{
+          padding: "0 10px 0 32px",
+        }}
       />
     </div>
   );
@@ -191,11 +154,7 @@ export default function UserForm({
   return (
     <form
       onSubmit={submit}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 12,
-      }}
+      className="admin-form"
     >
       <Field
         label="Usuario"
@@ -233,21 +192,13 @@ export default function UserForm({
         error={errors.password}
       >
         <div
-          style={{
-            position: "relative",
-            width: "100%",
-          }}
+          className="admin-form-input-wrapper"
+          style={{ width: "100%" }}
         >
           <Lock
             size={14}
-            style={{
-              position: "absolute",
-              left: 10,
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "#9ca3af",
-              zIndex: 1,
-            }}
+            className="admin-form-icon"
+            style={{ zIndex: 1 }}
           />
 
           <input
@@ -257,8 +208,8 @@ export default function UserForm({
               set("password", e.target.value);
               validateField("password", e.target.value);
             }}
+            className="admin-form-input"
             style={{
-              ...inputStyle,
               paddingLeft: 32,
               paddingRight: 40,
             }}
@@ -293,40 +244,22 @@ export default function UserForm({
         </div>
       </Field>
 
-      <div
-        style={{
-          borderTop:
-            "1px solid #f3f4f6",
-          paddingTop: 8,
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
+      <div className="admin-form-footer">
         <button
           type="submit"
           disabled={loading}
+          className="admin-form-submit"
           style={{
-            height: 34,
-            padding: "0 16px",
-            border: "none",
-            borderRadius: 8,
             background:
               loading
                 ? "#93c5fd"
                 : "#1d4ed8",
-            color: "#fff",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
           }}
         >
           {loading ? (
             <Loader2
               size={14}
-              style={{
-                animation:
-                  "spin 1s linear infinite",
-              }}
+              className="admin-form-spin"
             />
           ) : (
             <Plus size={14} />
@@ -337,16 +270,6 @@ export default function UserForm({
             : "Crear administrador"}
         </button>
       </div>
-
-      <style>
-        {`
-          @keyframes spin {
-            to {
-              transform: rotate(360deg);
-            }
-          }
-        `}
-      </style>
     </form>
   );
 }
