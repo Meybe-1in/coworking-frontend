@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import "./UserStatusToggle.css";
 
 export default function UserStatusToggle({
   user,
@@ -47,39 +48,28 @@ export default function UserStatusToggle({
 
   return (
     <div
+      className="user-status-toggle"
       onClick={handleClick}
       style={{
-        width: 42,
-        height: 18,
-        borderRadius: 999,
         background: user.enabled
           ? "#10b981"
           : "#d1d5db",
-        position: "relative",
+
         cursor: isCurrentUsername
           ? "not-allowed"
           : "pointer",
-        transition: ".2s",
+
         opacity: isCurrentUsername
           ? 0.6
           : 1,
       }}
     >
       <div
+        className="user-status-toggle__thumb"
         style={{
-          width: 14,
-          height: 14,
-          borderRadius: "50%",
-          background: "#fff",
-          position: "absolute",
-          top: 2,
-          left: 2,
           transform: user.enabled
             ? "translateX(24px)"
             : "translateX(0)",
-          transition: ".2s",
-          boxShadow:
-            "0 1px 3px rgba(0,0,0,.15)",
         }}
       />
     </div>

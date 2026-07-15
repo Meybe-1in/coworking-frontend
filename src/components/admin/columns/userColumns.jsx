@@ -4,6 +4,7 @@ import RoleBadge from "../ui/RoleBadge";
 import { fmtDate } from "../../../helpers/admin/formatters";
 import UserActions from "../users/UserActions";
 import UserStatusToggle from "../users/UserStatusToggle";
+import "../styles/admin-layout.css";
 
 export const userColumns = (onToggleStatus, onChangeRole, isCurrentUsername) => [
 
@@ -44,11 +45,7 @@ export const userColumns = (onToggleStatus, onChangeRole, isCurrentUsername) => 
     key: "enabled",
     label: "Estado",
     render: (u) => (
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-      }}>
+      <div className="admin-inline-actions">
       <Badge
         active={u.enabled}
         activeText="Activo"
@@ -75,14 +72,7 @@ export const userColumns = (onToggleStatus, onChangeRole, isCurrentUsername) => 
     key: "actions",
     label: "Acciones",
     render: (u) => (
-      <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: 60,
-      }}
-    >
+      <div className="admin-center-cell">
       <UserActions
         user={u}
         onChangeRole={onChangeRole}

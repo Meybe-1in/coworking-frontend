@@ -2,6 +2,7 @@ import StatCard from "./StatCard";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
 import { fmt } from "../../../helpers/admin/formatters";
+import "./DashboardStats.css";
 export default function DashboardStats({
   stats,
   loading,
@@ -16,36 +17,17 @@ export default function DashboardStats({
 
   return (
     <div>
-      <h1
-        style={{
-          fontSize: 20,
-          fontWeight: 700,
-          marginBottom: 4,
-        }}
-      >
+      <h1 className="dashboard-title">
         Dashboard
       </h1>
 
-      <p
-        style={{
-          fontSize: 13,
-          color: "#9ca3af",
-          marginBottom: 24,
-        }}
-      >
+      <p className="dashboard-subtitle">
         Resumen general del sistema
       </p>
 
       {stats && (
         <>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 14,
-              marginBottom: 14,
-            }}
-          >
+          <div className="dashboard-grid-2">
             <StatCard
               label="Ingresos totales"
               value={fmt(stats.totalRevenue)}
@@ -61,13 +43,7 @@ export default function DashboardStats({
             />
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 14,
-            }}
-          >
+          <div className="dashboard-grid-4">
             <StatCard
               label="Total reservas"
               value={stats.totalReservations}
@@ -98,12 +74,7 @@ export default function DashboardStats({
           </div>
 
           {stats.expiredReservations > 0 && (
-            <div
-              style={{
-                marginTop: 14,
-                maxWidth: 260,
-              }}
-            >
+            <div className="dashboard-expired">
               <StatCard
                 label="Expiradas"
                 value={stats.expiredReservations}
@@ -113,34 +84,12 @@ export default function DashboardStats({
             </div>
           )}
 
-          <div
-            style={{
-              marginTop: 28,
-              background: "#fff",
-              border: "1px solid #f0f0f0",
-              borderRadius: 14,
-              padding: "20px 24px",
-            }}
-          >
-            <p
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                color: "#9ca3af",
-                letterSpacing: ".5px",
-                textTransform: "uppercase",
-                marginBottom: 14,
-              }}
-            >
+          <div className="dashboard-quick-access">
+            <p className="dashboard-quick-access-title">
               Acceso rápido
             </p>
 
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-              }}
-            >
+            <div className="dashboard-quick-access-actions">
               {[
                 {
                   label: "Ver reservas",
@@ -161,19 +110,7 @@ export default function DashboardStats({
                 <button
                   key={a.tab}
                   onClick={() => setTab(a.tab)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "9px 16px",
-                    borderRadius: 8,
-                    border: "1px solid #e5e7eb",
-                    background: "#fff",
-                    cursor: "pointer",
-                    fontSize: 13.5,
-                    fontWeight: 500,
-                    color: "#374151",
-                  }}
+                  className="dashboard-quick-access-btn"
                 >
                   <Icon d={a.icon} size={15} />
                   {a.label}
