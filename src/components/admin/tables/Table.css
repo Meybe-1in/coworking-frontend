@@ -1,0 +1,45 @@
+/* AdminTable Style */
+
+.admin-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: #9ca3af;
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.admin-table td {
+  padding: 11px 14px;
+  vertical-align: middle;
+  height: 60px;
+}
+
+.admin-table-empty {
+  padding: 32px 0;
+  text-align: center;
+}
+
+/* DataTable Style */
+
+.data-table-container {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+
+
+/* DataTable Style */

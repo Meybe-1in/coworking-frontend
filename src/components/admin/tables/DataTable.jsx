@@ -1,6 +1,7 @@
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
 import AdminTable from "./AdminTable";
+import "./Table.css";
 
 export default function DataTable({
   loading,
@@ -10,14 +11,7 @@ export default function DataTable({
   emptyMsg,
 }) {
   return (
-    <div
-      style={{
-        background: "#fff",
-        borderRadius: 14,
-        border: "1px solid #f0f0f0",
-        overflow: "hidden",
-      }}
-    >
+    <div className="admin-table-container">
       {loading && <Loader />}
 
       {error && <Err msg={error} />}

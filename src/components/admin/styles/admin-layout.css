@@ -1,0 +1,12 @@
+.admin-inline-actions {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.admin-center-cell {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:60px;
+}
