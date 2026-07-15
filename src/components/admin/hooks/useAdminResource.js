@@ -1,6 +1,7 @@
 import {
   useEffect,
   useState,
+  useCallback,
 } from "react";
 
 export default function
@@ -13,16 +14,14 @@ export default function
   const [data, setData] =
     useState([]);
 
-  const [loading,
-    setLoading] =
+  const [loading, setLoading] =
     useState(false);
 
-  const [error,
-    setError] =
+  const [error, setError] =
     useState("");
 
   const load =
-    async () => {
+    useCallback(async () => {
       try {
         setLoading(true);
         setError("");
@@ -38,13 +37,13 @@ export default function
       } finally {
         setLoading(false);
       }
-    };
+    }, [fetchFn, errorMessage]);
 
   useEffect(() => {
-    if (tab === currentTab) {
+    if (tab === currentTab && data.length === 0) {
       load();
     }
-  }, [tab, currentTab]);
+  }, [tab, currentTab, data.length, load]);
 
   return {
     data,

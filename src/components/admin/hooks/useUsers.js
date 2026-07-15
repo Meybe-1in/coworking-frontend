@@ -1,44 +1,26 @@
-import { useEffect, useState, useCallback } from "react";
-import { getUsers } from "../../../api/adminApi";
+import useAdminResource from "./useAdminResource";
 
-export default function useUsers(tab) {
-  const [users, setUsers] = useState([]);
+import { getUsers, } from "../../../api/adminApi";
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
-
-  const loadUsers =
-    useCallback(async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const data =
-          await getUsers();
-
-        setUsers(data);
-      } catch (err) {
-        setError(
-          "Error al cargar usuarios"
-        );
-      } finally {
-        setLoading(false);
-      }
-    }, []);
-
-  useEffect(() => {
-    if (tab === "users") {
-      loadUsers();
-    }
-  }, [tab, loadUsers]);
-
-  return {
-    users,
+export default function useUsers(
+  tab
+) {
+  const {
+    data,
     loading,
     error,
-    reloadUsers: loadUsers,
+    reload,
+  } = useAdminResource(
+    tab,
+    "users",
+    getUsers,
+    "Error al cargar usuarios"
+  );
+
+  return {
+    users: data,
+    loading,
+    error,
+    reloadUsers: reload,
   };
 }
