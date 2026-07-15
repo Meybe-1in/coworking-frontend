@@ -1,13 +1,7 @@
 export default function Loader() {
   return (
-    <div
-      style={{
-        textAlign: "center",
-        padding: "48px 0",
-        color: "#d1d5db",
-      }}
-    >
-      <div style={{ fontSize: 13 }}>
+    <div className="admin-loader">
+      <div className="admin-loader__text">
         Cargando…
       </div>
     </div>

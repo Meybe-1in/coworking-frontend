@@ -1,4 +1,5 @@
 import AdminActionButton from "../ui/AdminActionButton";
+import "./Room.css";
 
 export default function RoomActions({
     room,
@@ -6,12 +7,7 @@ export default function RoomActions({
     onDelete,
 }) {
     return (
-        <div
-            style={{
-                display: "flex",
-                gap: 8,
-            }}
-        >
+        <div className="room-actions">
             <AdminActionButton
                 icon="Edit2"
                 title="Editar sala"

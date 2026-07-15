@@ -1,0 +1,9 @@
+.admin-loader {
+  text-align: center;
+  padding: 48px 0;
+  color: #d1d5db;
+}
+
+.admin-loader__text {
+  font-size: 13px;
+}
