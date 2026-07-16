@@ -1,68 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Building2, Users, MapPin, List, Camera, Loader2, Plus, } from "lucide-react";
 import "../forms/AdminForm.css";
-function Field({ label, hint, error, children, }) {
-  return (
-    <div className="admin-form-field">
-      <label className="admin-form-label">
-        {label}
-
-        {hint && (
-          <span className="admin-form-hint">
-            {hint}
-          </span>
-        )}
-      </label>
-
-      {children}
-
-      {error && (
-        <p className="admin-form-error">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function IconInput({
-  icon: Icon,
-  dollar,
-  ...props
-}) {
-  return (
-    <div className="admin-form-input-wrapper">
-      {Icon && (
-        <Icon
-          size={14}
-          className="admin-form-icon"
-        />
-      )}
-
-      {dollar && (
-        <span
-          className="admin-form-icon"
-          style={{
-            fontSize: 13,
-          }}
-        >
-          $
-        </span>
-      )}
-
-      <input
-        {...props}
-        className="admin-form-input"
-        style={{
-          paddingLeft:
-            Icon || dollar
-              ? 32
-              : 10,
-        }}
-      />
-    </div>
-  );
-}
+import AdminInput from "../forms/AdminInput.jsx";
+import AdminField from "../forms/AdminField.jsx";
+import AdminSubmitBtn from "../forms/AdminSubmitBtn";
 
 export default function RoomForm({ onSubmit, loading, initialData, isEdit = false, }) {
   const [form, setForm] =
@@ -166,18 +107,18 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
       onSubmit={submit}
       className="admin-form"
     >
-      <Field label="Nombre" error={errors.name}
+      <AdminField label="Nombre" error={errors.name}
       >
-        <IconInput icon={Building2} placeholder="Sala Focus A" value={form.name} onChange={(e) =>
+        <AdminInput icon={Building2} placeholder="Sala Focus A" value={form.name} onChange={(e) =>
           set(
             "name",
             e.target.value
           )
         }
         />
-      </Field>
+      </AdminField>
 
-      <Field label="Descripción">
+      <AdminField label="Descripción">
         <textarea rows={2} placeholder="Descripción de la sala" value={form.description} onChange={(e) =>
           set(
             "description",
@@ -191,21 +132,14 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             resize: "none",
           }}
         />
-      </Field>
+      </AdminField>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "1fr 1fr 1fr",
-          gap: 10,
-        }}
-      >
-        <Field
+      <div className="admin-form-grid">
+        <AdminField
           label="Capacidad"
           error={errors.capacity}
         >
-          <IconInput
+          <AdminInput
             icon={Users}
             type="number"
             min="1"
@@ -217,13 +151,13 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
               )
             }
           />
-        </Field>
+        </AdminField>
 
-        <Field
+        <AdminField
           label="Precio / hora"
           error={errors.price}
         >
-          <IconInput
+          <AdminInput
             dollar
             type="number"
             min="0"
@@ -236,54 +170,32 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
               )
             }
           />
-        </Field>
+        </AdminField>
 
         {/* toggle disponible */}
-        <Field label="Disponible">
+        <AdminField label="Disponible">
           <div
+            className="admin-toggle"
             onClick={() =>
               set(
                 "available",
                 !form.available
               )
             }
-            style={{
-              height: 36,
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "0 10px",
-              border:
-                "1px solid #e5e7eb",
-              borderRadius: 8,
-              background:
-                "#f9fafb",
-              cursor: "pointer",
-              userSelect: "none",
-            }}
+
           >
             <div
+              className="admin-toggle-track"
               style={{
-                width: 28,
-                height: 15,
-                borderRadius: 99,
                 background:
                   form.available
                     ? "#10b981"
                     : "#d1d5db",
-                position: "relative",
               }}
             >
               <div
+                className="admin-toggle-thumb"
                 style={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: "50%",
-                  background: "#fff",
-                  position:
-                    "absolute",
-                  top: 2,
-                  left: 2,
                   transform:
                     form.available
                       ? "translateX(13px)"
@@ -293,9 +205,8 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             </div>
 
             <span
+              className="admin-toggle-label"
               style={{
-                fontSize: 12,
-                fontWeight: 500,
                 color:
                   form.available
                     ? "#059669"
@@ -307,14 +218,14 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
                 : "No"}
             </span>
           </div>
-        </Field>
+        </AdminField>
       </div>
 
-      <Field
+      <AdminField
         label="Ubicación"
         error={errors.location}
       >
-        <IconInput
+        <AdminInput
           icon={MapPin}
           value={form.location}
           onChange={(e) =>
@@ -324,13 +235,13 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             )
           }
         />
-      </Field>
+      </AdminField>
 
-      <Field
+      <AdminField
         label="Características"
         hint="(separar con coma)"
       >
-        <IconInput
+        <AdminInput
           icon={List}
           placeholder="Wifi, Aire, Proyector"
           value={form.features}
@@ -341,29 +252,27 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             )
           }
         />
-      </Field>
+      </AdminField>
 
       {/* imagen */}
-      <Field label="Imagen">
+      <AdminField label="Imagen">
         <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
           onChange={(e) => pickImage(e.target.files[0])} />
 
 
         {preview ? (
-          <div style={{ position: "relative", height: 80, borderRadius: 8, overflow: "hidden", border: "1px solid #e5e7eb" }}>
+          <div className="admin-image-preview">
             <img src={preview} alt="preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            <div style={{
-              position: "absolute", bottom: 0, left: 0, right: 0,
-              background: "rgba(0,0,0,.55)", display: "flex",
-              alignItems: "center", justifyContent: "center", gap: 12, padding: "5px 0",
-            }}>
+            <div className="admin-image-overlay">
               <button type="button" onClick={() => fileRef.current.click()}
-                style={{ fontSize: 11, fontWeight: 500, color: "#fff", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                className="admin-image-action"
+              >
                 Cambiar
               </button>
-              <span style={{ color: "rgba(255,255,255,.35)", fontSize: 11 }}>·</span>
+              <span className="admin-image-divider">·</span>
               <button type="button" onClick={clearImage}
-                style={{ fontSize: 11, fontWeight: 500, color: "#fca5a5", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                className="admin-image-action admin-image-action-remove"
+              >
                 Quitar
               </button>
             </div>
@@ -372,13 +281,7 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
           <button
             type="button"
             onClick={() => fileRef.current.click()}
-            style={{
-              height: 36, width: "100%", display: "flex", alignItems: "center",
-              justifyContent: "center", gap: 8,
-              border: "1px dashed #d1d5db", borderRadius: 8,
-              background: "#f9fafb", color: "#9ca3af",
-              fontSize: 13, cursor: "pointer", fontFamily: "inherit",
-            }}
+            className="admin-upload-btn"
           >
             {/* camera icon inline */}
             <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -389,39 +292,18 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
             Subir imagen
           </button>
         )}
-      </Field>
+      </AdminField>
 
       <div className="admin-form-footer">
-        <button
-          type="submit"
-          disabled={loading}
-          className="admin-form-submit"
-          style={{
-            background:
-              loading
-                ? "#93c5fd"
-                : "#1d4ed8",
-            cursor:
-              loading
-                ? "not-allowed"
-                : "pointer",
-          }}
-        >
-          {loading ? (
-            <Loader2
-              size={14}
-              className="admin-form-spin"
-            />
-          ) : (
-            <Plus size={14} />
-          )}
-
-          {loading
-            ? "Guardando..."
-            : isEdit
+        <AdminSubmitBtn
+          loading={loading}
+          loadingText="Guardando..."
+          text={
+            isEdit
               ? "Actualizar sala"
-              : "Crear sala"}
-        </button>
+              : "Crear sala"
+          }
+        />
       </div>
     </form>
   );
