@@ -9,7 +9,8 @@ export default function AdminPasswordInput({
   value,
   onChange,
 }) {
-
+  const [showPassword, setShowPassword] =
+    useState(false);
 
   return (
     <div
