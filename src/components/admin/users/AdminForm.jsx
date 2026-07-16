@@ -1,17 +1,12 @@
 import { useState } from "react";
-import {
-  User, Mail, Lock, Eye, EyeOff, Building2,
-  Users, MapPin, List, Camera, Loader2, Plus,
-} from "lucide-react";
+import {User, Mail, Building2, Users, MapPin, List, Camera, Loader2, Plus,} from "lucide-react";
 import "../forms/AdminForm.css";
 import AdminInput from "../forms/AdminInput.jsx";
 import AdminField from "../forms/AdminField.jsx";
 import AdminSubmitBtn from "../forms/AdminSubmitBtn";
+import AdminPasswordInput from "../forms/AdminPasswordInput";
 
-export default function UserForm({
-  onSubmit,
-  loading,
-}) {
+export default function UserForm({onSubmit, loading, }) {
   const [form, setForm] =
     useState({
       username: "",
@@ -21,9 +16,6 @@ export default function UserForm({
 
   const [errors, setErrors] =
     useState({});
-
-  const [showPassword, setShowPassword] =
-    useState(false);
 
   const emailRegex =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -150,42 +142,13 @@ export default function UserForm({
         label="Contraseña"
         error={errors.password}
       >
-        <div
-          className="admin-form-input-wrapper"
-          style={{ width: "100%" }}
-        >
-          <Lock
-            size={14}
-            className="admin-form-icon"
-            style={{ zIndex: 1 }}
-          />
-
-          <input
-            type={showPassword ? "text" : "password"}
-            value={form.password}
-            onChange={(e) => {
-              set("password", e.target.value);
-              validateField("password", e.target.value);
-            }}
-            className="admin-form-input"
-            style={{
-              paddingLeft: 32,
-              paddingRight: 40,
-            }}
-          />
-
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="admin-password-toggle"
-          >
-            {showPassword ? (
-              <EyeOff size={16} />
-            ) : (
-              <Eye size={16} />
-            )}
-          </button>
-        </div>
+        <AdminPasswordInput
+          value={form.password}
+          onChange={(e) => {
+            set("password", e.target.value);
+            validateField("password", e.target.value);
+          }}
+        />
       </AdminField>
 
       <div className="admin-form-footer">
