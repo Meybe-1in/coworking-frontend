@@ -4,6 +4,8 @@ import "../forms/AdminForm.css";
 import AdminInput from "../forms/AdminInput.jsx";
 import AdminField from "../forms/AdminField.jsx";
 import AdminSubmitBtn from "../forms/AdminSubmitBtn";
+import AdminToggle from "../forms/AdminToggle";
+import AdminImageUpload from "../forms/AdminImageUpload";
 
 export default function RoomForm({ onSubmit, loading, initialData, isEdit = false, }) {
   const [form, setForm] =
@@ -174,50 +176,12 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
 
         {/* toggle disponible */}
         <AdminField label="Disponible">
-          <div
-            className="admin-toggle"
-            onClick={() =>
-              set(
-                "available",
-                !form.available
-              )
+          <AdminToggle
+            value={form.available}
+            onChange={(value) =>
+              set("available", value)
             }
-
-          >
-            <div
-              className="admin-toggle-track"
-              style={{
-                background:
-                  form.available
-                    ? "#10b981"
-                    : "#d1d5db",
-              }}
-            >
-              <div
-                className="admin-toggle-thumb"
-                style={{
-                  transform:
-                    form.available
-                      ? "translateX(13px)"
-                      : "translateX(0)",
-                }}
-              />
-            </div>
-
-            <span
-              className="admin-toggle-label"
-              style={{
-                color:
-                  form.available
-                    ? "#059669"
-                    : "#9ca3af",
-              }}
-            >
-              {form.available
-                ? "Sí"
-                : "No"}
-            </span>
-          </div>
+          />
         </AdminField>
       </div>
 
@@ -259,39 +223,11 @@ export default function RoomForm({ onSubmit, loading, initialData, isEdit = fals
         <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
           onChange={(e) => pickImage(e.target.files[0])} />
 
-
-        {preview ? (
-          <div className="admin-image-preview">
-            <img src={preview} alt="preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            <div className="admin-image-overlay">
-              <button type="button" onClick={() => fileRef.current.click()}
-                className="admin-image-action"
-              >
-                Cambiar
-              </button>
-              <span className="admin-image-divider">·</span>
-              <button type="button" onClick={clearImage}
-                className="admin-image-action admin-image-action-remove"
-              >
-                Quitar
-              </button>
-            </div>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => fileRef.current.click()}
-            className="admin-upload-btn"
-          >
-            {/* camera icon inline */}
-            <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
-              <circle cx="12" cy="13" r="4" />
-            </svg>
-            Subir imagen
-          </button>
-        )}
+        <AdminImageUpload
+          preview={preview}
+          fileRef={fileRef}
+          clearImage={clearImage}
+        />
       </AdminField>
 
       <div className="admin-form-footer">
