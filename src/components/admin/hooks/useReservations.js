@@ -2,17 +2,13 @@ import useAdminResource from "./useAdminResource";
 
 import { getAllReservations,} from "../../../api/adminApi";
 
-export default function useReservations(
-  tab
-) {
+export default function useReservations() {
   const {
     data,
     loading,
     error,
     reload,
   } = useAdminResource(
-    tab,
-    "reservations",
     getAllReservations,
     "Error al cargar reservas"
   );
@@ -21,7 +17,6 @@ export default function useReservations(
     reservations: data,
     loading,
     error,
-    reloadReservations:
-      reload,
+    reloadReservations: reload,
   };
 }

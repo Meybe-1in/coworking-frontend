@@ -6,8 +6,6 @@ import {
 
 export default function
   useAdminResource(
-    tab,
-    currentTab,
     fetchFn,
     errorMessage
   ) {
@@ -40,10 +38,8 @@ export default function
     }, [fetchFn, errorMessage]);
 
   useEffect(() => {
-    if (tab === currentTab && data.length === 0) {
       load();
-    }
-  }, [tab, currentTab, data.length, load]);
+  }, [load]);
 
   return {
     data,

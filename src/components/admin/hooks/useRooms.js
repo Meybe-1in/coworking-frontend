@@ -1,17 +1,13 @@
 import useAdminResource from "./useAdminResource";
 import { getAllRooms } from "../../../api/roomApi";
 
-export default function useRooms(
-  tab
-) {
+export default function useRooms() {
   const {
     data,
     loading,
     error,
     reload,
   } = useAdminResource(
-    tab,
-    "rooms",
     getAllRooms,
     "Error al cargar salas"
   );
