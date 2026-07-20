@@ -19,8 +19,6 @@ import RoomDetailsPage from "./pages/Checkout/RoomDetailsPage";
 import AuthWatcher from "./components/Auth/AuthWatcher";
 import PaymentPage from "./pages/payment/PaymentPage";
 import MyReservations from "./components/User/MyReservation";
-
-//import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import AdminRoutes from "./routes/AdminRoutes";
 import MyPayments from "./pages/payment/MyPayments";
 

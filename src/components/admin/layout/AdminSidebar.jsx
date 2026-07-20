@@ -1,12 +1,10 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import "./AdminSidebar.css";
 
-export default function AdminSidebar({
-  tab,
-  setTab,
-  TABS,
-  Icon,
-}) {
+import { TABS } from "../../../helpers/admin/tabs";
+
+export default function AdminSidebar({ Icon, }) {
   const [tablesOpen, setTablesOpen] = useState(true);
 
   return (
@@ -31,38 +29,48 @@ export default function AdminSidebar({
 
               {tablesOpen &&
                 t.children.map((child) => (
-                  <button
+                  <NavLink
                     key={child.id}
-                    onClick={() => setTab(child.id)}
-                    className={`
-                    admin-sidebar__item
-                    admin-sidebar__child
-                    ${tab === child.id ? "admin-sidebar__item--active" : ""}
-                  `}
+                    to={child.path}
+                    className={({ isActive }) =>
+                      `
+                      admin-sidebar__item
+                      admin-sidebar__child
+                      ${isActive
+                        ? "admin-sidebar__item--active"
+                        : ""
+                      }
+                    `
+                    }
                   >
                     <Icon
                       d={child.icon}
                       size={14}
                     />
                     {child.label}
-                  </button>
+                  </NavLink>
                 ))}
             </div>
           );
         }
 
         return (
-          <button
+          <NavLink
             key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`
+            to={t.path}
+            className={({ isActive }) =>
+              `
               admin-sidebar__item
-              ${tab === t.id ? "admin-sidebar__item--active" : ""}
-            `}
+              ${isActive
+                ? "admin-sidebar__item--active"
+                : ""
+              }
+            `
+            }
           >
             <Icon d={t.icon} size={16} />
             {t.label}
-          </button>
+          </NavLink>
         );
       })}
     </aside>
