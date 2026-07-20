@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import SignUp from "./pages/SignUp/SignUp";
 import LoginPage from "./pages/Login/LoginPage";
@@ -18,7 +19,9 @@ import RoomDetailsPage from "./pages/Checkout/RoomDetailsPage";
 import AuthWatcher from "./components/Auth/AuthWatcher";
 import PaymentPage from "./pages/payment/PaymentPage";
 import MyReservations from "./components/User/MyReservation";
-import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+
+//import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+import AdminRoutes from "./routes/AdminRoutes";
 import MyPayments from "./pages/payment/MyPayments";
 
 function LayoutWrapper() {
@@ -91,12 +94,12 @@ function LayoutWrapper() {
               </ProtectedRoute>
             }
           />
-          <Route path="/payment" 
-          element={
-          <ProtectedRoute>
-          <PaymentPage />
-          </ProtectedRoute>
-          } 
+          <Route path="/payment"
+            element={
+              <ProtectedRoute>
+                <PaymentPage />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/my-reservations"
@@ -117,8 +120,17 @@ function LayoutWrapper() {
           <Route
             path="/admin"
             element={
+              <Navigate
+                to="/admin/dashboard"
+                replace
+              />
+            }
+          />
+          <Route
+            path="/admin/*"
+            element={
               <ProtectedRoute adminOnly={true}>
-                <AdminDashboard />
+                <AdminRoutes />
               </ProtectedRoute>
             }
           />

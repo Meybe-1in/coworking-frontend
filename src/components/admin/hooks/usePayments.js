@@ -1,17 +1,13 @@
 import useAdminResource from "./useAdminResource";
 import { getAllPayments,} from "../../../api/adminApi";
 
-export default function usePayments(
-  tab
-) {
+export default function usePayments() {
   const {
     data,
     loading,
     error,
     reload,
   } = useAdminResource(
-    tab,
-    "payments",
     getAllPayments,
     "Error al cargar pagos"
   );
