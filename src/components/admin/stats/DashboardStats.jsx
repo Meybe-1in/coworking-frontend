@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import StatCard from "./StatCard";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
@@ -7,10 +8,10 @@ export default function DashboardStats({
   stats,
   loading,
   error,
-  setTab,
   ICONS,
   Icon,
 }) {
+  const navigate = useNavigate();
   if (loading) return <Loader />;
 
   if (error) return <Err msg={error} />;
@@ -93,23 +94,22 @@ export default function DashboardStats({
               {[
                 {
                   label: "Ver reservas",
-                  tab: "reservations",
+                  path: "/admin/reservations",
                   icon: ICONS.list,
                 },
                 {
                   label: "Ver pagos",
-                  tab: "payments",
+                  path: "/admin/payments",
                   icon: ICONS.credit,
                 },
                 {
                   label: "Ver salas",
-                  tab: "rooms",
+                  path: "/admin/rooms",
                   icon: ICONS.room,
                 },
               ].map((a) => (
                 <button
-                  key={a.tab}
-                  onClick={() => setTab(a.tab)}
+                  onClick={() => navigate(a.path)}
                   className="dashboard-quick-access-btn"
                 >
                   <Icon d={a.icon} size={15} />
