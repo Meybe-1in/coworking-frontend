@@ -1,12 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import { clearAuth } from "../../../utils/authStorage";
 import "./AdminHeader.css";
+import Swal from "sweetalert2";
+
 export default function AdminHeader({ Icon, ICONS }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    clearAuth();
-    navigate("/Login", { replace: true });
+    Swal.fire({
+      title: "¿Cerrar sesión?",
+      text: "Tu sesión actual finalizará.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Cerrar sesión",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#111827",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        clearAuth();
+        navigate("/Login", { replace: true });
+      }
+    });
   };
 
   return (
