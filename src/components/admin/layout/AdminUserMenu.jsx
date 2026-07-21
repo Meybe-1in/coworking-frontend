@@ -17,7 +17,8 @@ export default function AdminUserMenu() {
         role === "ROLE_ADMIN"
             ? "Administrador"
             : role;
-    const { logout } = useLogout();
+
+    const { handleLogout } = useLogout();
 
     const navigate = useNavigate();
 
@@ -55,7 +56,7 @@ export default function AdminUserMenu() {
 
                 <div className="admin-user-menu__info">
                     <span className="admin-user-menu__name">{username}</span>
-                    <span className="admin-user-menu__role">Admin</span>
+                    <span className="admin-user-menu__role">{roleLabel}</span>
                 </div>
 
                 <ChevronDown
@@ -87,7 +88,7 @@ export default function AdminUserMenu() {
 
                 <div className="admin-user-menu__footer">
                     <button
-                        onClick={logout}
+                        onClick={handleLogout}
                         className="admin-user-menu__item admin-user-menu__item--danger"
                         role="menuitem"
                     >
