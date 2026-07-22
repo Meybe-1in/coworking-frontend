@@ -41,3 +41,26 @@
   color: #fff;
   stroke: #fff;
 }
+
+.admin-header__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-header__logout {
+  border: none;
+  background: #111;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.admin-header__logout:hover {
+  opacity: 0.9;
+}

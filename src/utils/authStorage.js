@@ -1,3 +1,4 @@
+//Obtener datos de autenticación del almacenamiento local o de sesión
 export function getAuthItem(key) {
   return (
     localStorage.getItem(key) ||
@@ -5,7 +6,16 @@ export function getAuthItem(key) {
   );
 }
 
+//Limpiar el almacenamiento local y de sesión
 export function clearAuth() {
-  localStorage.clear();
-  sessionStorage.clear();
+  const keys = [
+    "token",
+    "username",
+    "role"
+  ];
+  
+  keys.forEach((key) => {
+    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
+  });
 }
