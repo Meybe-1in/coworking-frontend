@@ -53,3 +53,8 @@ export const updateUserRole = async (userId, role) => {
   const res = await API.patch(`/admin/users/${userId}/role`, { role });
   return res.data;
 }
+
+export async function getAdminProfile() {
+  const response = await API.get("/admin/profile");
+  return response.data;
+}

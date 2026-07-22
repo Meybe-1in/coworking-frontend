@@ -11,6 +11,7 @@ import ReservationsPage from "../pages/admin/ReservationsPage";
 import PaymentsPage from "../pages/admin/PaymentsPage";
 import RoomsPage from "../pages/admin/RoomsPage";
 import UsersPage from "../pages/admin/UsersPage";
+import ProfilePage from "../pages/admin/ProfilePage";
 
 export default function AdminRoutes() {
   return (
@@ -39,6 +40,11 @@ export default function AdminRoutes() {
         <Route
           path="users"
           element={<UsersPage />}
+        />
+
+        <Route
+          path="profile"
+          element={<ProfilePage />}
         />
 
         <Route

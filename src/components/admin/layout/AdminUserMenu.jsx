@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, User, Settings, LogOut } from "lucide-react";
 import { getAuthItem } from "../../../utils/authStorage";
+import useAdminProfile from "../hooks/useAdminProfile";
 import useLogout from "../hooks/useLogout";
 
 import "./AdminUserMenu.css";
@@ -10,8 +11,13 @@ export default function AdminUserMenu() {
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
 
-    const username = getAuthItem("username") || "Administrador";
-    const role = getAuthItem("role") || "ROLE_ADMIN";
+    const { profile } = useAdminProfile();
+
+    const username =
+        profile?.username || "Administrador";
+
+    const role =
+        profile?.roles?.[0] || "ROLE_ADMIN";
 
     const roleLabel =
         role === "ROLE_ADMIN"
