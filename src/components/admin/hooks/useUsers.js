@@ -8,6 +8,12 @@ export default function useUsers() {
     loading,
     error,
     reload,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
   } = useAdminResource(
     getUsers,
     "Error al cargar usuarios"
@@ -17,6 +23,12 @@ export default function useUsers() {
     users: data,
     loading,
     error,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
     reloadUsers: reload,
   };
 }

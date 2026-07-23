@@ -12,9 +12,15 @@ export const getRoomById = async (id) => {
   return res.data.data || res.data;
 };
 
-export const getAllRooms = async () => {
-  const res = await API.get("/api/rooms");
-  return res.data.data || res.data;
+export const getAllRooms = async (page = 0,size = 10) => {
+
+  const response = await API.get("/api/rooms", {
+      params: {
+        page,
+        size,
+      },
+    });
+  return response.data;
 };
 
 export const deleteRoom = async (id) => {

@@ -6,6 +6,12 @@ export default function useRooms() {
     data,
     loading,
     error,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
     reload,
   } = useAdminResource(
     getAllRooms,
@@ -16,6 +22,12 @@ export default function useRooms() {
     rooms: data,
     loading,
     error,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
     reloadRooms: reload,
   };
 }

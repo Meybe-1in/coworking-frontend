@@ -28,6 +28,13 @@ export default function RoomsTable({
   roomCols,
   Icon,
   ICONS,
+
+  page,
+  size,
+  totalPages,
+  totalElements,
+  setPage,
+  setSize,
 }) {
   const {
     search,
@@ -124,6 +131,12 @@ export default function RoomsTable({
           cols: roomCols,
           rows: filtered,
           emptyMsg: "No se encontraron salas.",
+          page,
+          size,
+          totalPages,
+          totalElements,
+          onPageChange: setPage,
+          onSizeChange: setSize,
         }}
       />
 

@@ -43,6 +43,13 @@ export default function UsersTable({
   userCols,
   Icon,
   ICONS,
+
+  page,
+  size,
+  totalPages,
+  totalElements,
+  setPage,
+  setSize,
 }) {
   const {
     search,
@@ -163,6 +170,12 @@ export default function UsersTable({
           cols: userCols,
           rows: filtered,
           emptyMsg: "No hay usuarios registrados",
+          page,
+          size,
+          totalPages,
+          totalElements,
+          onPageChange: setPage,
+          onSizeChange: setSize,
         }}
       />
       <CreateAdminModal
