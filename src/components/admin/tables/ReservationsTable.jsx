@@ -22,13 +22,6 @@ export default function ReservationsTable({
   resCols,
   Icon,
   ICONS,
-
-  page,
-  size,
-  totalPages,
-  totalElements,
-  setPage,
-  setSize,
 }) {
   const {
     search,
@@ -129,12 +122,6 @@ export default function ReservationsTable({
         cols: resCols,
         rows: filtered,
         emptyMsg: "No hay reservas aún",
-        page,
-        size,
-        totalPages,
-        totalElements,
-        onPageChange: setPage,
-        onSizeChange: setSize,
       }}
     />
   );

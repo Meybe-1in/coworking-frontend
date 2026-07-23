@@ -1,18 +1,20 @@
 import "./Table.css";
+
 export default function AdminTable({
   cols = [],
   rows = [],
   emptyMsg = "Sin datos",
 }) {
+
+  const safeRows = rows ?? [];
+
   return (
     <div className="admin-table-wrapper">
       <table className="admin-table">
         <thead>
           <tr>
             {cols.map((c) => (
-              <th
-                key={c.key}
-              >
+              <th key={c.key}>
                 {c.label}
               </th>
             ))}
@@ -20,7 +22,7 @@ export default function AdminTable({
         </thead>
 
         <tbody>
-          {rows.length === 0 ? (
+          {safeRows.length === 0 ? (
             <tr>
               <td
                 colSpan={cols.length}
@@ -30,12 +32,10 @@ export default function AdminTable({
               </td>
             </tr>
           ) : (
-            rows.map((row, i) => (
+            safeRows.map((row, i) => (
               <tr key={i}>
                 {cols.map((c) => (
-                  <td
-                    key={c.key}
-                  >
+                  <td key={c.key}>
                     {c.render
                       ? c.render(row)
                       : row[c.key]}
