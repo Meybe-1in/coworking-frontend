@@ -8,6 +8,12 @@ export default function useReservations() {
     loading,
     error,
     reload,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
   } = useAdminResource(
     getAllReservations,
     "Error al cargar reservas"
@@ -17,6 +23,12 @@ export default function useReservations() {
     reservations: data,
     loading,
     error,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
     reloadReservations: reload,
   };
 }

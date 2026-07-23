@@ -7,6 +7,12 @@ export default function usePayments() {
     loading,
     error,
     reload,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
   } = useAdminResource(
     getAllPayments,
     "Error al cargar pagos"
@@ -16,6 +22,12 @@ export default function usePayments() {
     payments: data,
     loading,
     error,
+    page,
+    size,
+    totalPages,
+    totalElements,
+    setPage,
+    setSize,
     reloadPayments: reload,
   };
 }

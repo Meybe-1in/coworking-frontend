@@ -1,5 +1,6 @@
 import TableFilters from "../filters/TableFilters";
 import DataTable from "./DataTable";
+import usePagination from "../hooks/usePagination";
 
 export default function AdminSection({
   title,
@@ -8,6 +9,9 @@ export default function AdminSection({
   filters,
   table,
 }) {
+
+  const pagination = usePagination(table.rows);
+
   return (
     <>
       <TableFilters
@@ -19,6 +23,17 @@ export default function AdminSection({
 
       <DataTable
         {...table}
+
+        rows={pagination.paginatedItems}
+
+        page={pagination.page}
+        size={pagination.size}
+
+        totalPages={pagination.totalPages}
+        totalElements={pagination.totalElements}
+
+        onPageChange={pagination.changePage}
+        onSizeChange={pagination.changeSize}
       />
     </>
   );

@@ -109,6 +109,7 @@ export default function DashboardStats({
                 },
               ].map((a) => (
                 <button
+                  key={a.path}
                   onClick={() => navigate(a.path)}
                   className="dashboard-quick-access-btn"
                 >
