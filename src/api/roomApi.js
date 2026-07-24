@@ -1,10 +1,12 @@
 import API from "./axiosConfig";
 import { toUTC } from "../utils/dateUtils";
 
-export const getRooms = async () => {
+export const getPublicRooms = async () => {
   const res = await API.get("/api/rooms");
 
-  return res.data.data || res.data;
+  const data = res.data.data || res.data;
+
+  return data.content || data;
 };
 
 export const getRoomById = async (id) => {

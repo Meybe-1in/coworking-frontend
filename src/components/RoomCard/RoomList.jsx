@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RoomCard from "./RoomCard";
-import { getRooms } from "../../api/roomApi";
+import { getPublicRooms } from "../../api/roomApi";
 
 export default function RoomList() {
   const [rooms, setRooms] = useState([]);
@@ -9,7 +9,7 @@ export default function RoomList() {
   useEffect(() => {
     const loadRooms = async () => {
       try {
-        const data = await getRooms();
+        const data = await getPublicRooms();
         const sorted = [...data].sort((a, b) => a.capacity - b.capacity);
         setRooms(sorted);
       } catch (err) {
