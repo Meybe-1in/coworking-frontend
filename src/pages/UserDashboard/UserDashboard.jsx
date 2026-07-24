@@ -6,7 +6,7 @@ import EmptyRoomsState from "../../components/ui/EmptyRoomsState";
 import RoomCarousel from "../../components/RoomCard/RoomCarousel";
 import { useLocation } from "react-router-dom";
 import { adjustDateIfPastClosing } from "../../utils/timeUtils";
-import { getRooms, getRoomsAvailability } from "../../api/roomApi";
+import { getPublicRooms, getRoomsAvailability } from "../../api/roomApi";
 import { getReservations } from "../../api/reservationApi";
 
 export default function UserDashboard() {
@@ -30,7 +30,7 @@ export default function UserDashboard() {
 
   const loadAllRooms = async () => {
     try {
-      const data = await getRooms();
+      const data = await getPublicRooms();
       setFiltered(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
@@ -91,7 +91,7 @@ export default function UserDashboard() {
 
     const [availabilityRoomsRes, allRoomsRes] = await Promise.all([
       getRoomsAvailability(adjustedFilters),
-      getRooms()
+      getPublicRooms()
     ]);
 
     // RESPUESTAS
