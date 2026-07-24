@@ -46,7 +46,7 @@ const Navbar = () => {
         </ul>
         {/* AUTH */}
         <div className="navbar-auth">
-          <Link to="/Login" className="signin">Iniciar sesión</Link>
+          <Link to="/login" className="signin">Iniciar sesión</Link>
           <Link to="/register" className="signup-btn">Registrarse</Link>
         </div>
       </div>

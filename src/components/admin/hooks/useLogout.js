@@ -23,7 +23,7 @@ export default function useLogout() {
 
     clearAuth();
 
-    navigate("/Login", {
+    navigate("/login", {
       replace: true,
     });
   };

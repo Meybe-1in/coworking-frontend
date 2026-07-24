@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
     sessionStorage.getItem("role");
 
   if (!token) {
-    return <Navigate to="/Login" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (adminOnly && role !== "ROLE_ADMIN") {
