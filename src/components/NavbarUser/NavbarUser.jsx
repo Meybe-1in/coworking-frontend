@@ -14,7 +14,7 @@ export default function NavbarUser() {
 
   const handleLogout = () => {
     clearAuth();
-    navigate("/Login");
+    navigate("/login");
   };
 
   // botton sin estilo

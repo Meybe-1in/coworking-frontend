@@ -10,7 +10,7 @@ function SignUp() {
         <h1 className={styles.title}>Sign Up</h1>
         <SignUpForm />
         <p className={styles.footer}>
-          Already have an account? <a href="/Login">Log in</a>
+          Already have an account? <a href="/login">Log in</a>
         </p>
       </div>
 

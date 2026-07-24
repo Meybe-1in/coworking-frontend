@@ -7,7 +7,7 @@ const HeroSection = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/Login"); // manda al login
+    navigate("/login"); // manda al login
   };
 
   return (

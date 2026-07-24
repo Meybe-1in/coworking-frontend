@@ -26,7 +26,7 @@ function LayoutWrapper() {
   const location = useLocation();
 
   // rutas donde NO se mostrará el layout general (navbar, contenedor, etc.)
-  const hideLayoutRoutes = ["/Login", "/register"];
+  const hideLayoutRoutes = ["/login", "/register"];
   const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
@@ -63,7 +63,7 @@ function LayoutWrapper() {
             path="/reservations/new"
           />
           <Route
-            path="/Login"
+            path="/login"
             element={
               <LoginPage />
             }
