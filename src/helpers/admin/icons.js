@@ -43,4 +43,11 @@ export const ICONS = {
 
   users:
     "M17 20h5V4H2v16h5M9 20V10m6 10V14",
+
+  user:
+    "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
+
+  building:
+    "M3 21h18M5 21V7l7-4 7 4v14",
+
 };
