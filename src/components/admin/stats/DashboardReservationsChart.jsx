@@ -8,7 +8,6 @@ import Err from "../ui/Err";
 
 import "./DashboardReservationsChart.css";
 
-
 export default function DashboardReservationsChart({
     data,
     loading,
