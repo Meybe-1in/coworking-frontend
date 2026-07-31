@@ -2,6 +2,10 @@ import { useNavigate } from "react-router-dom";
 import StatCard from "./StatCard";
 import Loader from "../ui/Loader";
 import Err from "../ui/Err";
+
+import DashboardReservationsChart from "./DashboardReservationsChart";
+import { CHART_PERIODS } from "../../../helpers/admin/chartPeriods"; //import CHART_PERIODS from "../../../helpers/admin/chartPeriods";
+
 import { fmt } from "../../../helpers/admin/formatters";
 import "./DashboardStats.css";
 
@@ -9,6 +13,14 @@ export default function DashboardStats({
   stats,
   loading,
   error,
+
+  chartData,
+  chartLoading,
+  chartError,
+
+  period,
+  setPeriod,
+
   ICONS,
   Icon,
 }) {
@@ -83,6 +95,19 @@ export default function DashboardStats({
         dashboardMetrics,
         "dashboard-grid-4"
       )}
+
+      <section className="dashboard-chart-grid">
+
+        <DashboardReservationsChart
+          title="Reservas"
+          data={chartData}
+          loading={chartLoading}
+          error={chartError}
+          period={period}
+          setPeriod={setPeriod}
+        />
+
+      </section>
 
       <div className="dashboard-quick-access">
         <p className="dashboard-quick-access-title">
