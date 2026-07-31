@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { getAdminStats }
-  from "../../../api/adminApi";
+  from "../../../api/adminDashboardApi";
 
 export default function useAdminStats() {
   const [stats, setStats] =
