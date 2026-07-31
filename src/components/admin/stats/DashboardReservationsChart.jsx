@@ -12,6 +12,7 @@ export default function DashboardReservationsChart({
     data,
     loading,
     error,
+    period,
 }) {
 
     if (loading) {
