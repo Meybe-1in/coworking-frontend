@@ -4,7 +4,8 @@ import Loader from "../ui/Loader";
 import Err from "../ui/Err";
 
 import DashboardReservationsChart from "./DashboardReservationsChart";
-import { CHART_PERIODS } from "../../../helpers/admin/chartPeriods"; //import CHART_PERIODS from "../../../helpers/admin/chartPeriods";
+import DashboardRevenueChart from "./DashboardRevenueChart";
+import { CHART_PERIODS } from "../../../helpers/admin/chartPeriods";
 
 import { fmt } from "../../../helpers/admin/formatters";
 import "./DashboardStats.css";
@@ -14,12 +15,17 @@ export default function DashboardStats({
   loading,
   error,
 
-  chartData,
-  chartLoading,
-  chartError,
+  reservationChartData,
+  reservationChartLoading,
+  reservationChartError,
+  reservationPeriod,
+  setReservationPeriod,
 
-  period,
-  setPeriod,
+  revenueChartData,
+  revenueChartLoading,
+  revenueChartError,
+  revenuePeriod,
+  setRevenuePeriod,
 
   ICONS,
   Icon,
@@ -100,11 +106,20 @@ export default function DashboardStats({
 
         <DashboardReservationsChart
           title="Reservas"
-          data={chartData}
-          loading={chartLoading}
-          error={chartError}
-          period={period}
-          setPeriod={setPeriod}
+          data={reservationChartData}
+          loading={reservationChartLoading}
+          error={reservationChartError}
+          period={reservationPeriod}
+          setPeriod={setReservationPeriod}
+        />
+
+        <DashboardRevenueChart
+          title="Ingresos"
+          data={revenueChartData}
+          loading={revenueChartLoading}
+          error={revenueChartError}
+          period={revenuePeriod}
+          setPeriod={setRevenuePeriod}
         />
 
       </section>
