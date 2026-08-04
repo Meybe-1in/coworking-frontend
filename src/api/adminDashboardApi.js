@@ -1,10 +1,12 @@
 import API from "./axiosConfig";
 
+// Stats Section
 export const getAdminStats = async () => {
   const response = await API.get("/admin/stats");
   return response.data;
 };
 
+// Reservations Chart
 export const getReservationsChart = async (period) => {
   if (period === "YEAR") {
     const response = await API.get(
@@ -20,5 +22,13 @@ export const getReservationsChart = async (period) => {
     }
   );
 
+  return response.data;
+};
+
+// Revenue Chart
+export const getRevenueChart = async (period) => {
+  const response = await API.get("/admin/dashboard/revenue", {
+    params: { period },
+  });
   return response.data;
 };
