@@ -21,11 +21,12 @@ export default function DashboardChart({
 
                 <h3 className="chart-title">{title}</h3>
 
+                {period &&setPeriod && (
                 <CustomSelect
                     value={period}
                     onValueChange={setPeriod}
                     options={Object.values(CHART_PERIODS)}
-                />
+                />)}
 
             </div>
 
