@@ -5,8 +5,9 @@ import Err from "../ui/Err";
 
 import DashboardReservationsChart from "./DashboardReservationsChart";
 import DashboardRevenueChart from "./DashboardRevenueChart";
-import { CHART_PERIODS } from "../../../helpers/admin/chartPeriods";
+import DashboardRoomOccupancyChart from "./DashboardRoomOccupancyChart";
 
+import { CHART_PERIODS } from "../../../helpers/admin/chartPeriods";
 import { fmt } from "../../../helpers/admin/formatters";
 import "./DashboardStats.css";
 
@@ -26,6 +27,10 @@ export default function DashboardStats({
   revenueChartError,
   revenuePeriod,
   setRevenuePeriod,
+
+  roomOccupancyData,
+  roomOccupancyLoading,
+  roomOccupancyError,
 
   ICONS,
   Icon,
@@ -120,6 +125,17 @@ export default function DashboardStats({
           error={revenueChartError}
           period={revenuePeriod}
           setPeriod={setRevenuePeriod}
+        />
+
+      </section>
+
+      <section className="dashboard-chart-grid">
+
+        <DashboardRoomOccupancyChart
+          title="Ranking de salas"
+          data={roomOccupancyData}
+          loading={roomOccupancyLoading}
+          error={roomOccupancyError}
         />
 
       </section>
