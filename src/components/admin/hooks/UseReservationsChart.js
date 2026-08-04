@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getReservationsChart } from "../../../api/adminDashboardApi";
-import CHART_PERIODS from "../../../helpers/admin/chartPeriods";
+import { CHART_PERIODS } from "../../../helpers/admin/chartPeriods";
 
 export default function useReservationsChart() {
 
@@ -10,7 +10,7 @@ export default function useReservationsChart() {
 
     const [error, setError] = useState(null);
 
-    const [period, setPeriod] = useState(CHART_PERIODS.WEEK);
+    const [period, setPeriod] = useState(CHART_PERIODS.YEAR.value);
 
 
     const loadChartData = useCallback(async () => {

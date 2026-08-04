@@ -1,5 +1,14 @@
 export const CHART_PERIODS = {
-    WEEK: "WEEK",
-    MONTH: "MONTH",
-    YEAR: "YEAR",
+  WEEK: {
+    value: "WEEK",
+    label: "Semana",
+  },
+  MONTH: {
+    value: "MONTH",
+    label: "Mes",
+  },
+  YEAR: {
+    value: "YEAR",
+    label: "Año",
+  },
 };
