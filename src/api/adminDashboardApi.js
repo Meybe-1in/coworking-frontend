@@ -32,3 +32,9 @@ export const getRevenueChart = async (period) => {
   });
   return response.data;
 };
+
+// Room occupancy Chart
+export const getRoomOccupancyChart = async () => {
+  const response = await API.get("/admin/dashboard/room-occupancy");
+  return response.data;
+};
