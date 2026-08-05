@@ -1,0 +1,89 @@
+.recent-activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.recent-activity-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.recent-activity-item:last-child {
+    border-bottom: none;
+}
+
+.recent-activity-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.recent-activity-icon.payment {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+
+.recent-activity-icon.reservation {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.recent-activity-content {
+    flex: 1;
+}
+
+.recent-activity-user {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.recent-activity-description {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.recent-activity-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.recent-activity-list {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.recent-activity-empty {
+    height: 100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.recent-activity-empty-title {
+    margin:0;
+    font-size:15px;
+    font-weight:600;
+    color:#374151;
+}
+
+.recent-activity-empty-description {
+    margin-top:6px;
+    font-size:13px;
+    color:#9ca3af;
+}
