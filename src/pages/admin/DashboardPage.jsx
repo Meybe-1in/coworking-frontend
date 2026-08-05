@@ -3,6 +3,7 @@ import DashboardStats from "../../components/admin/stats/DashboardStats";
 import useAdminStats from "../../components/admin/hooks/useAdminStats";
 import useReservationsChart from "../../components/admin/hooks/useReservationsChart";
 import useRevenueChart from "../../components/admin/hooks/useRevenueChart";
+import useRoomOccupancyChart from "../../components/admin/hooks/useRoomOccupancyChart";
 
 import Icon from "../../components/admin/ui/Icon";
 import { ICONS } from "../../helpers/admin/icons";
@@ -14,6 +15,7 @@ export default function DashboardPage() {
     loading,
     error,
   } = useAdminStats();
+
   // Reservas
   const {
     chartData,
@@ -22,6 +24,7 @@ export default function DashboardPage() {
     period,
     setPeriod,
   } = useReservationsChart();
+
   // Ingresos
   const {
     chartData: revenueChartData,
@@ -30,6 +33,13 @@ export default function DashboardPage() {
     period: revenuePeriod,
     setPeriod: setRevenuePeriod,
   } = useRevenueChart();
+
+  // Ocupación de salas
+  const {
+    chartData: roomOccupancyData,
+    loading: roomOccupancyLoading,
+    error: roomOccupancyError,
+  } = useRoomOccupancyChart();
 
   return (
     <DashboardStats
@@ -49,6 +59,9 @@ export default function DashboardPage() {
       revenuePeriod={revenuePeriod}
       setRevenuePeriod={setRevenuePeriod}
 
+      roomOccupancyData={roomOccupancyData}
+      roomOccupancyLoading={roomOccupancyLoading}
+      roomOccupancyError={roomOccupancyError}
 
       ICONS={ICONS}
       Icon={Icon}
