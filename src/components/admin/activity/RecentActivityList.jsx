@@ -5,7 +5,7 @@ import DashboardChart from "../stats/DashboardChart";
 import RecentActivityItem from "./RecentActivityItem";
 
 export default function RecentActivityList({
-    activities,
+    activities = [],
     loading,
     error,
 }) {
@@ -18,18 +18,34 @@ export default function RecentActivityList({
             loading={loading}
             error={error}
         >
-            <ul className="recent-activity-list">
+            {activities.length === 0 ? (
 
-                {activities.map(activity => (
+                <div className="recent-activity-empty">
 
-                    <RecentActivityItem
-                        key={`${activity.type}-${activity.date}`}
-                        activity={activity}
-                    />
+                    <p className="recent-activity-empty-title">
+                        No hay actividad reciente
+                    </p>
 
-                ))}
+                    <p className="recent-activity-empty-description">
+                        Las acciones del sistema aparecerán aquí
+                    </p>
 
-            </ul>
+                </div>
+
+            ) : (
+                <ul className="recent-activity-list">
+
+                    {activities.map(activity => (
+
+                        <RecentActivityItem
+                            key={`${activity.type}-${activity.date}`}
+                            activity={activity}
+                        />
+
+                    ))}
+
+                </ul>
+            )}
         </DashboardChart>
     );
 
