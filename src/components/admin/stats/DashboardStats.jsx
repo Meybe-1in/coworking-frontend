@@ -6,6 +6,7 @@ import Err from "../ui/Err";
 import DashboardReservationsChart from "./DashboardReservationsChart";
 import DashboardRevenueChart from "./DashboardRevenueChart";
 import DashboardRoomOccupancyChart from "./DashboardRoomOccupancyChart";
+import RecentActivityList from "../activity/RecentActivityList";
 
 import { CHART_PERIODS } from "../../../helpers/admin/chartPeriods";
 import { fmt } from "../../../helpers/admin/formatters";
@@ -31,6 +32,10 @@ export default function DashboardStats({
   roomOccupancyData,
   roomOccupancyLoading,
   roomOccupancyError,
+
+  recentActivities,
+  recentActivitiesLoading,
+  recentActivitiesError,
 
   ICONS,
   Icon,
@@ -136,6 +141,12 @@ export default function DashboardStats({
           data={roomOccupancyData}
           loading={roomOccupancyLoading}
           error={roomOccupancyError}
+        />
+
+        <RecentActivityList
+          activities={recentActivities}
+          loading={recentActivitiesLoading}
+          error={recentActivitiesError}
         />
 
       </section>
