@@ -4,6 +4,7 @@ import useAdminStats from "../../components/admin/hooks/useAdminStats";
 import useReservationsChart from "../../components/admin/hooks/useReservationsChart";
 import useRevenueChart from "../../components/admin/hooks/useRevenueChart";
 import useRoomOccupancyChart from "../../components/admin/hooks/useRoomOccupancyChart";
+import useRecentActivity from "../../components/admin/hooks/useRecentActivity";
 
 import Icon from "../../components/admin/ui/Icon";
 import { ICONS } from "../../helpers/admin/icons";
@@ -41,6 +42,13 @@ export default function DashboardPage() {
     error: roomOccupancyError,
   } = useRoomOccupancyChart();
 
+  // Actividad reciente
+  const {
+    activities,
+    loading: activitiesLoading,
+    error: activitiesError,
+  } = useRecentActivity();
+
   return (
     <DashboardStats
       stats={stats}
@@ -62,6 +70,10 @@ export default function DashboardPage() {
       roomOccupancyData={roomOccupancyData}
       roomOccupancyLoading={roomOccupancyLoading}
       roomOccupancyError={roomOccupancyError}
+
+      recentActivities={activities}
+      recentActivitiesLoading={activitiesLoading}
+      recentActivitiesError={activitiesError}
 
       ICONS={ICONS}
       Icon={Icon}

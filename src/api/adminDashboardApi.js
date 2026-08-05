@@ -38,3 +38,9 @@ export const getRoomOccupancyChart = async () => {
   const response = await API.get("/admin/dashboard/room-occupancy");
   return response.data;
 };
+
+// Recent activities
+export const getRecentActivities = async () => {
+  const response = await API.get("/admin/dashboard/recent-activities");
+  return response.data;
+};
