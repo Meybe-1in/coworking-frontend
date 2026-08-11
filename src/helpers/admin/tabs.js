@@ -15,29 +15,48 @@ export const TABS = [
       {
         id: "reservations",
         label: "Reservas",
-        icon: ICONS.calendar,
         path: "/admin/reservations",
       },
       {
         id: "payments",
         label: "Pagos",
-        icon: ICONS.credit,
         path: "/admin/payments",
       },
 
       {
         id: "rooms",
         label: "Salas",
-        icon: ICONS.room,
         path: "/admin/rooms",
       },
 
       {
         id: "users",
         label: "Usuarios",
-        icon: ICONS.users,
         path: "/admin/users",
       }
+    ],
+  },
+
+  {
+    id: "reports",
+    label: "Reportes",
+    icon: ICONS.book,
+    children: [
+      {
+        id: "report-reservations",
+        label: "Reservas",
+        path: "/admin/reports/reservations",
+      },
+      {
+        id: "report-financial",
+        label: "Financiero",
+        path: "/admin/reports/financial",
+      },
+      {
+        id: "report-room-usage",
+        label: "Uso de salas",
+        path: "/admin/reports/room-usage",
+      },
     ],
   },
 ];

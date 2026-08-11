@@ -1,8 +1,4 @@
-import {
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
 
@@ -12,6 +8,11 @@ import PaymentsPage from "../pages/admin/PaymentsPage";
 import RoomsPage from "../pages/admin/RoomsPage";
 import UsersPage from "../pages/admin/UsersPage";
 import ProfilePage from "../pages/admin/ProfilePage";
+import ReportsPage from "../pages/admin/ReportsPage";
+
+import ReservationReport from "../pages/Reports/ReservationReport";
+import FinancialReport from "../pages/Reports/FinancialReport";
+import RoomUsageReport from "../pages/Reports/RoomUsageReport";
 
 export default function AdminRoutes() {
   return (
@@ -46,6 +47,35 @@ export default function AdminRoutes() {
           path="profile"
           element={<ProfilePage />}
         />
+        <Route
+          path="reports"
+          element={<ReportsPage />}
+        >
+          <Route
+            index
+            element={
+              <Navigate
+                to="reservations"
+                replace
+              />
+            }
+          />
+
+          <Route
+            path="reservations"
+            element={<ReservationReport />}
+          />
+
+          <Route
+            path="financial"
+            element={<FinancialReport />}
+          />
+
+          <Route
+            path="room-usage"
+            element={<RoomUsageReport />}
+          />
+        </Route>
 
         <Route
           path="*"
