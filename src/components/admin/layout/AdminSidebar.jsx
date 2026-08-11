@@ -5,7 +5,17 @@ import "./AdminSidebar.css";
 import { TABS } from "../../../helpers/admin/tabs";
 
 export default function AdminSidebar({ Icon, }) {
-  const [tablesOpen, setTablesOpen] = useState(true);
+  const [openGroups, setOpenGroups] = useState({
+    tables: true,
+    reports: true,
+  });
+
+  const toggleGroup = (groupId) => {
+    setOpenGroups((prev) => ({
+      ...prev,
+      [groupId]: !prev[groupId],
+    }));
+  };
 
   return (
     <aside className="admin-sidebar">
@@ -14,7 +24,7 @@ export default function AdminSidebar({ Icon, }) {
           return (
             <div key={t.id}>
               <button
-                onClick={() => setTablesOpen(!tablesOpen)}
+                onClick={() => toggleGroup(t.id)}
                 className="admin-sidebar__group-btn"
               >
                 <span className="admin-sidebar__label">
@@ -23,11 +33,11 @@ export default function AdminSidebar({ Icon, }) {
                 </span>
 
                 <span>
-                  {tablesOpen ? "▼" : "▶"}
+                  {openGroups[t.id] ? "▼" : "▶"}
                 </span>
               </button>
 
-              {tablesOpen &&
+              {openGroups[t.id] &&
                 t.children.map((child) => (
                   <NavLink
                     key={child.id}
