@@ -3,7 +3,7 @@ import {
     getReservationReport,
     generateReservationReportPdf,
     generateReservationReportCsv,
-} from "../../../api/adminReportApi";
+} from "../../../../api/adminReportApi";
 
 export default function useReservationReport() {
 
