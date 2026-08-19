@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import {
     getReservationReport,
     generateReservationReportPdf,
@@ -16,6 +17,7 @@ export default function useReservationReport() {
 
     const [error, setError] = useState(null);
 
+
     useEffect(() => {
 
         return () => {
@@ -28,18 +30,15 @@ export default function useReservationReport() {
 
     }, [pdfUrl]);
 
+
     const generateReport = async (request) => {
 
         setLoading(true);
         setError(null);
 
         try {
-
-            const data =
-                await getReservationReport(request);
-
+            const data =await getReservationReport(request);
             setReport(data);
-
             return data;
 
         } catch {
@@ -59,7 +58,8 @@ export default function useReservationReport() {
         }
     };
 
-    const downloadPdf = async (request) => {
+
+    const generatePdfPreview = async (request) => {
 
         setDownloadingPdf(true);
         setError(null);
@@ -78,7 +78,9 @@ export default function useReservationReport() {
 
         } catch {
 
-            setError("Error al generar el PDF");
+            setError(
+                "Error al generar el PDF"
+            );
 
             throw new Error(
                 "Error al generar el PDF"
@@ -90,6 +92,36 @@ export default function useReservationReport() {
 
         }
     };
+
+
+    const downloadPdf = async (request) => {
+
+        setDownloadingPdf(true);
+        setError(null);
+
+        try {
+
+            return await generateReservationReportPdf(
+                request
+            );
+
+        } catch {
+
+            setError(
+                "Error al generar el PDF"
+            );
+
+            throw new Error(
+                "Error al generar el PDF"
+            );
+
+        } finally {
+
+            setDownloadingPdf(false);
+
+        }
+    };
+
 
     const downloadCsv = async (request) => {
 
@@ -104,7 +136,9 @@ export default function useReservationReport() {
 
         } catch {
 
-            setError("Error al generar el CSV");
+            setError(
+                "Error al generar el CSV"
+            );
 
             throw new Error(
                 "Error al generar el CSV"
@@ -117,6 +151,7 @@ export default function useReservationReport() {
         }
     };
 
+
     return {
         report,
         pdfUrl,
@@ -127,6 +162,7 @@ export default function useReservationReport() {
         error,
 
         generateReport,
+        generatePdfPreview,
         downloadPdf,
         downloadCsv,
     };

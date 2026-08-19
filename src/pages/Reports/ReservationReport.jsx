@@ -1,5 +1,8 @@
+import { useState } from "react";
+import ReservationReportPreview from "../../components/admin/reports/reservation/ReservationReportPreview";
 import ReservationReportFilters from "../../components/admin/reports/reservation/ReservationReportFilters";
 import useReservationReport from "../../components/admin/hooks/report/useReservationReport";
+
 
 export default function ReservationReport() {
 
@@ -7,11 +10,75 @@ export default function ReservationReport() {
         report,
         loading,
         error,
+        pdfUrl,
+
         generateReport,
+        generatePdfPreview,
+        downloadPdf,
+        downloadCsv,
+
+        downloadingPdf,
+        downloadingCsv,
     } = useReservationReport();
 
+    const [reportRequest, setReportRequest] = useState(null);
     const handleGenerateReport = async (request) => {
-        await generateReport(request);
+        try {
+            await generateReport(request);
+            setReportRequest(request);
+            await generatePdfPreview(request);
+
+        } catch {
+            // El hook ya maneja el error.
+        }
+    };
+
+    const handleDownloadPdf = async () => {
+
+        if (!reportRequest) {
+            return;
+        }
+
+        try {
+            const blob = await downloadPdf(reportRequest);
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.download = "reporte-reservas.pdf";
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+
+        } catch {
+            // El hook ya maneja el error.
+        }
+    };
+    const handleDownloadCsv = async () => {
+
+        if (!reportRequest) {
+            return;
+        }
+
+        try {
+            const blob = await downloadCsv(reportRequest);
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.download = "reporte-reservas.csv";
+
+            document.body.appendChild(link);
+
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+
+        } catch {
+            // El hook ya maneja el error.
+        }
     };
 
     return (
@@ -28,11 +95,13 @@ export default function ReservationReport() {
                 <p>{error}</p>
             )}
 
-            {report && (
-                <pre>
-                    {JSON.stringify(report, null, 2)}
-                </pre>
-            )}
+            <ReservationReportPreview
+                pdfUrl={pdfUrl}
+                onDownloadPdf={handleDownloadPdf}
+                onDownloadCsv={handleDownloadCsv}
+                downloadingPdf={downloadingPdf}
+                downloadingCsv={downloadingCsv}
+            />
 
         </section>
     );
