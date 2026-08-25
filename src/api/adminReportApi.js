@@ -67,3 +67,38 @@ export const generateFinancialReportCsv = async (request) => {
 
     return response.data;
 };
+
+// room usage reports
+
+export const getRoomUsageReport = async (request) => {
+    const response = await API.post(
+        "/admin/reports/room-usage",
+        request
+    );
+
+    return response.data;
+};
+
+export const generateRoomUsageReportPdf = async (request) => {
+    const response = await API.post(
+        "/admin/reports/room-usage/pdf",
+        request,
+        {
+            responseType: "blob",
+        }
+    );
+
+    return response.data;
+};
+
+export const generateRoomUsageReportCsv = async (request) => {
+    const response = await API.post(
+        "/admin/reports/room-usage/csv",
+        request,
+        {
+            responseType: "blob",
+        }
+    );
+
+    return response.data;
+};
