@@ -1,0 +1,101 @@
+/* Financial report filters */
+
+.report-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.report-filter-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.report-filter-group input {
+    width: 170px;
+}
+
+.report-metrics {
+    position: relative;
+}
+
+.report-metrics__button {
+    min-width: 125px;
+    justify-content: center;
+}
+
+.report-metrics__button span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+
+    border-radius: 999px;
+
+    background: #f3f4f6;
+    color: #6b7280;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.report-metrics__chevron {
+    transition: transform 0.2s;
+}
+
+.report-metrics__chevron.open {
+    transform: rotate(180deg);
+}
+
+.report-metrics__menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+
+    width: 260px;
+    padding: 14px;
+
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+    z-index: 1000;
+}
+
+.report-metrics__title {
+    display: block;
+    margin-bottom: 10px;
+
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.report-metric {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 7px 4px;
+
+    font-size: 13px;
+    color: #374151;
+
+    cursor: pointer;
+}
+
+.report-metric:hover {
+    background: #f9fafb;
+    border-radius: 6px;
+}
+
+.report-metric input {
+    margin: 0;
+}
