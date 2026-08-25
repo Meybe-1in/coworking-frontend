@@ -47,3 +47,24 @@ export const FINANCIAL_REPORT_METRICS = [
 export const DEFAULT_FINANCIAL_REPORT_METRICS = [
     "TOTAL_REVENUE",
 ];
+
+// ROOM USAGE REPORT
+
+export const ROOM_USAGE_REPORT_METRICS = [
+    {
+        value: "OCCUPANCY_PERCENTAGE",
+        label: "Porcentaje de ocupación",
+    },
+    {
+        value: "TOTAL_RESERVATIONS",
+        label: "Cantidad de reservas",
+    },
+    {
+        value: "RESERVED_HOURS",
+        label: "Horas reservadas",
+    },
+];
+
+export const DEFAULT_ROOM_USAGE_REPORT_METRICS = [
+    "OCCUPANCY_PERCENTAGE",
+];
