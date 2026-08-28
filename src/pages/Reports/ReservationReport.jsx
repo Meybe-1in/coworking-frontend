@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ReportPreview from "../../components/admin/reports/ReportPreview";
-import ReportMetricFilters from "../../components/admin/reports/ReportMetricFilters";
+import ReportMetricsFilters from "../../components/admin/reports/ReportMetricsFilters";
 import useReport from "../../components/admin/hooks/report/useReport";
 import {
     getReservationReport,
@@ -50,7 +50,7 @@ export default function ReservationReport() {
 
             <h1>Reporte de Reservas</h1>
 
-            <ReportMetricFilters
+            <ReportMetricsFilters
                 onGenerate={handleGenerateReport}
                 loading={loading}
                 metricsOptions={RESERVATION_REPORT_METRICS}

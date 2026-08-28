@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import ReportMetricFilters from "../../components/admin/reports/ReportMetricFilters";
+import ReportMetricsFilters from "../../components/admin/reports/ReportMetricsFilters";
 import ReportPreview from "../../components/admin/reports/ReportPreview";
 import useReport from "../../components/admin/hooks/report/useReport";
 import {
@@ -52,7 +52,7 @@ export default function FinancialReport() {
         <section>
             <h1>Reporte Financiero</h1>
 
-            <ReportMetricFilters
+            <ReportMetricsFilters
                 onGenerate={handleGenerateReport}
                 loading={loading}
                 metricsOptions={FINANCIAL_REPORT_METRICS}

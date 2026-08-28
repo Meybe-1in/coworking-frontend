@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import ReportPreview from "../../components/admin/reports/ReportPreview";
-import ReportMetricFilters from "../../components/admin/reports/ReportMetricFilters";
+import ReportMetricsFilters from "../../components/admin/reports/ReportMetricsFilters";
 import useReport from "../../components/admin/hooks/report/useReport";
 import {
     getRoomUsageReport,
@@ -52,7 +52,7 @@ export default function RoomUsageReport() {
         <section>
             <h1>Reporte de Uso de Salas</h1>
 
-            <ReportMetricFilters
+            <ReportMetricsFilters
                 onGenerate={handleGenerateReport}
                 loading={loading}
                 metricsOptions={ROOM_USAGE_REPORT_METRICS}

@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { Filter, ChevronDown } from "lucide-react";
 import ReportFilters from "./ReportFilters";
 import { inputStyle, buttonStyle } from "../filters/filterStyles";
-import "./ReportMetricFilters.css";
+import "./ReportMetricsFilters.css";
 
-export default function ReportMetricFilters({
+export default function ReportMetricsFilters({
     onGenerate,
     loading = false,
     metricsOptions,
