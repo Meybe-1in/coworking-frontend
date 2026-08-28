@@ -1,22 +1,16 @@
 import { useEffect, useState } from "react";
 
-import {
-    getRoomUsageReport,
-    generateRoomUsageReportPdf,
-    generateRoomUsageReportCsv,
-} from "../../../../api/adminReportApi";
-
-export default function useRoomUsageReport() {
+export default function useReport({
+    getReport,
+    generatePdf,
+    generateCsv,
+    reportErrorMessage,
+}) {
     const [report, setReport] = useState(null);
-
     const [pdfUrl, setPdfUrl] = useState(null);
-
     const [loading, setLoading] = useState(false);
-
     const [downloadingPdf, setDownloadingPdf] = useState(false);
-
     const [downloadingCsv, setDownloadingCsv] = useState(false);
-
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -32,19 +26,15 @@ export default function useRoomUsageReport() {
         setError(null);
 
         try {
-            const data = await getRoomUsageReport(request);
+            const data = await getReport(request);
 
             setReport(data);
 
             return data;
         } catch {
-            setError(
-                "Error al generar el reporte de uso de salas"
-            );
+            setError(reportErrorMessage);
 
-            throw new Error(
-                "Error al generar el reporte"
-            );
+            throw new Error(reportErrorMessage);
         } finally {
             setLoading(false);
         }
@@ -55,23 +45,17 @@ export default function useRoomUsageReport() {
         setError(null);
 
         try {
-            const blob =
-                await generateRoomUsageReportPdf(request);
+            const blob = await generatePdf(request);
 
-            const url =
-                URL.createObjectURL(blob);
+            const url = URL.createObjectURL(blob);
 
             setPdfUrl(url);
 
             return blob;
         } catch {
-            setError(
-                "Error al generar el PDF"
-            );
+            setError("Error al generar el PDF");
 
-            throw new Error(
-                "Error al generar el PDF"
-            );
+            throw new Error("Error al generar el PDF");
         } finally {
             setDownloadingPdf(false);
         }
@@ -82,17 +66,11 @@ export default function useRoomUsageReport() {
         setError(null);
 
         try {
-            return await generateRoomUsageReportPdf(
-                request
-            );
+            return await generatePdf(request);
         } catch {
-            setError(
-                "Error al generar el PDF"
-            );
+            setError("Error al generar el PDF");
 
-            throw new Error(
-                "Error al generar el PDF"
-            );
+            throw new Error("Error al generar el PDF");
         } finally {
             setDownloadingPdf(false);
         }
@@ -103,17 +81,11 @@ export default function useRoomUsageReport() {
         setError(null);
 
         try {
-            return await generateRoomUsageReportCsv(
-                request
-            );
+            return await generateCsv(request);
         } catch {
-            setError(
-                "Error al generar el CSV"
-            );
+            setError("Error al generar el CSV");
 
-            throw new Error(
-                "Error al generar el CSV"
-            );
+            throw new Error("Error al generar el CSV");
         } finally {
             setDownloadingCsv(false);
         }
