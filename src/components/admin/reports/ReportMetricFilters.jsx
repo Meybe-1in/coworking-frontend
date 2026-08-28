@@ -1,36 +1,26 @@
 import { useEffect, useRef, useState } from "react";
+
 import { Filter, ChevronDown } from "lucide-react";
+import ReportFilters from "./ReportFilters";
+import { inputStyle, buttonStyle } from "../filters/filterStyles";
+import "./ReportMetricFilters.css";
 
-import ReportFilters from "../ReportFilters";
-
-import {
-    RESERVATION_REPORT_METRICS,
-    DEFAULT_RESERVATION_REPORT_METRICS,
-} from "../../../../helpers/admin/reportMetrics";
-
-import { inputStyle, buttonStyle } from "../../filters/filterStyles";
-
-import "./ReservationReportFilters.css";
-
-export default function ReservationReportFilters({
+export default function ReportMetricFilters({
     onGenerate,
     loading = false,
+    metricsOptions,
+    defaultMetrics,
+    metricsTitle = "Reporte",
 }) {
-
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-
-    const [metrics, setMetrics] = useState(
-        DEFAULT_RESERVATION_REPORT_METRICS
-    );
-
+    const [metrics, setMetrics] = useState(defaultMetrics);
     const [metricsOpen, setMetricsOpen] = useState(false);
+
     const metricsRef = useRef(null);
 
     useEffect(() => {
-
         const handleClickOutside = (event) => {
-
             if (
                 metricsRef.current &&
                 !metricsRef.current.contains(event.target)
@@ -50,13 +40,10 @@ export default function ReservationReportFilters({
                 handleClickOutside
             );
         };
-
     }, []);
 
     const handleMetricChange = (value) => {
-
         setMetrics((currentMetrics) => {
-
             if (currentMetrics.includes(value)) {
                 return currentMetrics.filter(
                     (metric) => metric !== value
@@ -68,7 +55,6 @@ export default function ReservationReportFilters({
     };
 
     const handleSubmit = (event) => {
-
         event.preventDefault();
 
         onGenerate({
@@ -83,12 +69,8 @@ export default function ReservationReportFilters({
             onSubmit={handleSubmit}
             loading={loading}
         >
-
             <div className="report-filter-group">
-
-                <label>
-                    Fecha inicio
-                </label>
+                <label>Fecha inicio</label>
 
                 <input
                     type="date"
@@ -99,14 +81,10 @@ export default function ReservationReportFilters({
                     style={inputStyle}
                     required
                 />
-
             </div>
 
             <div className="report-filter-group">
-
-                <label>
-                    Fecha fin
-                </label>
+                <label>Fecha fin</label>
 
                 <input
                     type="date"
@@ -117,11 +95,12 @@ export default function ReservationReportFilters({
                     style={inputStyle}
                     required
                 />
-
             </div>
 
-            <div ref={metricsRef} className="report-metrics">
-
+            <div
+                ref={metricsRef}
+                className="report-metrics"
+            >
                 <button
                     type="button"
                     onClick={() =>
@@ -150,41 +129,35 @@ export default function ReservationReportFilters({
 
                 {metricsOpen && (
                     <div className="report-metrics__menu">
-
                         <span className="report-metrics__title">
-                            Reporte
+                            {metricsTitle}
                         </span>
 
-                        {RESERVATION_REPORT_METRICS.map(
-                            (metric) => (
-                                <label
-                                    key={metric.value}
-                                    className="report-metric"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        checked={metrics.includes(
+                        {metricsOptions.map((metric) => (
+                            <label
+                                key={metric.value}
+                                className="report-metric"
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={metrics.includes(
+                                        metric.value
+                                    )}
+                                    onChange={() =>
+                                        handleMetricChange(
                                             metric.value
-                                        )}
-                                        onChange={() =>
-                                            handleMetricChange(
-                                                metric.value
-                                            )
-                                        }
-                                    />
+                                        )
+                                    }
+                                />
 
-                                    <span>
-                                        {metric.label}
-                                    </span>
-                                </label>
-                            )
-                        )}
-
+                                <span>
+                                    {metric.label}
+                                </span>
+                            </label>
+                        ))}
                     </div>
                 )}
-
             </div>
-
         </ReportFilters>
     );
 }
