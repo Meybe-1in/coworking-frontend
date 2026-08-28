@@ -6,7 +6,6 @@ export default function useReport({
     generateCsv,
     reportErrorMessage,
 }) {
-    const [report, setReport] = useState(null);
     const [pdfUrl, setPdfUrl] = useState(null);
     const [loading, setLoading] = useState(false);
     const [downloadingPdf, setDownloadingPdf] = useState(false);
@@ -26,14 +25,9 @@ export default function useReport({
         setError(null);
 
         try {
-            const data = await getReport(request);
-
-            setReport(data);
-
-            return data;
+            return await getReport(request);
         } catch {
             setError(reportErrorMessage);
-
             throw new Error(reportErrorMessage);
         } finally {
             setLoading(false);
@@ -46,53 +40,82 @@ export default function useReport({
 
         try {
             const blob = await generatePdf(request);
-
             const url = URL.createObjectURL(blob);
 
-            setPdfUrl(url);
+            setPdfUrl((previousUrl) => {
+                if (previousUrl) {
+                    URL.revokeObjectURL(previousUrl);
+                }
+
+                return url;
+            });
 
             return blob;
         } catch {
-            setError("Error al generar el PDF");
+            const message = "Error al generar el PDF";
 
-            throw new Error("Error al generar el PDF");
+            setError(message);
+            throw new Error(message);
         } finally {
             setDownloadingPdf(false);
         }
     };
 
-    const downloadPdf = async (request) => {
+    const downloadFile = (blob, filename) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = filename;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+    };
+
+    const downloadPdf = async (request, filename) => {
         setDownloadingPdf(true);
         setError(null);
 
         try {
-            return await generatePdf(request);
-        } catch {
-            setError("Error al generar el PDF");
+            const blob = await generatePdf(request);
 
-            throw new Error("Error al generar el PDF");
+            downloadFile(blob, filename);
+
+            return blob;
+        } catch {
+            const message = "Error al generar el PDF";
+
+            setError(message);
+            throw new Error(message);
         } finally {
             setDownloadingPdf(false);
         }
     };
 
-    const downloadCsv = async (request) => {
+    const downloadCsv = async (request, filename) => {
         setDownloadingCsv(true);
         setError(null);
 
         try {
-            return await generateCsv(request);
-        } catch {
-            setError("Error al generar el CSV");
+            const blob = await generateCsv(request);
 
-            throw new Error("Error al generar el CSV");
+            downloadFile(blob, filename);
+
+            return blob;
+        } catch {
+            const message = "Error al generar el CSV";
+
+            setError(message);
+            throw new Error(message);
         } finally {
             setDownloadingCsv(false);
         }
     };
 
     return {
-        report,
         pdfUrl,
         loading,
         downloadingPdf,
