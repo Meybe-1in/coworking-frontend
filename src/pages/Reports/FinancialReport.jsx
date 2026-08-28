@@ -1,133 +1,86 @@
 import { useState } from "react";
 
-import FinancialReportPreview from "../../components/admin/reports/financial/FinancialReportPreview";
-import FinancialReportFilters from "../../components/admin/reports/financial/FinancialReportFilters";
-import useFinancialReport from "../../components/admin/hooks/report/useFinancialReport";
+import ReportMetricFilters from "../../components/admin/reports/ReportMetricFilters";
+import ReportPreview from "../../components/admin/reports/ReportPreview";
+import useReport from "../../components/admin/hooks/report/useReport";
+import {
+    getFinancialReport,
+    generateFinancialReportPdf,
+    generateFinancialReportCsv,
+} from "../../api/adminReportApi";
+
+import {
+    FINANCIAL_REPORT_METRICS,
+    DEFAULT_FINANCIAL_REPORT_METRICS,
+} from "../../helpers/admin/reportMetrics";
 
 export default function FinancialReport() {
-
     const {
+        pdfUrl,
         loading,
         error,
-        pdfUrl,
         generateReport,
         generatePdfPreview,
         downloadPdf,
         downloadCsv,
         downloadingPdf,
         downloadingCsv,
-    } = useFinancialReport();
+    } = useReport({
+        getReport: getFinancialReport,
+        generatePdf: generateFinancialReportPdf,
+        generateCsv: generateFinancialReportCsv,
+        reportErrorMessage:
+            "Error al generar el reporte financiero",
+    });
 
     const [reportRequest, setReportRequest] =
         useState(null);
 
     const handleGenerateReport = async (request) => {
-
         try {
-
             await generateReport(request);
 
             setReportRequest(request);
 
             await generatePdfPreview(request);
-
         } catch {
-            // El hook ya maneja el error.
-        }
-    };
-
-    const handleDownloadPdf = async () => {
-
-        if (!reportRequest) {
-            return;
-        }
-
-        try {
-
-            const blob =
-                await downloadPdf(reportRequest);
-
-            const url =
-                URL.createObjectURL(blob);
-
-            const link =
-                document.createElement("a");
-
-            link.href = url;
-            link.download = "reporte-financiero.pdf";
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            link.remove();
-
-            URL.revokeObjectURL(url);
-
-        } catch {
-            // El hook ya maneja el error.
-        }
-    };
-
-    const handleDownloadCsv = async () => {
-
-        if (!reportRequest) {
-            return;
-        }
-
-        try {
-
-            const blob =
-                await downloadCsv(reportRequest);
-
-            const url =
-                URL.createObjectURL(blob);
-
-            const link =
-                document.createElement("a");
-
-            link.href = url;
-            link.download = "reporte-financiero.csv";
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            link.remove();
-
-            URL.revokeObjectURL(url);
-
-        } catch {
-            // El hook ya maneja el error.
+            // El hook maneja el error.
         }
     };
 
     return (
         <section>
+            <h1>Reporte Financiero</h1>
 
-            <h1>
-                Reporte Financiero
-            </h1>
-
-            <FinancialReportFilters
+            <ReportMetricFilters
                 onGenerate={handleGenerateReport}
                 loading={loading}
+                metricsOptions={FINANCIAL_REPORT_METRICS}
+                defaultMetrics={DEFAULT_FINANCIAL_REPORT_METRICS}
+                metricsTitle="Reporte financiero"
             />
 
-            {error && (
-                <p>
-                    {error}
-                </p>
-            )}
+            {error && <p>{error}</p>}
 
-            <FinancialReportPreview
+            <ReportPreview
                 pdfUrl={pdfUrl}
-                onDownloadPdf={handleDownloadPdf}
-                onDownloadCsv={handleDownloadCsv}
+                onDownloadPdf={() =>
+                    downloadPdf(
+                        reportRequest,
+                        "reporte-financiero.pdf"
+                    )
+                }
+                onDownloadCsv={() =>
+                    downloadCsv(
+                        reportRequest,
+                        "reporte-financiero.csv"
+                    )
+                }
                 downloadingPdf={downloadingPdf}
                 downloadingCsv={downloadingCsv}
+                description="Revisa el reporte financiero antes de descargarlo."
+                title="Vista previa del reporte financiero"
             />
-
         </section>
     );
 }

@@ -1,24 +1,37 @@
 import { useState } from "react";
 
-import RoomUsageReportPreview from "../../components/admin/reports/room/RoomUsageReportPreview";
+import ReportPreview from "../../components/admin/reports/ReportPreview";
+import ReportMetricFilters from "../../components/admin/reports/ReportMetricFilters";
+import useReport from "../../components/admin/hooks/report/useReport";
+import {
+    getRoomUsageReport,
+    generateRoomUsageReportPdf,
+    generateRoomUsageReportCsv,
+} from "../../api/adminReportApi";
 
-import RoomUsageReportFilters from "../../components/admin/reports/room/RoomUsageReportFilters";
+import {
+    ROOM_USAGE_REPORT_METRICS,
+    DEFAULT_ROOM_USAGE_REPORT_METRICS,
+} from "../../helpers/admin/reportMetrics";
 
-import useRoomUsageReport from "../../components/admin/hooks/report/useRoomUsageReport";
 
 export default function RoomUsageReport() {
     const {
-        report,
+        pdfUrl,
         loading,
         error,
-        pdfUrl,
         generateReport,
         generatePdfPreview,
         downloadPdf,
         downloadCsv,
         downloadingPdf,
         downloadingCsv,
-    } = useRoomUsageReport();
+    } = useReport({
+        getReport: getRoomUsageReport,
+        generatePdf: generateRoomUsageReportPdf,
+        generateCsv: generateRoomUsageReportCsv,
+        reportErrorMessage: "Error al generar el reporte de uso de salas",
+    });
 
     const [reportRequest, setReportRequest] =
         useState(null);
@@ -35,89 +48,40 @@ export default function RoomUsageReport() {
         }
     };
 
-    const handleDownloadPdf = async () => {
-        if (!reportRequest) {
-            return;
-        }
-
-        try {
-            const blob =
-                await downloadPdf(reportRequest);
-
-            const url =
-                URL.createObjectURL(blob);
-
-            const link =
-                document.createElement("a");
-
-            link.href = url;
-
-            link.download =
-                "reporte-uso-salas.pdf";
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            link.remove();
-
-            URL.revokeObjectURL(url);
-        } catch {
-            // El hook ya maneja el error.
-        }
-    };
-
-    const handleDownloadCsv = async () => {
-        if (!reportRequest) {
-            return;
-        }
-
-        try {
-            const blob =
-                await downloadCsv(reportRequest);
-
-            const url =
-                URL.createObjectURL(blob);
-
-            const link =
-                document.createElement("a");
-
-            link.href = url;
-
-            link.download =
-                "reporte-uso-salas.csv";
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            link.remove();
-
-            URL.revokeObjectURL(url);
-        } catch {
-            // El hook ya maneja el error.
-        }
-    };
-
     return (
         <section>
             <h1>Reporte de Uso de Salas</h1>
 
-            <RoomUsageReportFilters
+            <ReportMetricFilters
                 onGenerate={handleGenerateReport}
                 loading={loading}
+                metricsOptions={ROOM_USAGE_REPORT_METRICS}
+                defaultMetrics={DEFAULT_ROOM_USAGE_REPORT_METRICS}
+                metricsTitle="Reporte de Uso de Salas"
             />
 
             {error && (
                 <p>{error}</p>
             )}
 
-            <RoomUsageReportPreview
+            <ReportPreview
                 pdfUrl={pdfUrl}
-                onDownloadPdf={handleDownloadPdf}
-                onDownloadCsv={handleDownloadCsv}
+                onDownloadPdf={() =>
+                    downloadPdf(
+                        reportRequest,
+                        "reporte-uso-salas.pdf"
+                    )
+                }
+                onDownloadCsv={() =>
+                    downloadCsv(
+                        reportRequest,
+                        "reporte-uso-salas.csv"
+                    )
+                }
                 downloadingPdf={downloadingPdf}
                 downloadingCsv={downloadingCsv}
+                description="Revisa el reporte de uso de salas antes de descargarlo."
+                title="Vista previa del reporte de uso de salas"
             />
         </section>
     );
