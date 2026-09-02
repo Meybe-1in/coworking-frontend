@@ -1,21 +1,44 @@
-import { useState } from "react";
-import {User, Mail, Building2, Users, MapPin, List, Camera, Loader2, Plus,} from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Mail, Shield } from "lucide-react";
 import "../forms/AdminForm.css";
 import AdminInput from "../forms/AdminInput.jsx";
 import AdminField from "../forms/AdminField.jsx";
 import AdminSubmitBtn from "../forms/AdminSubmitBtn";
 import AdminPasswordInput from "../forms/AdminPasswordInput";
 
-export default function UserForm({onSubmit, loading, }) {
-  const [form, setForm] =
-    useState({
-      username: "",
-      email: "",
+const ROLE_OPTIONS = [
+  {
+    value: "USER",
+    label: "Usuario",
+  },
+  {
+    value: "ADMIN",
+    label: "Administrador",
+  },
+];
+
+export default function UserForm({ onSubmit, loading, mode = "create", initialData = {}, }) {
+  const isEdit = mode === "edit";
+
+  const [form, setForm] = useState({
+    username: initialData.username || "",
+    email: initialData.email || "",
+    role: initialData.role || "USER",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setForm({
+      username: initialData.username || "",
+      email: initialData.email || "",
+      role: initialData.role || "USER",
       password: "",
     });
 
-  const [errors, setErrors] =
-    useState({});
+    setErrors({});
+  }, [initialData]);
 
   const emailRegex =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -74,6 +97,14 @@ export default function UserForm({onSubmit, loading, }) {
         }
       }
 
+      if (key === "role") {
+        if (!value) {
+          next.role = "Selecciona un rol";
+        } else {
+          delete next.role;
+        }
+      }
+
       if (key === "password") {
         if (!strongPasswordRegex.test(value)) {
           next.password =
@@ -99,6 +130,16 @@ export default function UserForm({onSubmit, loading, }) {
       return;
     }
 
+    if (isEdit) {
+      onSubmit({
+        username: form.username.trim(),
+        email: form.email.trim(),
+        role: form.role,
+      });
+
+      return;
+    }
+
     onSubmit(form);
   };
 
@@ -114,12 +155,10 @@ export default function UserForm({onSubmit, loading, }) {
         <AdminInput
           icon={User}
           value={form.username}
-          onChange={(e) =>
-            set(
-              "username",
-              e.target.value
-            )
-          }
+          onChange={(e) => {
+            set("username", e.target.value);
+            validateField("username", e.target.value);
+          }}
         />
       </AdminField>
 
@@ -138,18 +177,37 @@ export default function UserForm({onSubmit, loading, }) {
         />
       </AdminField>
 
-      <AdminField
-        label="Contraseña"
-        error={errors.password}
-      >
-        <AdminPasswordInput
-          value={form.password}
-          onChange={(e) => {
-            set("password", e.target.value);
-            validateField("password", e.target.value);
-          }}
-        />
-      </AdminField>
+      {isEdit && (
+        <AdminField
+          label="Rol"
+          error={errors.role}
+        >
+          <FilterSelect
+            value={form.role}
+            onChange={(value) => {
+              set("role", value);
+              validateField("role", value);
+            }}
+            options={ROLE_OPTIONS}
+            minWidth="100%"
+          />
+        </AdminField>
+      )}
+
+      {!isEdit && (
+        <AdminField
+          label="Contraseña"
+          error={errors.password}
+        >
+          <AdminPasswordInput
+            value={form.password}
+            onChange={(e) => {
+              set("password", e.target.value);
+              validateField("password", e.target.value);
+            }}
+          />
+        </AdminField>
+      )}
 
       <div className="admin-form-footer">
         <AdminSubmitBtn
