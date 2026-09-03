@@ -6,7 +6,7 @@ import UserActions from "../users/UserActions";
 import UserStatusToggle from "../users/UserStatusToggle";
 import "../styles/admin-layout.css";
 
-export const userColumns = (onToggleStatus, onChangeRole, isCurrentUsername) => [
+export const userColumns = (onToggleStatus, onChangeRole, isCurrentUsername, onEditUser) => [
 
   idColumn,
 
@@ -76,6 +76,7 @@ export const userColumns = (onToggleStatus, onChangeRole, isCurrentUsername) => 
       <UserActions
         user={u}
         onChangeRole={onChangeRole}
+        onEditUser={onEditUser}
         isCurrentUsername= {
           u.username === isCurrentUsername
         }

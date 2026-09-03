@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { updateUserStatus, updateUserRole, } from "../../../api/adminApi";
+import { updateUserStatus, updateUserRole, updateUser as updateUserApi } from "../../../api/adminApi";
 
 export default function useUserActions(
   reloadUsers
@@ -75,8 +75,35 @@ export default function useUserActions(
     }
   };
 
+  const editUser = async (userId, userData) => {
+    try {
+      await updateUserApi(userId, userData);
+      await reloadUsers();
+      Swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "Usuario actualizado correctamente",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      return true; // Indica que la actualización fue exitosa
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "No fue posible actualizar el usuario",
+      });
+
+      return false; // Indica que la actualización fallo
+    }
+  };
+
   return {
     toggleStatus,
     changeRole,
+    editUser,
   };
 }

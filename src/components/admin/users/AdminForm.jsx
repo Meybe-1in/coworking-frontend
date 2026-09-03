@@ -1,21 +1,51 @@
-import { useState } from "react";
-import {User, Mail, Building2, Users, MapPin, List, Camera, Loader2, Plus,} from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Mail } from "lucide-react";
 import "../forms/AdminForm.css";
 import AdminInput from "../forms/AdminInput.jsx";
 import AdminField from "../forms/AdminField.jsx";
 import AdminSubmitBtn from "../forms/AdminSubmitBtn";
 import AdminPasswordInput from "../forms/AdminPasswordInput";
+import FilterSelect from "../filters/FilterSelect.jsx";
 
-export default function UserForm({onSubmit, loading, }) {
-  const [form, setForm] =
-    useState({
-      username: "",
-      email: "",
+const ROLE_OPTIONS = [
+  {
+    value: "USER",
+    label: "Usuario",
+  },
+  {
+    value: "ADMIN",
+    label: "Administrador",
+  },
+];
+
+export default function UserForm({ onSubmit, loading, mode = "create", initialData = {}, }) {
+  const isEdit = mode === "edit";
+
+  const [form, setForm] = useState({
+    username: initialData.username || "",
+    email: initialData.email || "",
+    role: isEdit
+      ? initialData.role || "USER"
+      : undefined,
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setForm({
+      username: initialData.username || "",
+      email: initialData.email || "",
+      role: initialData.role || "USER",
       password: "",
     });
 
-  const [errors, setErrors] =
-    useState({});
+    setErrors({});
+  }, [
+    initialData.username,
+    initialData.email,
+    initialData.role,
+  ]);
 
   const emailRegex =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,7 +64,12 @@ export default function UserForm({onSubmit, loading, }) {
       errs.email = "Ingresa un email válido";
     }
 
-    if (!strongPasswordRegex.test(form.password)) {
+    if (isEdit && !form.role) {
+      errs.role = "Selecciona un rol";
+    }
+
+    // La contraseña solamente se valida al crear un usuario
+    if (!isEdit && !strongPasswordRegex.test(form.password)) {
       errs.password =
         "Mínimo 8 caracteres, mayúscula, minúscula, número y símbolo";
     }
@@ -69,8 +104,18 @@ export default function UserForm({onSubmit, loading, }) {
       if (key === "email") {
         if (!emailRegex.test(value)) {
           next.email = "Ingresa un email válido";
+        } else if (!emailRegex.test(value.trim())) {
+          next.email = "Ingresa un email válido";
         } else {
           delete next.email;
+        }
+      }
+
+      if (key === "role") {
+        if (isEdit && !value) {
+          next.role = "Selecciona un rol";
+        } else {
+          delete next.role;
         }
       }
 
@@ -99,7 +144,21 @@ export default function UserForm({onSubmit, loading, }) {
       return;
     }
 
-    onSubmit(form);
+    if (isEdit) {
+      onSubmit({
+        username: form.username.trim(),
+        email: form.email.trim(),
+        role: form.role,
+      });
+
+      return;
+    }
+
+    onSubmit({
+      username: form.username.trim(),
+      email: form.email.trim(),
+      password: form.password,
+    });
   };
 
   return (
@@ -114,12 +173,10 @@ export default function UserForm({onSubmit, loading, }) {
         <AdminInput
           icon={User}
           value={form.username}
-          onChange={(e) =>
-            set(
-              "username",
-              e.target.value
-            )
-          }
+          onChange={(e) => {
+            set("username", e.target.value);
+            validateField("username", e.target.value);
+          }}
         />
       </AdminField>
 
@@ -138,24 +195,47 @@ export default function UserForm({onSubmit, loading, }) {
         />
       </AdminField>
 
-      <AdminField
-        label="Contraseña"
-        error={errors.password}
-      >
-        <AdminPasswordInput
-          value={form.password}
-          onChange={(e) => {
-            set("password", e.target.value);
-            validateField("password", e.target.value);
-          }}
-        />
-      </AdminField>
+      {isEdit && (
+        <AdminField
+          label="Rol"
+          error={errors.role}
+        >
+          <FilterSelect
+            value={form.role}
+            onChange={(value) => {
+              set("role", value);
+              validateField("role", value);
+            }}
+            options={ROLE_OPTIONS}
+            minWidth="100%"
+          />
+        </AdminField>
+      )}
+
+      {!isEdit && (
+        <AdminField
+          label="Contraseña"
+          error={errors.password}
+        >
+          <AdminPasswordInput
+            value={form.password}
+            onChange={(e) => {
+              set("password", e.target.value);
+              validateField("password", e.target.value);
+            }}
+          />
+        </AdminField>
+      )}
 
       <div className="admin-form-footer">
         <AdminSubmitBtn
           loading={loading}
           loadingText="Guardando..."
-          text="Crear administrador"
+          text={
+            isEdit
+              ? "Guardar cambios"
+              : "Crear administrador"
+          }
         />
       </div>
     </form>
