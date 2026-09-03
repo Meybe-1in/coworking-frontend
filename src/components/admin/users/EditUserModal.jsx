@@ -2,7 +2,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 
 import Modal from "../ui/Modal";
-import UserForm from "../forms/UserForm";
+import UserForm from "./AdminForm";
 
 export default function EditUserModal({
     open,
@@ -21,8 +21,8 @@ export default function EditUserModal({
         : "USER";
 
     const initialData = {
-        username: user.username,
-        email: user.email,
+        username: user.username || "",
+        email: user.email || "",
         role: currentRole,
     };
 

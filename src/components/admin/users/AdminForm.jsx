@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { User, Mail, Shield } from "lucide-react";
+import { User, Mail } from "lucide-react";
 import "../forms/AdminForm.css";
 import AdminInput from "../forms/AdminInput.jsx";
 import AdminField from "../forms/AdminField.jsx";
 import AdminSubmitBtn from "../forms/AdminSubmitBtn";
 import AdminPasswordInput from "../forms/AdminPasswordInput";
+import FilterSelect from "../filters/FilterSelect.jsx";
 
 const ROLE_OPTIONS = [
   {
@@ -23,7 +24,9 @@ export default function UserForm({ onSubmit, loading, mode = "create", initialDa
   const [form, setForm] = useState({
     username: initialData.username || "",
     email: initialData.email || "",
-    role: initialData.role || "USER",
+    role: isEdit
+      ? initialData.role || "USER"
+      : undefined,
     password: "",
   });
 
@@ -38,7 +41,11 @@ export default function UserForm({ onSubmit, loading, mode = "create", initialDa
     });
 
     setErrors({});
-  }, [initialData]);
+  }, [
+    initialData.username,
+    initialData.email,
+    initialData.role,
+  ]);
 
   const emailRegex =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,7 +64,10 @@ export default function UserForm({ onSubmit, loading, mode = "create", initialDa
       errs.email = "Ingresa un email válido";
     }
 
-    if (!strongPasswordRegex.test(form.password)) {
+    if (!form.role) { errs.role = "Selecciona un rol"; }
+
+    // La contraseña solamente se valida al crear un usuario
+    if (!isEdit && !strongPasswordRegex.test(form.password)) {
       errs.password =
         "Mínimo 8 caracteres, mayúscula, minúscula, número y símbolo";
     }
@@ -213,7 +223,11 @@ export default function UserForm({ onSubmit, loading, mode = "create", initialDa
         <AdminSubmitBtn
           loading={loading}
           loadingText="Guardando..."
-          text="Crear administrador"
+          text={
+            isEdit
+              ? "Guardar cambios"
+              : "Crear administrador"
+          }
         />
       </div>
     </form>

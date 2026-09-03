@@ -5,7 +5,12 @@ export default function UserActions({
   user,
   onChangeRole,
   isCurrentUsername,
+  onEditUser,
 }) {
+
+  const handleEdit = () => {
+    onEditUser(user);
+  };
 
   const handleRoleChange = async () => {
 
@@ -41,12 +46,21 @@ export default function UserActions({
   };
 
   return (
-    <AdminActionButton
-      onClick={handleRoleChange}
-      disabled={isCurrentUsername}
-      variant="primary"
-    >
-      Cambiar rol
-    </AdminActionButton>
+    <div className="admin-inline-actions">
+      <AdminActionButton
+        onClick={handleEdit}
+        variant="primary"
+      >
+        Editar
+      </AdminActionButton>
+
+      <AdminActionButton
+        onClick={handleRoleChange}
+        disabled={isCurrentUsername}
+        variant="primary"
+      >
+        Cambiar rol
+      </AdminActionButton>
+    </div>
   );
 }
