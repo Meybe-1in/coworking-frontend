@@ -64,7 +64,9 @@ export default function UserForm({ onSubmit, loading, mode = "create", initialDa
       errs.email = "Ingresa un email válido";
     }
 
-    if (!form.role) { errs.role = "Selecciona un rol"; }
+    if (isEdit && !form.role) {
+      errs.role = "Selecciona un rol";
+    }
 
     // La contraseña solamente se valida al crear un usuario
     if (!isEdit && !strongPasswordRegex.test(form.password)) {
@@ -102,13 +104,15 @@ export default function UserForm({ onSubmit, loading, mode = "create", initialDa
       if (key === "email") {
         if (!emailRegex.test(value)) {
           next.email = "Ingresa un email válido";
+        } else if (!emailRegex.test(value.trim())) {
+          next.email = "Ingresa un email válido";
         } else {
           delete next.email;
         }
       }
 
       if (key === "role") {
-        if (!value) {
+        if (isEdit && !value) {
           next.role = "Selecciona un rol";
         } else {
           delete next.role;
@@ -150,7 +154,11 @@ export default function UserForm({ onSubmit, loading, mode = "create", initialDa
       return;
     }
 
-    onSubmit(form);
+    onSubmit({
+      username: form.username.trim(),
+      email: form.email.trim(),
+      password: form.password,
+    });
   };
 
   return (
