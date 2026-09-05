@@ -2,7 +2,10 @@ import {
   formatAuditAction,
   formatAuditEntity,
   formatAuditDate,
+  getAuditActionClass,
 } from "../../../helpers/admin/auditFormatter";
+
+import "../ui/styles/AuditBadge.css";
 
 export const auditColumns = [
   {
@@ -13,12 +16,20 @@ export const auditColumns = [
   {
     key: "action",
     label: "Acción",
-    render: (row) => formatAuditAction(row.action),
+    render: (row) => (
+      <span className={getAuditActionClass(row.action)}>
+        {formatAuditAction(row.action)}
+      </span>
+    ),
   },
   {
     key: "entityType",
     label: "Entidad",
-    render: (row) => formatAuditEntity(row.entityType),
+    render: (row) => (
+      <span className="audit-entity">
+        {formatAuditEntity(row.entityType)}
+      </span>
+    ),
   },
   {
     key: "entityId",
