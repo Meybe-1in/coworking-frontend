@@ -1,0 +1,45 @@
+.audit-action,
+.audit-entity {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Acción por defecto */
+.audit-action {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+/* Acciones */
+.audit-action--created,
+.audit-action--activated {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.audit-action--updated {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.audit-action--deleted,
+.audit-action--cancelled {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.audit-action--deactivated {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Entidad */
+.audit-entity {
+    background: #f3f4f6;
+    color: #374151;
+}

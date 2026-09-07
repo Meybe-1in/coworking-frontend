@@ -7,6 +7,14 @@ export const TABS = [
     icon: ICONS.grid,
     path: "/admin/dashboard",
   },
+
+  {
+    id: "audit",
+    label: "Auditoría",
+    icon: ICONS.history,
+    path: "/admin/audit",
+  },
+  
   {
     id: "tables",
     label: "Tablas",

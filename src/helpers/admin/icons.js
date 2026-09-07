@@ -50,4 +50,7 @@ export const ICONS = {
   building:
     "M3 21h18M5 21V7l7-4 7 4v14",
 
+  history:
+  "M12 8v4l3 2M3.05 11a9 9 0 101.92-4.95M3 4v5h5",
+
 };

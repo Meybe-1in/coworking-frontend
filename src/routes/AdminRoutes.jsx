@@ -9,6 +9,7 @@ import RoomsPage from "../pages/admin/RoomsPage";
 import UsersPage from "../pages/admin/UsersPage";
 import ProfilePage from "../pages/admin/ProfilePage";
 import ReportsPage from "../pages/admin/ReportsPage";
+import AuditPage from "../pages/admin/AuditPage";
 
 import ReservationReport from "../pages/Reports/ReservationReport";
 import FinancialReport from "../pages/Reports/FinancialReport";
@@ -41,6 +42,11 @@ export default function AdminRoutes() {
         <Route
           path="users"
           element={<UsersPage />}
+        />
+
+        <Route
+          path="audit"
+          element={<AuditPage />}
         />
 
         <Route
