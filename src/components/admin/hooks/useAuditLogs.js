@@ -6,6 +6,8 @@ import { downloadFile } from "../../../helpers/admin/downloadFile";
 export default function useAuditLogs() {
 
     const [appliedFilters, setAppliedFilters] = useState({});
+    const [exporting, setExporting] = useState(false);
+    const [exportError, setExportError] = useState("");
 
     const fetchAuditLogs = useCallback(
         (page, size) => getAuditLogs(
@@ -72,5 +74,7 @@ export default function useAuditLogs() {
         applyFilters,
         clearFilters,
         exportCSV,
+        exporting,
+        exportError,
     };
 }

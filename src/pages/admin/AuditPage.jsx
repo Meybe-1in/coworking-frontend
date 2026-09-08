@@ -17,6 +17,9 @@ export default function AuditPage() {
     appliedFilters,
     applyFilters,
     clearFilters,
+    exportCSV,
+    exporting,
+    exportError,
   } = useAuditLogs();
 
   return (
@@ -29,6 +32,9 @@ export default function AuditPage() {
         appliedFilters={appliedFilters}
         applyFilters={applyFilters}
         clearFilters={clearFilters}
+        exportCSV={exportCSV}
+        exporting={exporting}
+        exportError={exportError}
       />
 
       <AuditTable

@@ -17,6 +17,9 @@ export default function AuditFilters({
     appliedFilters,
     applyFilters,
     clearFilters,
+    exportCSV,
+    exporting,
+    exportError,
 }) {
     const [adminName, setAdminName] = useState(
         appliedFilters.adminName || ""
@@ -163,10 +166,22 @@ export default function AuditFilters({
                     <button
                         type="button"
                         className="table-filter__export"
-                        disabled
+                        onClick={exportCSV}
+                        disabled={exporting}
+                        title="Exportar CSV"
+                        aria-label="Exportar CSV"
                     >
-                        <FileDown size={16} />
-                        Exportar CSV
+                        <span
+                            className={
+                                exporting
+                                    ? "table-filters__icon--spin"
+                                    : ""
+                            }
+                        >
+                            <FileDown size={16} />
+                        </span>
+
+                        {exporting ? "Exportando..." : "Exportar CSV"}
                     </button>
                 </div>
             </div>
@@ -174,6 +189,12 @@ export default function AuditFilters({
             {filterError && (
                 <p className="audit-filter__error">
                     {filterError}
+                </p>
+            )}
+
+            {exportError && (
+                <p className="audit-filter__error">
+                    {exportError}
                 </p>
             )}
         </>
