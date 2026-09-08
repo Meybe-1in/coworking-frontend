@@ -15,8 +15,8 @@ export default function AuditPage() {
     setSize,
     reloadAuditLogs,
     appliedFilters,
+    applyFilters,
     clearFilters,
-    setAppliedFilters,
   } = useAuditLogs();
 
   return (
@@ -27,8 +27,8 @@ export default function AuditPage() {
         loading={loading}
         reloadAuditLogs={reloadAuditLogs}
         appliedFilters={appliedFilters}
+        applyFilters={applyFilters}
         clearFilters={clearFilters}
-        setAppliedFilters={setAppliedFilters}
       />
 
       <AuditTable

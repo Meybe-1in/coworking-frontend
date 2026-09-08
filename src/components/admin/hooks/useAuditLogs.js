@@ -32,6 +32,14 @@ export default function useAuditLogs() {
         "Error al cargar los registros de auditoría"
     );
 
+    const applyFilters = useCallback(
+        (filters) => {
+            setAppliedFilters(filters);
+            setPage(0);
+        },
+        [setPage]
+    );
+
     const clearFilters = useCallback(() => {
         setAppliedFilters({});
         setPage(0);
@@ -61,8 +69,8 @@ export default function useAuditLogs() {
         setSize,
         reloadAuditLogs: reload,
         appliedFilters,
+        applyFilters,
         clearFilters,
         exportCSV,
-        setAppliedFilters,
     };
 }

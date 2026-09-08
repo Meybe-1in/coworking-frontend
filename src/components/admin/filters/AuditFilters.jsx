@@ -15,8 +15,8 @@ export default function AuditFilters({
     loading,
     reloadAuditLogs,
     appliedFilters,
+    applyFilters,
     clearFilters,
-    setAppliedFilters,
 }) {
     const [adminName, setAdminName] = useState(
         appliedFilters.adminName || ""
@@ -69,7 +69,7 @@ export default function AuditFilters({
             filters.endDate = endDate;
         }
 
-        setAppliedFilters(filters);
+        applyFilters(filters);
     };
 
     const handleClearFilters = () => {
