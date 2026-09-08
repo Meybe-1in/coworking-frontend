@@ -1,7 +1,21 @@
+import { useState, useCallback } from "react";
 import useAdminResource from "./useAdminResource";
-import { getAuditLogs } from "../../../api/auditApi";
+import { getAuditLogs, exportAuditLogsCSV } from "../../../api/auditApi";
+import { downloadFile } from "../../../helpers/admin/downloadFile";
 
 export default function useAuditLogs() {
+
+    const [appliedFilters, setAppliedFilters] = useState({});
+
+    const fetchAuditLogs = useCallback(
+        (page, size) => getAuditLogs(
+            page,
+            size,
+            appliedFilters
+        ),
+        [appliedFilters]
+    );
+
     const {
         data,
         loading,
@@ -14,9 +28,26 @@ export default function useAuditLogs() {
         setSize,
         reload,
     } = useAdminResource(
-        getAuditLogs,
+        fetchAuditLogs,
         "Error al cargar los registros de auditoría"
     );
+
+    const clearFilters = useCallback(() => {
+        setAppliedFilters({});
+        setPage(0);
+    }, [setPage]);
+
+    const exportCSV = useCallback(async () => {
+        const blob =
+            await exportAuditLogsCSV(
+                appliedFilters
+            );
+
+        downloadFile(
+            blob,
+            "audit-logs.csv"
+        );
+    }, [appliedFilters]);
 
     return {
         auditLogs: data,
@@ -29,5 +60,9 @@ export default function useAuditLogs() {
         setPage,
         setSize,
         reloadAuditLogs: reload,
+        appliedFilters,
+        clearFilters,
+        exportCSV,
+        setAppliedFilters,
     };
 }
