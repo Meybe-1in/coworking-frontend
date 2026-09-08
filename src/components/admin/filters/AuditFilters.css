@@ -1,0 +1,177 @@
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- Filtros ---------- */
+
+.table-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.table-filters__info h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.table-filters__info p {
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 3px 0 0;
+}
+
+/* ---------- Acciones ---------- */
+
+.table-filters__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.table-filters__search {
+    width: 220px;
+    height: 36px;
+    padding: 0 12px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    font-size: 13.5px;
+    background: #fff;
+    color: #374151;
+
+    font-family: inherit;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.table-filters__search:focus,
+.audit-filter__date:focus {
+    border-color: #a5b4fc;
+}
+
+/* ---------- Fechas ---------- */
+
+.audit-filter__date {
+    width: 150px;
+    height: 36px;
+    padding: 0 10px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    font-size: 13.5px;
+    background: #fff;
+    color: #374151;
+
+    font-family: inherit;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* ---------- Botones ---------- */
+
+.table-filter__button {
+    width: 36px;
+    height: 36px;
+
+    padding: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    background: #fff;
+    color: #374151;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.table-filter__button:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.table-filter__refresh,
+.table-filter__export {
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 0 12px;
+
+    border-radius: 8px;
+
+    font-size: 13.5px;
+    font-family: inherit;
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+}
+
+/* ---------- Actualizar ---------- */
+
+.table-filter__refresh {
+    background: #fff;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.table-filter__refresh:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.table-filter__refresh:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ---------- Exportar ---------- */
+
+.table-filter__export {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.table-filter__export:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ---------- Icono refresh ---------- */
+
+.table-filters__icon--spin {
+    display: inline-flex;
+    animation: spin 1s linear infinite;
+}
+
+/* ---------- Error ---------- */
+
+.audit-filter__error {
+    margin: -10px 0 16px;
+
+    font-size: 13px;
+    color: #dc2626;
+}
