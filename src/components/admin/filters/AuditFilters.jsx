@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
     Search,
@@ -34,6 +34,12 @@ export default function AuditFilters({
     const [endDate, setEndDate] = useState(
         appliedFilters.endDate || ""
     );
+
+    useEffect(() => {
+        setAdminName(appliedFilters.adminName || "");
+        setStartDate(appliedFilters.startDate || "");
+        setEndDate(appliedFilters.endDate || "");
+    }, [appliedFilters]);
 
     const handleApplyFilters = () => {
         const hasStartDate = Boolean(startDate);
