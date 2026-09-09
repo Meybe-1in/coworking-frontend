@@ -7,6 +7,7 @@ import {
     FileDown,
 } from "lucide-react";
 
+import Swal from "sweetalert2";
 import "./AuditFilters.css";
 
 export default function AuditFilters({
@@ -36,15 +37,17 @@ export default function AuditFilters({
     const [filterError, setFilterError] = useState("");
 
     const handleApplyFilters = () => {
-        setFilterError("");
-
         const hasStartDate = Boolean(startDate);
         const hasEndDate = Boolean(endDate);
 
         if (hasStartDate !== hasEndDate) {
-            setFilterError(
-                "Debes seleccionar una fecha de inicio y una fecha de fin."
-            );
+            Swal.fire({
+                icon: "warning",
+                title: "Fechas incompletas",
+                text: "Debes seleccionar una fecha de inicio y una fecha de fin.",
+                confirmButtonText: "Entendido",
+            });
+
             return;
         }
 
@@ -53,12 +56,16 @@ export default function AuditFilters({
             hasEndDate &&
             startDate > endDate
         ) {
-            setFilterError(
-                "La fecha de inicio no puede ser posterior a la fecha de fin."
-            );
+            Swal.fire({
+                icon: "warning",
+                title: "Rango de fechas inválido",
+                text: "La fecha de inicio no puede ser posterior a la fecha de fin.",
+                confirmButtonText: "Entendido",
+            });
+
             return;
         }
-
+        
         const filters = {};
 
         const normalizedAdminName = adminName.trim();
