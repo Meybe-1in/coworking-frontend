@@ -37,6 +37,7 @@ export default function useAuditLogs() {
     const applyFilters = useCallback(
         (filters) => {
             setAppliedFilters(filters);
+            setExportError("");
             setPage(0);
         },
         [setPage]
@@ -44,19 +45,28 @@ export default function useAuditLogs() {
 
     const clearFilters = useCallback(() => {
         setAppliedFilters({});
+        setExportError("");
         setPage(0);
     }, [setPage]);
 
     const exportCSV = useCallback(async () => {
-        const blob =
-            await exportAuditLogsCSV(
-                appliedFilters
-            );
+        setExporting(true);
+        setExportError("");
+        try {
+            const blob =
+                await exportAuditLogsCSV(
+                    appliedFilters
+                );
 
-        downloadFile(
-            blob,
-            "audit-logs.csv"
-        );
+            downloadFile(
+                blob,
+                "audit-logs.csv"
+            );
+        } catch (error) {
+            setExportError("Error al exportar los registros de auditoría");
+        } finally {
+            setExporting(false);
+        }
     }, [appliedFilters]);
 
     return {
