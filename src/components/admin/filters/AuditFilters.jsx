@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import Swal from "sweetalert2";
+
 import "./AuditFilters.css";
 
 export default function AuditFilters({
@@ -33,8 +34,6 @@ export default function AuditFilters({
     const [endDate, setEndDate] = useState(
         appliedFilters.endDate || ""
     );
-
-    const [filterError, setFilterError] = useState("");
 
     const handleApplyFilters = () => {
         const hasStartDate = Boolean(startDate);
@@ -65,7 +64,7 @@ export default function AuditFilters({
 
             return;
         }
-        
+
         const filters = {};
 
         const normalizedAdminName = adminName.trim();
@@ -86,7 +85,6 @@ export default function AuditFilters({
         setAdminName("");
         setStartDate("");
         setEndDate("");
-        setFilterError("");
 
         clearFilters();
     };
@@ -94,62 +92,90 @@ export default function AuditFilters({
     return (
         <>
             <div className="table-filters">
-                <div className="table-filters__info">
-                    <h1>Auditoría</h1>
-                    <p>
-                        Mostrando {auditLogs.length} de {totalElements}
-                    </p>
+
+                {/* Primera fila */}
+                <div className="table-filters__top">
+
+                    <div className="table-filters__info">
+                        <h1>Auditoría</h1>
+
+                        <p>
+                            Mostrando {auditLogs.length} de{" "}
+                            {totalElements}
+                        </p>
+                    </div>
+
+                    <div className="table-filters__filter-controls">
+
+                        <div className="table-filters__field">
+
+                            <input
+                                id="admin-search"
+                                type="text"
+                                placeholder="Buscar administrador..."
+                                value={adminName}
+                                onChange={(e) =>
+                                    setAdminName(e.target.value)
+                                }
+                                className="table-filters__search"
+                            />
+                        </div>
+
+                        <div className="table-filters__field">
+                            <label htmlFor="start-date">
+                                Fecha inicio
+                            </label>
+
+                            <input
+                                id="start-date"
+                                type="date"
+                                value={startDate}
+                                onChange={(e) =>
+                                    setStartDate(e.target.value)
+                                }
+                                className="audit-filter__date"
+                            />
+                        </div>
+
+                        <div className="table-filters__field">
+                            <label htmlFor="end-date">
+                                Fecha fin
+                            </label>
+
+                            <input
+                                id="end-date"
+                                type="date"
+                                value={endDate}
+                                onChange={(e) =>
+                                    setEndDate(e.target.value)
+                                }
+                                className="audit-filter__date"
+                            />
+                        </div>
+
+                        <button
+                            type="button"
+                            className="table-filter__button"
+                            onClick={handleApplyFilters}
+                        >
+                            <Search size={16} />
+                            <span>Buscar</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            className="table-filter__button"
+                            onClick={handleClearFilters}
+                        >
+                            <BrushCleaning size={16} />
+                            <span>Limpiar</span>
+                        </button>
+
+                    </div>
                 </div>
 
-                <div className="table-filters__actions">
-
-                    <input
-                        type="text"
-                        placeholder="Buscar administrador..."
-                        value={adminName}
-                        onChange={(e) =>
-                            setAdminName(e.target.value)
-                        }
-                        className="table-filters__search"
-                    />
-
-                    <input
-                        type="date"
-                        value={startDate}
-                        onChange={(e) =>
-                            setStartDate(e.target.value)
-                        }
-                        className="audit-filter__date"
-                    />
-
-                    <input
-                        type="date"
-                        value={endDate}
-                        onChange={(e) =>
-                            setEndDate(e.target.value)
-                        }
-                        className="audit-filter__date"
-                    />
-
-                    <button
-                        type="button"
-                        className="table-filter__button"
-                        onClick={handleApplyFilters}
-                        title="Buscar"
-                        aria-label="Buscar"
-                    >
-                        <Search size={16} />
-                    </button>
-
-                    <button
-                        type="button"
-                        className="table-filter__button"
-                        onClick={handleClearFilters}
-                        title="Limpiar filtros"
-                        aria-label="Limpiar filtros"
-                    >
-                        <BrushCleaning size={16} />
-                    </button>
+                {/* Segunda fila */}
+                <div className="table-filters__bottom">
 
                     <button
                         type="button"
@@ -167,7 +193,9 @@ export default function AuditFilters({
                             <RefreshCw size={16} />
                         </span>
 
-                        Actualizar
+                        {loading
+                            ? "Actualizando..."
+                            : "Actualizar"}
                     </button>
 
                     <button
@@ -175,8 +203,6 @@ export default function AuditFilters({
                         className="table-filter__export"
                         onClick={exportCSV}
                         disabled={exporting}
-                        title="Exportar CSV"
-                        aria-label="Exportar CSV"
                     >
                         <span
                             className={
@@ -188,16 +214,13 @@ export default function AuditFilters({
                             <FileDown size={16} />
                         </span>
 
-                        {exporting ? "Exportando..." : "Exportar CSV"}
+                        {exporting
+                            ? "Exportando..."
+                            : "Exportar CSV"}
                     </button>
+
                 </div>
             </div>
-
-            {filterError && (
-                <p className="audit-filter__error">
-                    {filterError}
-                </p>
-            )}
 
             {exportError && (
                 <p className="audit-filter__error">
