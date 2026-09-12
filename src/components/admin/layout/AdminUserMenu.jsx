@@ -90,6 +90,14 @@ export default function AdminUserMenu() {
                         <User size={16} strokeWidth={2} />
                         Mi perfil
                     </button>
+                    <button
+                        className="admin-user-menu__item"
+                        role="menuitem"
+                        onClick={() => navigate("/admin/settings")}
+                    >
+                        <Settings size={16} strokeWidth={2} />
+                        Configuración
+                    </button>
                 </div>
 
                 <div className="admin-user-menu__footer">
