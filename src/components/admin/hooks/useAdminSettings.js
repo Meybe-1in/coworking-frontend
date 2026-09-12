@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
     getAdminSettings,
     updateAdminSettings,
-} from "../../../../api/adminSetting";
+} from "../../../api/adminSettings";
 
 export default function useAdminSettings() {
     const [settings, setSettings] = useState(null);
