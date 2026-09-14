@@ -116,4 +116,40 @@
     .admin-settings__card {
         padding: 18px;
     }
+
+    .admin-settings__form {
+        width: 100%;
+    }
+
+    .admin-settings__error {
+        color: #dc2626;
+        font-size: 12px;
+    }
+
+    .admin-settings__actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 4px;
+    }
+
+    .admin-settings__save {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #111827;
+        color: #ffffff;
+        transition: opacity 0.2s;
+    }
+
+    .admin-settings__save:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    .admin-settings__save:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
 }
