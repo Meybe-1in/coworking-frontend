@@ -1,0 +1,155 @@
+.admin-settings {
+    padding: 24px;
+}
+
+.admin-settings__header {
+    margin-bottom: 24px;
+}
+
+.admin-settings__header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.admin-settings__header p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.admin-settings__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-settings__card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.admin-settings__card-header {
+    margin-bottom: 20px;
+}
+
+.admin-settings__card-header h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.admin-settings__card-header p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.admin-settings__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.admin-settings__field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.admin-settings__field--full {
+    grid-column: 1 / -1;
+}
+
+.admin-settings__field label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.admin-settings__field input,
+.admin-settings__field textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: #ffffff;
+    color: #111827;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-settings__field input:focus,
+.admin-settings__field textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.admin-settings__field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.admin-settings__field span {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+@media (max-width: 768px) {
+    .admin-settings {
+        padding: 16px;
+    }
+
+    .admin-settings__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-settings__field--full {
+        grid-column: auto;
+    }
+
+    .admin-settings__card {
+        padding: 18px;
+    }
+
+    .admin-settings__form {
+        width: 100%;
+    }
+
+    .admin-settings__error {
+        color: #dc2626;
+        font-size: 12px;
+    }
+
+    .admin-settings__actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 4px;
+    }
+
+    .admin-settings__save {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #111827;
+        color: #ffffff;
+        transition: opacity 0.2s;
+    }
+
+    .admin-settings__save:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    .admin-settings__save:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
