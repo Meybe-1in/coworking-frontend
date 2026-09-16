@@ -1,17 +1,41 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import NavbarUser from "../../components/NavbarUser/NavbarUser";
 import { createReservation } from "../../api/reservationApi";
+import useReservationSettings from "../../components/hooks/useReservationSettings";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { toUTC } from "../../utils/dateUtils";
 
 export default function CheckoutPage() {
+
+  const {
+    settings,
+    loading: settingsLoading,
+    error: settingsError,
+  } = useReservationSettings();
+
   const location = useLocation();
   const navigate = useNavigate();
   const { room, filters } = location.state || {};
 
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (settingsLoading) {
+    return <p>Cargando configuración de reserva...</p>;
+  }
+
+  if (settingsError || !settings) {
+    return (
+      <p className="text-red-600">
+        No se pudo cargar la configuración de reserva.
+      </p>
+    );
+  }
+
+  if (!room || !filters) {
+    return <p>Error cargando reserva</p>;
+  }
 
   if (!room || !filters) {
     return <p>Error cargando reserva</p>;
@@ -181,7 +205,7 @@ export default function CheckoutPage() {
                 />
               </svg>
 
-              Tu reserva se mantendrá durante 15 minutos mientras completas el pago
+              Tu reserva se mantendrá durante {settings.pendingExpirationMinutes} minutos mientras completas el pago
             </div>
 
           </div>
