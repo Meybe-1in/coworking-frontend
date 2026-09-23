@@ -65,7 +65,8 @@ export default function CheckoutPage() {
           room,
           filters,
           total,
-          createdAt: res.data.createdAt
+          createdAt: res.data.createdAt,
+          pendingExpirationMinutes: settings.pendingExpirationMinutes,
         },
       });
     } catch (error) {

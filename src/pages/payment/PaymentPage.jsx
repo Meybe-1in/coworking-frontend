@@ -8,13 +8,13 @@ import "./payment.css";
 
 export default function PaymentPage() {
   const { state } = useLocation();
-  const { reservationId, room, filters, total, createdAt } = state || {};
+  const { reservationId, room, filters, total, createdAt, pendingExpirationMinutes=15, } = state || {};
   console.log(createdAt);
   const calculateTimeLeft = () => {
     if (!createdAt) return "00:00";
 
     const created = new Date(createdAt).getTime();
-    const expiresAt = created + 15 * 60 * 1000;
+    const expiresAt = created + pendingExpirationMinutes * 60 * 1000;
     const diff = expiresAt - Date.now();
 
     if (diff <= 0) return "00:00";
@@ -34,7 +34,7 @@ export default function PaymentPage() {
     const interval = setInterval(() => {
       const diff =
         new Date(createdAt).getTime() +
-        15 * 60 * 1000 -
+        pendingExpirationMinutes * 60 * 1000 -
         Date.now();
 
       if (diff <= 0) {
