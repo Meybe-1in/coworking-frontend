@@ -143,17 +143,11 @@ export default function UserDashboard() {
         ? availabilityRoomsRes
         : availabilityRoomsRes?.data || [];
 
-      console.log(
-        "DETALLE DISPONIBLES:",
-        JSON.stringify(availabilityRooms, null, 2)
-      );
-
       const allRooms = Array.isArray(allRoomsRes)
         ? allRoomsRes
         : allRoomsRes?.data || [];
 
       const reservations = await getReservations();
-      console.log("RESERVAS:", JSON.stringify(reservations, null, 2));
 
       // NO HAY DISPONIBLES
       if (availabilityRooms.length === 0) {
