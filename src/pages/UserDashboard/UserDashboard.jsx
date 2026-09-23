@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { adjustDateIfPastClosing } from "../../utils/timeUtils";
 import { getPublicRooms, getRoomsAvailability } from "../../api/roomApi";
 import { getReservations } from "../../api/reservationApi";
+import useReservationSettings from "../../components/hooks/useReservationSettings";
 
 export default function UserDashboard() {
 
@@ -15,6 +16,7 @@ export default function UserDashboard() {
   const [suggestedRooms, setSuggestedRooms] = useState([]);
   const [filters, setFilters] = useState(null);
   const location = useLocation();
+  const { settings } = useReservationSettings();
 
   useEffect(() => {
     loadAllRooms();
@@ -44,123 +46,165 @@ export default function UserDashboard() {
   };
 
   const getNextAvailableTime = (room, reservations, filters) => {
+    if (!settings) {
+      return {
+        isAvailable: true,
+        nextAvailable: null
+      };
+    }
+
     const { date, start, end } = filters;
 
-    const startTime = new Date(`${date}T${start}`).getTime();
-    const endTime = new Date(`${date}T${end}`).getTime();
-    const duration = endTime - startTime;
+    const closingHour = parseInt(
+      settings.closingTime.split(":")[0],
+      10
+    );
 
-    // Filtrar reservas de esa sala
+    const startHour = parseInt(start.split(":")[0], 10);
+    const endHour = parseInt(end.split(":")[0], 10);
+
+    const durationHours = endHour - startHour;
+
+    if (durationHours <= 0) {
+      return {
+        isAvailable: false,
+        nextAvailable: null
+      };
+    }
+
+    // Solo las reservas PENDING y PAID bloquean la sala.
     const roomReservations = reservations
-      .filter(r => r.roomName === room.name)
-      .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+      .filter(
+        (reservation) =>
+          reservation.roomName === room.name &&
+          ["PENDING", "PAID"].includes(reservation.status)
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.startAt) - new Date(b.startAt)
+      );
 
-    let isAvailable = true;
-    let nextAvailable = null;
+    let candidateHour = startHour;
 
-    let canStart = startTime;
+    while (candidateHour + durationHours <= closingHour) {
+      const candidateStart = new Date(
+        `${date}T${String(candidateHour).padStart(2, "0")}:00:00`
+      ).getTime();
 
-    for (let i = 0; i < roomReservations.length; i++) {
-      const resStart = new Date(roomReservations[i].startAt).getTime();
-      const resEnd = new Date(roomReservations[i].endAt).getTime();
+      const candidateEnd = new Date(
+        `${date}T${String(candidateHour + durationHours).padStart(2, "0")}:00:00`
+      ).getTime();
 
-      const canEnd = canStart + duration;
-      //SE SOLAPA CON EL BLOQUE ACTUAL
-      if (canStart < resEnd && canEnd > resStart) {
-        isAvailable = false;
+      const hasConflict = roomReservations.some((reservation) => {
+        const reservationStart =
+          new Date(reservation.startAt).getTime();
 
-        // mover inicio al final de esta reserva
-        canStart = resEnd;
+        const reservationEnd =
+          new Date(reservation.endAt).getTime();
 
-        // reiniciar loop para validar contra TODAS otra vez
-        i = -1;
+        return (
+          candidateStart < reservationEnd &&
+          candidateEnd > reservationStart
+        );
+      });
+
+      if (!hasConflict) {
+        return {
+          isAvailable: candidateHour === startHour,
+          nextAvailable:
+            candidateHour === startHour
+              ? null
+              : new Date(candidateStart)
+        };
       }
+
+      candidateHour++;
     }
 
-    if (!isAvailable) {
-      nextAvailable = new Date(canStart);
-    }
-
-    return { isAvailable, nextAvailable };
+    // No hay otro horario disponible dentro del horario de operación.
+    return {
+      isAvailable: false,
+      nextAvailable: null
+    };
   };
 
   const handleSearch = async (filters) => {
-  try {
-    const adjustedFilters = adjustDateIfPastClosing(filters);
-    setFilters(adjustedFilters);
+    try {
+      const adjustedFilters = adjustDateIfPastClosing(filters);
+      setFilters(adjustedFilters);
 
-    const [availabilityRoomsRes, allRoomsRes] = await Promise.all([
-      getRoomsAvailability(adjustedFilters),
-      getPublicRooms()
-    ]);
+      const [availabilityRoomsRes, allRoomsRes] = await Promise.all([
+        getRoomsAvailability(adjustedFilters),
+        getPublicRooms()
+      ]);
 
-    // RESPUESTAS
-    const availabilityRooms = Array.isArray(availabilityRoomsRes)
-      ? availabilityRoomsRes
-      : availabilityRoomsRes?.data || [];
+      // RESPUESTAS
+      const availabilityRooms = Array.isArray(availabilityRoomsRes)
+        ? availabilityRoomsRes
+        : availabilityRoomsRes?.data || [];
 
-    const allRooms = Array.isArray(allRoomsRes)
-      ? allRoomsRes
-      : allRoomsRes?.data || [];
+      const allRooms = Array.isArray(allRoomsRes)
+        ? allRoomsRes
+        : allRoomsRes?.data || [];
 
-    const reservations = await getReservations();
+      const reservations = await getReservations();
 
-    // NO HAY DISPONIBLES
-    if (availabilityRooms.length === 0) {
-      const suggestions = allRooms
-        .sort(
-          (a, b) =>
-            Math.abs(a.capacity - filters.people) -
-            Math.abs(b.capacity - filters.people)
-        )
-        .slice(0, 4)
-        .map(room => {
-          const { isAvailable, nextAvailable } = getNextAvailableTime(
-            room,
-            reservations,
-            adjustedFilters
-          );
+      // NO HAY DISPONIBLES
+      if (availabilityRooms.length === 0) {
+        const suggestions = allRooms
+          .sort(
+            (a, b) =>
+              Math.abs(a.capacity - filters.people) -
+              Math.abs(b.capacity - filters.people)
+          )
+          .slice(0, 4)
+          .map(room => {
+            const { isAvailable, nextAvailable } = getNextAvailableTime(
+              room,
+              reservations,
+              adjustedFilters
+            );
 
-          return {
-            ...room,
-            isAvailable,
-            nextAvailable
-          };
-        });
+            return {
+              ...room,
+              isAvailable,
+              nextAvailable
+            };
+          });
 
+        setFiltered([]);
+        setSuggestedRooms(suggestions);
+        return;
+      }
+
+      // HAY DISPONIBLES
+      const fullRooms = availabilityRooms.map(avRoom => {
+        const fullData = allRooms.find(r => r.id === avRoom.id);
+
+        if (!fullData) return null;
+
+        const { isAvailable, nextAvailable } = getNextAvailableTime(
+          fullData,
+          reservations,
+          adjustedFilters
+        );
+
+        return {
+          ...fullData,
+          ...avRoom,
+          isAvailable,
+          nextAvailable
+        };
+      }).filter(Boolean); // elimina nulls
+
+      setFiltered(fullRooms);
+      setSuggestedRooms([]);
+
+    } catch (err) {
+      console.error(err);
       setFiltered([]);
-      setSuggestedRooms(suggestions);
-      return;
     }
-
-    // HAY DISPONIBLES
-    const fullRooms = availabilityRooms.map(avRoom => {
-      const fullData = allRooms.find(r => r.id === avRoom.id);
-
-      if (!fullData) return null;
-
-      const { isAvailable, nextAvailable } = getNextAvailableTime(
-        fullData,
-        reservations,
-        adjustedFilters
-      );
-
-      return {
-        ...fullData,
-        ...avRoom,
-        isAvailable,
-        nextAvailable
-      };
-    }).filter(Boolean); // elimina nulls
-
-    setFiltered(fullRooms);
-    setSuggestedRooms([]);
-
-  } catch (err) {
-    console.error(err);
-    setFiltered([]);
-  }
-};
+  };
 
   return (
     <div className="bg-slate-100 min-h-screen">
