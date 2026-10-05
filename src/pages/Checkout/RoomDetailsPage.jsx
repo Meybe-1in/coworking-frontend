@@ -136,18 +136,35 @@ export default function RoomDetailsPage() {
         }));
     };
 
+    const isEndHourBlocked = (start, end) => {
+        if (!start || !end) {
+            return false;
+        }
+
+        const startHour = parseInt(
+            start.split(":")[0],
+            10
+        );
+
+        const endHour = parseInt(
+            end.split(":")[0],
+            10
+        );
+
+        for (let hour = startHour; hour < endHour; hour++) {
+            if (blockedHours.has(formatHour(hour))) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     const getEndHours = () => {
         if (!settings || !safeFilters.start) {
             return [];
         }
 
-        /*
-         * IMPORTANTE:
-         * Aquí NO aplicamos maxReservationHours.
-         *
-         * El selector debe mostrar todo el horario
-         * hasta la hora de cierre.
-         */
         const hours = getEndHoursBySettings(
             safeFilters.start,
             settings
@@ -155,7 +172,10 @@ export default function RoomDetailsPage() {
 
         return hours.map((hour) => ({
             value: hour,
-            disabled: false,
+            disabled: isEndHourBlocked(
+                safeFilters.start,
+                hour
+            ),
         }));
     };
 
@@ -169,22 +189,17 @@ export default function RoomDetailsPage() {
             settings
         );
 
-        return endHours[0] || "";
+        return (
+            endHours.find(
+                (hour) =>
+                    !isEndHourBlocked(
+                        start,
+                        hour
+                    )
+            ) || ""
+        );
     };
 
-    /*
-     * Inicializar y corregir automáticamente
-     * fecha / inicio / fin.
-     *
-     * Casos:
-     *
-     * 1. Entrar desde carrusel sin filtros.
-     * 2. Hoy ya terminó.
-     * 3. Hora seleccionada está ocupada.
-     * 4. Sala ocupada 08:00 - 10:00
-     *    => selecciona 10:00 - 11:00.
-     * 5. Cambio de fecha.
-     */
     useEffect(() => {
         if (!settings || !room || !safeFilters.date) {
             return;
@@ -270,7 +285,14 @@ export default function RoomDetailsPage() {
              * solamente completamos el FIN si está vacío.
              */
             if (currentStartIsValid) {
-                if (!prev.end) {
+                const currentEndIsValid =
+                    prev.end &&
+                    !isEndHourBlocked(
+                        prev.start,
+                        prev.end
+                    );
+
+                if (!currentEndIsValid) {
                     return {
                         ...prev,
                         end: getFirstEndForStart(
@@ -282,16 +304,8 @@ export default function RoomDetailsPage() {
                 return prev;
             }
 
-            /*
-             * Si no es válida:
-             *
-             * Ejemplo:
-             * 08:00 ocupado
-             * 09:00 ocupado
-             * 10:00 libre
-             *
-             * => 10:00 - 11:00
-             */
+            // Si no es válida:
+
             return {
                 ...prev,
                 start: firstAvailable.value,
@@ -320,11 +334,6 @@ export default function RoomDetailsPage() {
             [name]: value,
         };
 
-        /*
-         * Al cambiar inicio,
-         * seleccionamos automáticamente
-         * la primera hora de finalización.
-         */
         if (name === "start") {
             const endHours =
                 getEndHoursBySettings(
@@ -332,8 +341,17 @@ export default function RoomDetailsPage() {
                     settings
                 );
 
+            const firstAvailableEnd =
+                endHours.find(
+                    (hour) =>
+                        !isEndHourBlocked(
+                            value,
+                            hour
+                        )
+                );
+
             updated.end =
-                endHours[0] || "";
+                firstAvailableEnd || "";
         }
 
         /*
@@ -641,7 +659,7 @@ export default function RoomDetailsPage() {
                                                 >
                                                     {h.value}{" "}
                                                     {h.disabled
-                                                        ? " (Ocupado)"
+                                                        ? " (No disponible)"
                                                         : ""}
                                                 </option>
                                             )

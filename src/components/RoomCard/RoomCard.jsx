@@ -2,17 +2,15 @@ import { useNavigate } from "react-router-dom";
 import salaImg from "../../assets/sala.png";
 import { getAvailabilityMessage, getMessageColor, getButtonText } from "../../utils/timeUtils";
 
-export default function RoomCard({ room, filters, preview = false }) {
-  const isAvailable = room.isAvailable ?? room.available;
-  const navigate = useNavigate();
+export default function RoomCard({
+  room,
+  filters,
+  preview = false
+}) {
+  const isAvailable =
+    room.isAvailable ?? room.available;
 
-  const handleReserve = () => {
-    if (!filters) {
-      navigate(`/rooms/${room.id}`);
-      return;
-    }
-    navigate("/checkout", { state: { room, filters } });
-  };
+  const navigate = useNavigate();
 
   const goToRoom = () => {
     navigate(`/rooms/${room.id}`, {
@@ -28,14 +26,14 @@ export default function RoomCard({ room, filters, preview = false }) {
       >
         <img
           src={room.imageUrl || salaImg}
-
           alt={room.name}
           className="w-full h-40 object-cover"
         />
 
         <div className="p-4 flex flex-col gap-2">
-
-          <h3 className="font-semibold text-lg">{room.name}</h3>
+          <h3 className="font-semibold text-lg">
+            {room.name}
+          </h3>
 
           <p className="text-gray-600 text-sm">
             {room.capacity} personas
@@ -44,29 +42,48 @@ export default function RoomCard({ room, filters, preview = false }) {
           <p className="font-bold text-blue-800">
             ${room.price}/h
           </p>
-
         </div>
       </div>
     );
   }
 
   return (
-    <article onClick={(e) => { e.stopPropagation(); goToRoom(); }} className="bg-white rounded-2xl shadow-xl p-6">
-      {/* Header */}
+    <article
+      onClick={(e) => {
+        e.stopPropagation();
+        goToRoom();
+      }}
+      className="bg-white rounded-2xl shadow-xl p-6"
+    >
       <div className="flex justify-between items-start">
+
         <div className="flex flex-col gap-2">
+
           <span
-            className={`px-4 py-2 rounded-br-xl text-white font-medium ${isAvailable ? "bg-sky-300" : "bg-red-300"
+            className={`px-4 py-2 rounded-br-xl text-white font-medium ${isAvailable
+                ? "bg-sky-300"
+                : "bg-red-300"
               }`}
           >
-            {isAvailable ? "Disponible" : "No disponible en este horario"}
+            {isAvailable
+              ? "Disponible"
+              : "No disponible en este horario"}
           </span>
 
           {!isAvailable && room.nextAvailable && (
-            <span className={`text-sm animate-fadeIn ${getMessageColor(room.nextAvailable)}`}>
-              <strong>{getAvailabilityMessage(room.nextAvailable)}</strong>
+            <span
+              className={`text-sm animate-fadeIn ${getMessageColor(
+                room.nextAvailable
+              )}`}
+            >
+              <strong>
+                {getAvailabilityMessage(
+                  room.nextAvailable
+                )}
+              </strong>
             </span>
           )}
+
         </div>
 
         <span className="text-3xl font-bold text-blue-800">
@@ -76,10 +93,13 @@ export default function RoomCard({ room, filters, preview = false }) {
 
       </div>
 
-      {/* Content */}
       <div className="mt-6 grid gap-6 md:grid-cols-2">
+
         <div className="flex flex-col gap-4">
-          <h3 className="text-xl font-semibold">{room.name}</h3>
+
+          <h3 className="text-xl font-semibold">
+            {room.name}
+          </h3>
 
           <p className="font-medium">
             {room.capacity} personas | {room.location}
@@ -90,40 +110,48 @@ export default function RoomCard({ room, filters, preview = false }) {
           </p>
 
           <div className="flex flex-wrap gap-2">
-            {room.features?.map((f, i) => (
+            {room.features?.map((feature, index) => (
               <span
-                key={i}
+                key={index}
                 className="px-3 py-1 rounded-full bg-gray-100 text-blue-800"
               >
-                {f}
+                {feature}
               </span>
             ))}
           </div>
+
         </div>
 
         <img
-          src={room.imageUrl || null}
+          src={room.imageUrl || salaImg}
           alt={room.name}
           className="rounded-xl object-cover w-full h-full max-h-72"
         />
+
       </div>
 
       <div className="mt-6 flex justify-end">
+
         <button
-          onClick={goToRoom}
+          onClick={(e) => {
+            e.stopPropagation();
+            goToRoom();
+          }}
           className={`
-      px-6 py-2 rounded-xl
-      text-white font-semibold
-      hover:scale-105 hover:shadow-lg
-      transition-all duration-300
-      ${isAvailable
+            px-6 py-2 rounded-xl
+            text-white font-semibold
+            hover:scale-105 hover:shadow-lg
+            transition-all duration-300
+            ${isAvailable
               ? "bg-linear-to-r from-sky-500 to-blue-600"
-              : "bg-linear-to-r from-gray-400 to-gray-500"}
-    `}
+              : "bg-linear-to-r from-gray-400 to-gray-500"
+            }
+          `}
           disabled={!isAvailable && !room.nextAvailable}
         >
           {getButtonText(isAvailable, room)}
         </button>
+
       </div>
     </article>
   );
