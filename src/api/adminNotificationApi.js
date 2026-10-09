@@ -1,3 +1,4 @@
+import API from "./axiosConfig";
 export const getAdminNotifications = async () => {
     const response = await API.get("/admin/notifications");
     return response.data;
