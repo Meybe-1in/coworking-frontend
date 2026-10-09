@@ -65,7 +65,7 @@ export default function AdminNotificationPanel({
         loadNotifications();
         const intervalId = window.setInterval(
             () => loadNotifications(true),
-            15000);
+            5000);
         return () => window.clearInterval(intervalId);
     }, [loadNotifications]);
 
@@ -86,7 +86,7 @@ export default function AdminNotificationPanel({
             );
 
             const unreadCount = await getAdminUnreadNotificationCount();
-            onUnreadCountChange?.(Number(unreadCount));
+            onUnreadCountChange?.(Number(unreadCount) || 0);
         } catch {
             // El interceptor de Axios muestra el error de la petición.
         } finally {
