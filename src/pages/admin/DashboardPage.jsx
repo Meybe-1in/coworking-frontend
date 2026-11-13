@@ -1,7 +1,7 @@
 import DashboardStats from "../../components/admin/stats/DashboardStats";
 
 import useAdminStats from "../../components/admin/hooks/useAdminStats";
-import useReservationsChart from "../../components/admin/hooks/useReservationsChart";
+import useReservationsChart from "../../components/admin/hooks/UseReservationsChart";
 import useRevenueChart from "../../components/admin/hooks/useRevenueChart";
 import useRoomOccupancyChart from "../../components/admin/hooks/useRoomOccupancyChart";
 import useRecentActivity from "../../components/admin/hooks/useRecentActivity";
